@@ -1,9 +1,7 @@
 <!doctype html>
 <html>
 <head>
-<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
-<meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
-<title>osm_overpassapi</title><style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color:#ffffff; --text-color:#333333; --select-text-bg-color:#B5D6FC; --select-text-font-color:auto; --monospace:"Lucida Console",Consolas,"Courier",monospace; }
+<meta charset='UTF-8'><meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1"><style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color:#ffffff; --text-color:#333333; --select-text-bg-color:#B5D6FC; --select-text-font-color:auto; --monospace:"Lucida Console",Consolas,"Courier",monospace; }
 html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
 body { margin: 0px; padding: 0px; height: auto; bottom: 0px; top: 0px; left: 0px; right: 0px; font-size: 1rem; line-height: 1.42857; overflow-x: hidden; background: inherit; tab-size: 4; }
 iframe { margin: auto; }
@@ -233,1694 +231,374 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket { color: rgb(255, 34, 34); }
 }
 
 
-/* Flowchart variables */
-/* Sequence Diagram variables */
-/* Gantt chart variables */
-/* state colors */
-.label {
-  
-  color: #333; }
-
-.label text {
-  fill: #333; }
-
-.node rect,
-.node circle,
-.node ellipse,
-.node polygon {
-  fill: #BDD5EA;
-  stroke: #9370DB;
-  stroke-width: 1px; }
-
-.node .label {
-  text-align: center; }
-
-.node.clickable {
-  cursor: pointer; }
-
-.arrowheadPath {
-  fill: lightgrey; }
-
-.edgePath .path {
-  stroke: lightgrey;
-  stroke-width: 1.5px; }
-
-.edgeLabel {
-  background-color: #e8e8e8;
-  text-align: center; }
-
-.cluster rect {
-  fill: #6D6D65;
-  stroke: rgba(255, 255, 255, 0.25);
-  stroke-width: 1px; }
-
-.cluster text {
-  fill: #F9FFFE; }
-
-div.mermaidTooltip {
-  position: absolute;
-  text-align: center;
-  max-width: 200px;
-  padding: 2px;
-  
-  font-size: 12px;
-  background: #6D6D65;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 2px;
-  pointer-events: none;
-  z-index: 100; }
-
-.actor {
-  stroke: #81B1DB;
-  fill: #BDD5EA; }
-
-text.actor {
-  fill: black;
-  stroke: none; }
-
-.actor-line {
-  stroke: lightgrey; }
-
-.messageLine0 {
-  stroke-width: 1.5;
-  stroke-dasharray: '2 2';
-  stroke: lightgrey; }
-
-.messageLine1 {
-  stroke-width: 1.5;
-  stroke-dasharray: '2 2';
-  stroke: lightgrey; }
-
-#arrowhead {
-  fill: lightgrey; }
-
-.sequenceNumber {
-  fill: white; }
-
-#sequencenumber {
-  fill: lightgrey; }
-
-#crosshead path {
-  fill: lightgrey !important;
-  stroke: lightgrey !important; }
-
-.messageText {
-  fill: lightgrey;
-  stroke: none; }
-
-.labelBox {
-  stroke: #81B1DB;
-  fill: #BDD5EA; }
-
-.labelText {
-  fill: #323D47;
-  stroke: none; }
-
-.loopText {
-  fill: lightgrey;
-  stroke: none; }
-
-.loopLine {
-  stroke-width: 2;
-  stroke-dasharray: '2 2';
-  stroke: #81B1DB; }
-
-.note {
-  stroke: rgba(255, 255, 255, 0.25);
-  fill: #fff5ad; }
-
-.noteText {
-  fill: black;
-  stroke: none;
-  
-  font-size: 14px; }
-
-.activation0 {
-  fill: #f4f4f4;
-  stroke: #666; }
-
-.activation1 {
-  fill: #f4f4f4;
-  stroke: #666; }
-
-.activation2 {
-  fill: #f4f4f4;
-  stroke: #666; }
-
-/** Section styling */
-.section {
-  stroke: none;
-  opacity: 0.2; }
-
-.section0 {
-  fill: rgba(255, 255, 255, 0.3); }
-
-.section2 {
-  fill: #EAE8B9; }
-
-.section1,
-.section3 {
-  fill: white;
-  opacity: 0.2; }
-
-.sectionTitle0 {
-  fill: #F9FFFE; }
-
-.sectionTitle1 {
-  fill: #F9FFFE; }
-
-.sectionTitle2 {
-  fill: #F9FFFE; }
-
-.sectionTitle3 {
-  fill: #F9FFFE; }
-
-.sectionTitle {
-  text-anchor: start;
-  font-size: 11px;
-  text-height: 14px;
-   }
-
-/* Grid and axis */
-.grid .tick {
-  stroke: lightgrey;
-  opacity: 0.3;
-  shape-rendering: crispEdges; }
-
-.grid path {
-  stroke-width: 0; }
-
-/* Today line */
-.today {
-  fill: none;
-  stroke: #DB5757;
-  stroke-width: 2px; }
-
-/* Task styling */
-/* Default task */
-.task {
-  stroke-width: 2; }
-
-.taskText {
-  text-anchor: middle;
-   }
-
-.taskText:not([font-size]) {
-  font-size: 11px; }
-
-.taskTextOutsideRight {
-  fill: #323D47;
-  text-anchor: start;
-  font-size: 11px;
-   }
-
-.taskTextOutsideLeft {
-  fill: #323D47;
-  text-anchor: end;
-  font-size: 11px; }
-
-/* Special case clickable */
-.task.clickable {
-  cursor: pointer; }
-
-.taskText.clickable {
-  cursor: pointer;
-  fill: #003163 !important;
-  font-weight: bold; }
-
-.taskTextOutsideLeft.clickable {
-  cursor: pointer;
-  fill: #003163 !important;
-  font-weight: bold; }
-
-.taskTextOutsideRight.clickable {
-  cursor: pointer;
-  fill: #003163 !important;
-  font-weight: bold; }
-
-/* Specific task settings for the sections*/
-.taskText0,
-.taskText1,
-.taskText2,
-.taskText3 {
-  fill: #323D47; }
-
-.task0,
-.task1,
-.task2,
-.task3 {
-  fill: #BDD5EA;
-  stroke: rgba(255, 255, 255, 0.5); }
-
-.taskTextOutside0,
-.taskTextOutside2 {
-  fill: lightgrey; }
-
-.taskTextOutside1,
-.taskTextOutside3 {
-  fill: lightgrey; }
-
-/* Active task */
-.active0,
-.active1,
-.active2,
-.active3 {
-  fill: #81B1DB;
-  stroke: rgba(255, 255, 255, 0.5); }
-
-.activeText0,
-.activeText1,
-.activeText2,
-.activeText3 {
-  fill: #323D47 !important; }
-
-/* Completed task */
-.done0,
-.done1,
-.done2,
-.done3 {
-  stroke: grey;
-  fill: lightgrey;
-  stroke-width: 2; }
-
-.doneText0,
-.doneText1,
-.doneText2,
-.doneText3 {
-  fill: #323D47 !important; }
-
-/* Tasks on the critical line */
-.crit0,
-.crit1,
-.crit2,
-.crit3 {
-  stroke: #E83737;
-  fill: #E83737;
-  stroke-width: 2; }
-
-.activeCrit0,
-.activeCrit1,
-.activeCrit2,
-.activeCrit3 {
-  stroke: #E83737;
-  fill: #81B1DB;
-  stroke-width: 2; }
-
-.doneCrit0,
-.doneCrit1,
-.doneCrit2,
-.doneCrit3 {
-  stroke: #E83737;
-  fill: lightgrey;
-  stroke-width: 2;
-  cursor: pointer;
-  shape-rendering: crispEdges; }
-
-.milestone {
-  transform: rotate(45deg) scale(0.8, 0.8); }
-
-.milestoneText {
-  font-style: italic; }
-
-.doneCritText0,
-.doneCritText1,
-.doneCritText2,
-.doneCritText3 {
-  fill: #323D47 !important; }
-
-.activeCritText0,
-.activeCritText1,
-.activeCritText2,
-.activeCritText3 {
-  fill: #323D47 !important; }
-
-.titleText {
-  text-anchor: middle;
-  font-size: 18px;
-  fill: #323D47;
-   }
-
-g.classGroup text {
-  fill: #9370DB;
-  stroke: none;
-  
-  font-size: 10px; }
-  g.classGroup text .title {
-    font-weight: bolder; }
-
-g.classGroup rect {
-  fill: #BDD5EA;
-  stroke: #9370DB; }
-
-g.classGroup line {
-  stroke: #9370DB;
-  stroke-width: 1; }
-
-.classLabel .box {
-  stroke: none;
-  stroke-width: 0;
-  fill: #BDD5EA;
-  opacity: 0.5; }
-
-.classLabel .label {
-  fill: #9370DB;
-  font-size: 10px; }
-
-.relation {
-  stroke: #9370DB;
-  stroke-width: 1;
-  fill: none; }
-
-#compositionStart {
-  fill: #9370DB;
-  stroke: #9370DB;
-  stroke-width: 1; }
-
-#compositionEnd {
-  fill: #9370DB;
-  stroke: #9370DB;
-  stroke-width: 1; }
-
-#aggregationStart {
-  fill: #BDD5EA;
-  stroke: #9370DB;
-  stroke-width: 1; }
-
-#aggregationEnd {
-  fill: #BDD5EA;
-  stroke: #9370DB;
-  stroke-width: 1; }
-
-#dependencyStart {
-  fill: #9370DB;
-  stroke: #9370DB;
-  stroke-width: 1; }
-
-#dependencyEnd {
-  fill: #9370DB;
-  stroke: #9370DB;
-  stroke-width: 1; }
-
-#extensionStart {
-  fill: #9370DB;
-  stroke: #9370DB;
-  stroke-width: 1; }
-
-#extensionEnd {
-  fill: #9370DB;
-  stroke: #9370DB;
-  stroke-width: 1; }
-
-.commit-id,
-.commit-msg,
-.branch-label {
-  fill: lightgrey;
-  color: lightgrey;
-   }
-
-.pieTitleText {
-  text-anchor: middle;
-  font-size: 25px;
-  fill: #eee;
+/* Fira Code */
+/* 全局属性 */
+:root{
+  --select-text-bg-color: #e49123;
+  --bg-color:  #fafafa;                   /*change background*/
+  --text-color: #333333;                  /*change text color*/
+  --md-char-color: #C7C5C5;               /*change color of meta characetrs like `*` in markdown */
+  --meta-content-color: #5b808d;          /*change color of meta contents like image text or link address in markdown */
+
+  --primary-color: #428bca;               /* color of primary buttons */
+  --primary-btn-border-color: #285e8e;
+  --primary-btn-text-color: #fff;
+
+  --window-border: 1px solid #eee;        /*border for sidebar, etc*/
+
+  --active-file-bg-color: #eee;           /*background color if list item in file tree or file list*/
+  --active-file-text-color: inherit;
+  --active-file-border-color: #777;
+
+  --side-bar-bg-color: var(--bg-color);     /*change background of sidebar*/
+  --item-hover-bg-color: rgba(229, 229, 229, 0.59); /*background of control items when hover, like menu in sidebar*/
+  --item-hover-text-color: inherit;
+  --monospace: monospace;                   /*monospace font for codes, fences*/
 }
-
-g.stateGroup text {
-  stroke: none;
-  font-size: 10px;
+::selection {
+	background:#b981d1;
+	color:white
 }
-
-g.stateGroup circle {
-  fill: white !important;
-  stroke: white !important;
+::-moz-selection {
+	background:#b981d1;
+	color:white
 }
-
-g.stateGroup .state-title {
-  font-weight: bolder;
-  fill: black; }
-
-g.stateGroup rect {
-  fill: #ececff;
-  stroke: #9370DB; }
-
-g.stateGroup line {
-  stroke: #9370DB;
-  stroke-width: 1; }
-
-.transition {
-  stroke: #9370DB;
-  stroke-width: 1;
-  fill: none; }
-
-.stateGroup .composit {
-  fill: #555;
-  border-bottom: 1px; }
-
-.state-note {
-  stroke: rgba(255, 255, 255, 0.25);
-  fill: #fff5ad; }
-  .state-note text {
-    fill: black;
-    stroke: none;
-    font-size: 10px; }
-
-.stateLabel .box {
-  stroke: none;
-  stroke-width: 0;
-  fill: #BDD5EA;
-  opacity: 0.5; }
-
-.stateLabel text {
-  fill: black;
-  font-size: 10px;
-  font-weight: bold;
-}
-
-.cluster-label {
-  color:black;
-}
-
-.statediagram-cluster rect {
-  fill: #BDD5EA;
-  stroke: #9370DB; 
-  stroke-width: 1px;
-}
-.statediagram-cluster rect.outer {
-  rx: 5px;
-  ry: 5px;
-}
-.statediagram-state .divider {
-  stroke: #9370DB; 
-}
-
-.statediagram-state .title-state {
-  rx: 5px;
-  ry: 5px;
-}
-.statediagram-cluster.statediagram-cluster .inner {
-  fill: white;
-}
-.statediagram-cluster.statediagram-cluster-alt .inner {
-  fill: #e0e0e0;
-}
-
-.statediagram-cluster .inner {
-  rx:0;
-  ry:0;
-}
-
-.statediagram-state rect.basic {
-  rx: 5px;
-  ry: 5px;
-}
-.statediagram-state rect.divider {
-  stroke-dasharray: 10,10;
-  fill: #efefef;
-}
-
-.note-edge {
-  stroke-dasharray: 5;
-}
-
-.statediagram-note rect {
-  stroke: var(--cluster-border);
-  fill: #fff5ad;
-  stroke-width: 1px;
-  rx: 0;
-  ry: 0;
-}
-
-.node circle.state-start {
-  fill: black;
-  stroke: black;
-}
-.node circle.state-end {
-  fill: black;
-  stroke: white;
-  stroke-width: 1.5
-}
-#statediagram-barbEnd {
-  fill: #9370DB; 
-}
-
-/* CSS Document */
-
-/** code highlight */
-
-.cm-s-inner .cm-variable,
-.cm-s-inner .cm-operator,
-.cm-s-inner .cm-property {
-    color: #b8bfc6;
-}
-
-.cm-s-inner .cm-keyword {
-    color: #C88FD0;
-}
-
-.cm-s-inner .cm-tag {
-    color: #7DF46A;
-}
-
-.cm-s-inner .cm-attribute {
-    color: #7575E4;
-}
-
-.CodeMirror div.CodeMirror-cursor {
-    border-left: 1px solid #b8bfc6;
-    z-index: 3;
-}
-
-.cm-s-inner .cm-string {
-    color: #D26B6B;
-}
-
-.cm-s-inner .cm-comment,
-.cm-s-inner.cm-comment {
-    color: #DA924A;
-}
-
-.cm-s-inner .cm-header,
-.cm-s-inner .cm-def,
-.cm-s-inner.cm-header,
-.cm-s-inner.cm-def {
-    color: #8d8df0;
-}
-
-.cm-s-inner .cm-quote,
-.cm-s-inner.cm-quote {
-    color: #57ac57;
-}
-
-.cm-s-inner .cm-hr {
-    color: #d8d5d5;
-}
-
-.cm-s-inner .cm-link {
-    color: #d3d3ef;
-}
-
-.cm-s-inner .cm-negative {
-    color: #d95050;
-}
-
-.cm-s-inner .cm-positive {
-    color: #50e650;
-}
-
-.cm-s-inner .cm-string-2 {
-    color: #f50;
-}
-
-.cm-s-inner .cm-meta,
-.cm-s-inner .cm-qualifier {
-    color: #b7b3b3;
-}
-
-.cm-s-inner .cm-builtin {
-    color: #f3b3f8;
-}
-
-.cm-s-inner .cm-bracket {
-    color: #997;
-}
-
-.cm-s-inner .cm-atom,
-.cm-s-inner.cm-atom {
-    color: #84B6CB;
-}
-
-.cm-s-inner .cm-number {
-    color: #64AB8F;
-}
-
-.cm-s-inner .cm-variable {
-    color: #b8bfc6;
-}
-
-.cm-s-inner .cm-variable-2 {
-    color: #9FBAD5;
-}
-
-.cm-s-inner .cm-variable-3 {
-    color: #1cc685;
-}
-
-.CodeMirror-selectedtext,
-.CodeMirror-selected {
-    background: #4a89dc;
-    color: #fff !important;
-    text-shadow: none;
-}
-
-.CodeMirror-gutters {
-    border-right: none;
-}
-
-/* CSS Document */
-
-/** markdown source **/
-.cm-s-typora-default .cm-header, 
-.cm-s-typora-default .cm-property
-{
-    color: #cebcca;
-}
-
-.CodeMirror.cm-s-typora-default div.CodeMirror-cursor{
-    border-left: 3px solid #b8bfc6;
-}
-
-.cm-s-typora-default .cm-comment {
-    color: #9FB1FF;
-}
-
-.cm-s-typora-default .cm-string {
-    color: #A7A7D9
-}
-
-.cm-s-typora-default .cm-atom, .cm-s-typora-default .cm-number {
-    color: #848695;
-    font-style: italic;
-}
-
-.cm-s-typora-default .cm-link {
-    color: #95B94B;
-}
-
-.cm-s-typora-default .CodeMirror-activeline-background {
-    background: rgba(51, 51, 51, 0.72);
-}
-
-.cm-s-typora-default .cm-comment, .cm-s-typora-default .cm-code {
-	color: #8aa1e1;
-}@import "";
-@import "";
-@import "";
-
-:root {
-    --bg-color:  #363B40;
-    --side-bar-bg-color: #2E3033;
-    --text-color: #b8bfc6;
-
-    --select-text-bg-color:#4a89dc;
-
-    --item-hover-bg-color: #0a0d16;
-    --control-text-color: #b7b7b7;
-    --control-text-hover-color: #eee;
-    --window-border: 1px solid #555;
-
-    --active-file-bg-color: rgb(34, 34, 34);
-    --active-file-border-color: #8d8df0;
-
-    --primary-color: #a3d5fe;
-
-    --active-file-text-color: white;
-    --item-hover-bg-color: #70717d;
-    --item-hover-text-color: white;
-    --primary-color: #6dc1e7;
-
-    --rawblock-edit-panel-bd: #333;
-
-    --search-select-bg-color: #428bca;
-}
-
-html {
-    font-size: 16px;
-}
-
-html,
-body {
-    -webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
-    background: #363B40;
-    background: var(--bg-color);
-    fill: currentColor;
-    line-height: 1.625rem;
+::-webkit-selection {
+	background:#b981d1;
+	color:white
 }
 
 #write {
-    max-width: 914px;
-}
-
-
-@media only screen and (min-width: 1400px) {
-	#write {
-		max-width: 1024px;
-	}
-}
-
-@media only screen and (min-width: 1800px) {
-	#write {
-		max-width: 1200px;
-	}
-}
-
-html,
-body,
-button,
-input,
-select,
-textarea,
-div.code-tooltip-content {
-    color: #b8bfc6;
-    border-color: transparent;
-}
-
-div.code-tooltip,
-.md-hover-tip .md-arrow:after {
-    background: #333;
-}
-
-.popover.bottom > .arrow:after {
-    border-bottom-color: #333;
-}
-
-html,
-body,
-button,
-input,
-select,
-textarea {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-hr {
-    height: 2px;
-    border: 0;
-    margin: 24px 0 !important;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-family: "Lucida Grande", "Corbel", sans-serif;
-    font-weight: normal;
-    clear: both;
-    -ms-word-wrap: break-word;
-    word-wrap: break-word;
-    margin: 0;
-    padding: 0;
-    color: #DEDEDE
-}
-
-h1 {
-    font-size: 2.5rem;
-    /* 36px */
-    line-height: 2.75rem;
-    /* 40px */
-    margin-bottom: 1.5rem;
-    /* 24px */
-    letter-spacing: -1.5px;
-}
-
-h2 {
-    font-size: 1.63rem;
-    /* 24px */
-    line-height: 1.875rem;
-    /* 30px */
-    margin-bottom: 1.5rem;
-    /* 24px */
-    letter-spacing: -1px;
-    font-weight: bold;
-}
-
-h3 {
-    font-size: 1.17rem;
-    /* 18px */
-    line-height: 1.5rem;
-    /* 24px */
-    margin-bottom: 1.5rem;
-    /* 24px */
-    letter-spacing: -1px;
-    font-weight: bold;
-}
-
-h4 {
-    font-size: 1.12rem;
-    /* 16px */
-    line-height: 1.375rem;
-    /* 22px */
-    margin-bottom: 1.5rem;
-    /* 24px */
-    color: white;
-}
-
-h5 {
-    font-size: 0.97rem;
-    /* 16px */
-    line-height: 1.25rem;
-    /* 22px */
-    margin-bottom: 1.5rem;
-    /* 24px */
-    font-weight: bold;
-}
-
-h6 {
-    font-size: 0.93rem;
-    /* 16px */
-    line-height: 1rem;
-    /* 16px */
-    margin-bottom: 0.75rem;
-    color: white;
-}
-
-@media (min-width: 980px) {
-    h3.md-focus:before,
-    h4.md-focus:before,
-    h5.md-focus:before,
-    h6.md-focus:before {
-        color: #ddd;
-        border: 1px solid #ddd;
-        border-radius: 3px;
-        position: absolute;
-        left: -1.642857143rem;
-        top: .357142857rem;
-        float: left;
-        font-size: 9px;
-        padding-left: 2px;
-        padding-right: 2px;
-        vertical-align: bottom;
-        font-weight: normal;
-        line-height: normal;
-    }
-
-    h3.md-focus:before {
-        content: 'h3';
-    }
-
-    h4.md-focus:before {
-        content: 'h4';
-    }
-
-    h5.md-focus:before {
-        content: 'h5';
-        top: 0px;
-    }
-
-    h6.md-focus:before {
-        content: 'h6';
-        top: 0px;
-    }
-}
-
-a {
-    text-decoration: none;
-    outline: 0;
-}
-
-a:hover {
-    outline: 0;
-}
-
-a:focus {
-    outline: thin dotted;
-}
-
-sup.md-footnote {
-    background-color: #555;
-    color: #ddd;
-}
-
-p {
-    -ms-word-wrap: break-word;
-    word-wrap: break-word;
-}
-
-p,
-ul,
-dd,
-ol,
-hr,
-address,
-pre,
-table,
-iframe,
-.wp-caption,
-.wp-audio-shortcode,
-.wp-video-shortcode {
-    margin-top: 0;
-    margin-bottom: 1.5rem;
-    /* 24px */
-}
-
-li > blockquote {
-	margin-bottom: 0;
-}
-
-audio:not([controls]) {
-    display: none;
-}
-
-[hidden] {
-    display: none;
-}
-
-::-moz-selection {
-    background: #4a89dc;
-    color: #fff;
-    text-shadow: none;
-}
-
-*.in-text-selection,
-::selection {
-    background: #4a89dc;
-    color: #fff;
-    text-shadow: none;
-}
-
-ul,
-ol {
-    padding: 0 0 0 1.875rem;
-    /* 30px */
-}
-
-ul {
-    list-style: square;
-}
-
-ol {
-    list-style: decimal;
-}
-
-ul ul,
-ol ol,
-ul ol,
-ol ul {
-    margin: 0;
-}
-
-b,
-th,
-dt,
-strong {
-    font-weight: bold;
-}
-
-i,
-em,
-dfn,
-cite {
-    font-style: italic;
-}
-
-blockquote {
-    padding-left: 1.875rem;
-    margin: 0 0 1.875rem 1.875rem;
-    border-left: solid 2px #474d54;
-    padding-left: 30px;
-    margin-top: 35px;
-}
-
-pre,
-code,
-kbd,
-tt,
-var {
-    font-size: 0.875rem;
-    font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
-}
-
-code,
-tt,
-var {
-    background: rgba(0, 0, 0, 0.05);
-}
-
-kbd {
-    padding: 2px 4px;
-    font-size: 90%;
-    color: #fff;
-    background-color: #333;
-    border-radius: 3px;
-    box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
-}
-
-pre.md-fences {
-    padding: 10px 10px 10px 30px;
-    margin-bottom: 20px;
-    background: #333;
-}
-
-.CodeMirror-gutters {
-    background: #333;
-    border-right: 1px solid transparent;
-}
-
-.enable-diagrams pre.md-fences[lang="sequence"] .code-tooltip,
-.enable-diagrams pre.md-fences[lang="flow"] .code-tooltip,
-.enable-diagrams pre.md-fences[lang="mermaid"] .code-tooltip {
-    bottom: -2.2em;
-    right: 4px;
-}
-
-code,
-kbd,
-tt,
-var {
-    padding: 2px 5px;
-}
-
-table {
-    max-width: 100%;
-    width: 100%;
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-
-th,
-td {
-    padding: 5px 10px;
-    vertical-align: top;
-}
-
-a {
-    -webkit-transition: all .2s ease-in-out;
-    transition: all .2s ease-in-out;
-}
-
-hr {
-    background: #474d54;
-    /* variable */
-}
-
-h1 {
-    margin-top: 2em;
-}
-
-a {
-    color: #e0e0e0;
-    text-decoration: underline;
-}
-
-a:hover {
-    color: #fff;
-}
-
-.md-inline-math script {
-    color: #81b1db;
-}
-
-b,
-th,
-dt,
-strong {
-    color: #DEDEDE;
-    /* variable */
-}
-
-mark {
-    background: #D3D40E;
-}
-
-blockquote {
-    color: #9DA2A6;
-}
-
-table a {
-    color: #DEDEDE;
-    /* variable */
-}
-
-th,
-td {
-    border: solid 1px #474d54;
-    /* variable */
-}
-
-.task-list {
-    padding-left: 0;
-}
-
-.md-task-list-item {
-    padding-left: 1.25rem;
-}
-
-.md-task-list-item > input {
-    top: auto;
-}
-
-.md-task-list-item > input:before {
-    content: "";
-    display: inline-block;
-    width: 0.875rem;
-    height: 0.875rem;
-    vertical-align: middle;
-    text-align: center;
-    border: 1px solid #b8bfc6;
-    background-color: #363B40;
-    margin-top: -0.4rem;
-}
-
-.md-task-list-item > input:checked:before,
-.md-task-list-item > input[checked]:before {
-    content: '\221A';
-    /*◘*/
-    font-size: 0.625rem;
-    line-height: 0.625rem;
-    color: #DEDEDE;
-}
-
-/** quick open **/
-.auto-suggest-container {
-    border: 0px;
-    background-color: #525C65;
-}
-
-#typora-quick-open {
-    background-color: #525C65;
-}
-
-#typora-quick-open input{
-    background-color: #525C65;
-    border: 0;
-    border-bottom: 1px solid grey;
-}
-
-.typora-quick-open-item {
-    background-color: inherit;
-    color: inherit;
-}
-
-.typora-quick-open-item.active,
-.typora-quick-open-item:hover {
-    background-color: #4D8BDB;
-    color: white;
-}
-
-.typora-quick-open-item:hover {
-    background-color: rgba(77, 139, 219, 0.8);
-}
-
-.typora-search-spinner > div {
-  background-color: #fff;
-}
-
-#write pre.md-meta-block {
-    border-bottom: 1px dashed #ccc;
-    background: transparent;
-    padding-bottom: 0.6em;
-    line-height: 1.6em;
-}
-
-.btn,
-.btn .btn-default {
-    background: transparent;
-    color: #b8bfc6;
-}
-
-.ty-table-edit {
-    border-top: 1px solid gray;
-    background-color: #363B40;
-}
-
-.popover-title {
-    background: transparent;
-}
-
-.md-image>.md-meta {
-    color: #BBBBBB;
-    background: transparent;
-}
-
-.md-expand.md-image>.md-meta {
-    color: #DDD;
-}
-
-#write>h3:before,
-#write>h4:before,
-#write>h5:before,
-#write>h6:before {
-    border: none;
-    border-radius: 0px;
-    color: #888;
-    text-decoration: underline;
-    left: -1.4rem;
-    top: 0.2rem;
-}
-
-#write>h3.md-focus:before {
-    top: 2px;
-}
-
-#write>h4.md-focus:before {
-    top: 2px;
-}
-
-.md-toc-item {
-    color: #A8C2DC;
-}
-
-#write div.md-toc-tooltip {
-    background-color: #363B40;
-}
-
-.dropdown-menu .btn:hover,
-.dropdown-menu .btn:focus,
-.md-toc .btn:hover,
-.md-toc .btn:focus {
-    color: white;
-    background: black;
-}
-
-#toc-dropmenu {
-    background: rgba(50, 54, 59, 0.93);
-    border: 1px solid rgba(253, 253, 253, 0.15);
-}
-
-#toc-dropmenu .divider {
-    background-color: #9b9b9b;
-}
-
-.outline-expander:before {
-    top: 2px;
-}
-
-#typora-sidebar {
-    box-shadow: none;
-    border-right: 1px dashed;
-    border-right: none;
-}
-
-.sidebar-tabs {
-    border-bottom:0;
-}
-
-#typora-sidebar:hover .outline-title-wrapper {
-    border-left: 1px dashed;
-}
-
-.outline-title-wrapper .btn {
-    color: inherit;
-}
-
-.outline-item:hover {
-    border-color: #363B40;
-    background-color: #363B40;
-    color: white;
-}
-
-h1.md-focus .md-attr,
-h2.md-focus .md-attr,
-h3.md-focus .md-attr,
-h4.md-focus .md-attr,
-h5.md-focus .md-attr,
-h6.md-focus .md-attr,
-.md-header-span .md-attr {
-    color: #8C8E92;
-    display: inline;
-}
-
-.md-comment {
-    color: #5a95e3;
-    opacity: 1;
-}
-
-.md-inline-math svg {
-    color: #b8bfc6;
-}
-
-#math-inline-preview .md-arrow:after {
-    background: black;
-}
-
-.modal-content {
-    background: var(--bg-color);
-    border: 0;
-}
-
-.modal-title {
-    font-size: 1.5em;
-}
-
-.modal-content input {
-    background-color: rgba(26, 21, 21, 0.51);
-    color: white;
-}
-
-.modal-content .input-group-addon {
-    color: white;
-}
-
-.modal-backdrop {
-    background-color: rgba(174, 174, 174, 0.7);
-}
-
-.modal-content .btn-primary {
-    border-color: var(--primary-color);
-}
-
-.md-table-resize-popover {
-    background-color: #333;
-}
-
-.form-inline .input-group .input-group-addon {
-    color: white;
-}
-
-#md-searchpanel {
-    border-bottom: 1px dashed grey;
-}
-
-/** UI for electron */
-
-.context-menu,
-#spell-check-panel,
-#footer-word-count-info {
-    background-color: #42464A;
-}
-
-.context-menu.dropdown-menu .divider,
-.dropdown-menu .divider {
-    background-color: #777777;
-}
-
-footer {
-    color: inherit;
-}
-
-@media (max-width: 1000px) {
-    footer {
-        border-top: none;
-    }
-    footer:hover {
-        color: inherit;
-    }
-}
-
-#file-info-file-path .file-info-field-value:hover {
-    background-color: #555;
-    color: #dedede;
-}
-
-.megamenu-content,
-.megamenu-opened header {
-    background: var(--bg-color);
-}
-
-.megamenu-menu-panel h2,
-.megamenu-menu-panel h1,
-.long-btn {
-    color: inherit;
-}
-
-.megamenu-menu-panel input[type='text'] {
-    background: inherit;
-    border: 0;
-    border-bottom: 1px solid;
-}
-
-#recent-file-panel-action-btn {
-    background: inherit;
-    border: 1px grey solid;
-}
-
-.megamenu-menu-panel .dropdown-menu > li > a {
-    color: inherit;
-    background-color: #2F353A;
-    text-decoration: none;
-}
-
-.megamenu-menu-panel table td:nth-child(1) {
-    color: inherit;
-    font-weight: bold;
-}
-
-.megamenu-menu-panel tbody tr:hover td:nth-child(1) {
-    color: white;
-}
-
-.modal-footer .btn-default, 
-.modal-footer .btn-primary,
-.modal-footer .btn-default:not(:hover) {
-    border: 1px solid;
-    border-color: transparent;
-}
-
-.btn-default:hover, .btn-default:focus, .btn-default.focus, .btn-default:active, .btn-default.active, .open > .dropdown-toggle.btn-default {
-    color: white;
-    border: 1px solid #ddd;
-    background-color: inherit;
-}
-
-.modal-header {
-    border-bottom: 0;
-}
-
-.modal-footer {
-    border-top: 0;
-}
-
-#recent-file-panel tbody tr:nth-child(2n-1) {
-    background-color: transparent !important;
-}
-
-.megamenu-menu-panel tbody tr:hover td:nth-child(2) {
-    color: inherit;
-}
-
-.megamenu-menu-panel .btn {
-    border: 1px solid #eee;
-    background: transparent;
-}
-
-.mouse-hover .toolbar-icon.btn:hover,
-#w-full.mouse-hover,
-#w-pin.mouse-hover {
-    background-color: inherit;
-}
-
-.typora-node::-webkit-scrollbar {
-    width: 5px;
-}
-
-.typora-node::-webkit-scrollbar-thumb:vertical {
-    background: rgba(250, 250, 250, 0.3);
-}
+  max-width: 914px;
+  font-size: 16px;
+  text-align: left;
+  letter-spacing: 0px;
+  font-family: "Fira Code", "微软雅黑","PingFang SC", "Microsoft YaHei", sans-serif;
+}
 
-.typora-node::-webkit-scrollbar-thumb:vertical:active {
-    background: rgba(250, 250, 250, 0.5);
-}
+/*段落*/
+#write p {
+  font-size: 16px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin: 0;
+  line-height: 26px;
+  color: black;
+}
+
+/*  todo item 对齐 */
+#write input[type="checkbox"] {
+  margin-top: calc(1em - 2px);
+  margin-right: 5px;
+  left: -3px;
+}
+
+/*标题*/
+#write h1,
+#write h2,
+#write h3,
+#write h4,
+#write h5,
+#write h6 {
+  margin: .72em 0;
+  padding: 0px;
+  font-weight: bold;
+  color: black;
+}
+#write h1 {
+  margin: 1.2em 0;
+  font-size: 2rem;
+  /* text-align: center; */
+}
+#write h2::before{
+  content: "✔";
+  font-weight: bold;
+  color: #ffb11b;
+  margin-right: 4px
+}
+#write h2 {
+  font-size: 1.7rem;
+  margin: 1em 0;
+}
+#write h2 span {
+ font-weight: bold;
+ color: #333;
+ padding: 3px 10px 1px;
+}
+
+#write h3 {
+  font-size: 1.5rem;
+}
+#write h4 {
+  font-size: 1.25rem;
+}
+#write h5 {
+  font-size: 1rem;
+}
+#write h6 {
+  font-size: 1rem;
+}
+
+/* 列表 */
+#write ul,
+#write ol {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  padding-left: 40px;
+  color: black;
+}
+#write ul {
+  list-style-type: disc;
+}
+#write ul ul {
+  list-style-type: square;
+}
+#write ol {
+  list-style-type: decimal;
+}
+/* 列表内容 */
+#write li section {
+  font-size:15px;
+}
+
+/* 字体加粗 */
+/* #write strong::before {
+  content: '「';
+} */
+
+#write strong {
+  color: #E49123;
+  font-weight: bold;
+}
 
-#w-unpin {
-    background-color: #4182c4;
-}
+/* #write strong::after {
+  content: '」';
+} */
 
-#top-titlebar, #top-titlebar * {
-    color: var(--item-hover-text-color);
+/*引用*/
+#write blockquote {
+  margin-bottom: 16px;
+  margin-top: 16px;
+  padding: 10px 10px 10px 20px;
+  font-size: 0.9em;
+  background: #fff9f9;
+  border-left: 3px solid #ffb11b;
+  color: #6a737d;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
-
-.typora-sourceview-on #toggle-sourceview-btn,
-#footer-word-count:hover,
-.ty-show-word-count #footer-word-count {
-    background: #333333;
+#write blockquote p {
+  line-height: 26px;
 }
 
-#toggle-sourceview-btn:hover {
-    color: #eee;
-    background: #333333;
+/* 超链接 */
+#write a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #E49123;
+  border-bottom: 1px solid #E49123;
 }
 
-/** focus mode */
-.on-focus-mode .md-end-block:not(.md-focus):not(.md-focus-container) * {
-    color: #686868 !important;
+/* 分割线 */
+#write hr {
+  height: 1px;
+  padding: 0;
+  border: none;
+  text-align: center;
+  background-image: linear-gradient(to right,rgba(231, 93, 109,0.3),rgba(255, 159, 150,0.75),rgba(255, 216, 181,0.3));
+}
+
+/* background-color 由 rgba 转为 HEX*/
+#write code{
+  font-size: 14px;
+  color:  rgb(235, 76, 55);
+  background-color: #f0f0f0;
 }
-
-.on-focus-mode .md-end-block:not(.md-focus) img,
-.on-focus-mode .md-task-list-item:not(.md-focus-container)>input {
-    opacity: #686868 !important;
+
+/* 行内代码 */
+#write p code,
+#write span code,
+#write li code {
+  word-wrap: break-word;
+  padding: 2px 4px;
+  border-radius: 4px;
+  margin: 0 2px;
+  word-break: break-all;
 }
 
-.on-focus-mode li[cid]:not(.md-focus-container){
-    color: #686868;
+/* 文章插图 */
+#write img {
+  display: block;
+  margin: 0 auto;
+  width: 85%;
+  max-width: 100%;
+  border-radius: 5px;
+  box-shadow:0px 4px 12px #84A1A8;
+  border: 0px;
 }
 
-.on-focus-mode .md-fences.md-focus .CodeMirror-code>*:not(.CodeMirror-activeline) *,
-.on-focus-mode .CodeMirror.cm-s-inner:not(.CodeMirror-focused) * {
-    color: #686868 !important;
+#write table tr {
+  border: 0;
+  border-top: 1px solid #ccc;
+  background-color: white;
 }
-
-.on-focus-mode .md-focus,
-.on-focus-mode .md-focus-container {
-    color: #fff;
+#write table tr:nth-child(2n) {
+  background-color: #F8F8F8;
 }
-
-.on-focus-mode #typora-source .CodeMirror-code>*:not(.CodeMirror-activeline) * {
-    color: #686868 !important;
+#write table tr th,
+#write table tr td {
+  font-size: 16px;
+  line-height: 1.5;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  text-align: left;
 }
-
-
-/*diagrams*/
-#write .md-focus .md-diagram-panel {
-    border: 1px solid #ddd;
-    margin-left: -1px;
-    width: calc(100% + 2px);
+#write table tr th {
+  font-weight: bold;
+  background-color: #f0f0f0;
 }
 
-/*diagrams*/
-#write .md-focus.md-fences-with-lineno .md-diagram-panel {
-    margin-left: auto;
-}
 
-.md-diagram-panel-error {
-    color: #f1908e;
+/* 上角标 */
+#write .md-footnote {
+ font-weight: bold;
+ color: #E49123;
 }
-
-.active-tab-files #info-panel-tab-file,
-.active-tab-files #info-panel-tab-file:hover,
-.active-tab-outline #info-panel-tab-outline,
-.active-tab-outline #info-panel-tab-outline:hover {
-    color: #eee;
+#write .md-footnote > .md-text:before {
+ content: '['
 }
-
-.sidebar-footer-item:hover,
-.footer-item:hover {
-    background: inherit;
-    color: white;
+#write .md-footnote > .md-text:after {
+ content: ']'
 }
 
-.ty-side-sort-btn.active,
-.ty-side-sort-btn:hover,
-.selected-folder-menu-item a:after {
-    color: white;
-}
 
-#sidebar-files-menu {
-    border:solid 1px;
-    box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.79);
-    background-color: var(--bg-color);
+/* 下角标 */
+#write .md-def-name {
+  padding-right: 1.8ch;
 }
-
-.file-list-item {
-    border-bottom:none;
+#write .md-def-name:before {
+  content: '[';
+  color: #000;
 }
-
-.file-list-item-summary {
-    opacity: 1;
+#write .md-def-name:after {
+  color: #000;
 }
 
-.file-list-item.active:first-child {
-    border-top: none;
-}
 
-.file-node-background {
-    height: 32px;
+/* 代码块主题 */
+code, .md-fences {
+	padding: .5em;
+	/* border: 1px solid #ccc; */
+	padding: .1em;
+	border-radius: 5px;
+	margin-left: 0.2em;
+  margin-right: 0.2em;
+  font-family: "Fira Code", "微软雅黑","PingFang SC", "Microsoft YaHei", sans-serif;
 }
-
-.file-library-node.active>.file-node-content,
-.file-list-item.active {
-    color: white;
-    color: var(--active-file-text-color);
+.md-fences {
+  margin: 0 0 20px;
+  background-color: #292b35;
+  color: rgb(236, 236, 236);
+	/* font-size: 1em; */
+	padding: 0.3em 1em;
+  padding-top: 0.4em;
+  box-shadow: 0px 4px 9px grey;
 }
-
-.file-library-node.active>.file-node-background{
-    background-color: rgb(34, 34, 34);
-    background-color: var(--active-file-bg-color);
+.CodeMirror div.CodeMirror-cursor {
+  margin-left: 4.6px;
+  border-left: 1px solid #7ba0f0;
+  z-index: 5;
 }
-.file-list-item.active {
-    background-color: rgb(34, 34, 34);
-    background-color: var(--active-file-bg-color);
+.cm-s-inner div.CodeMirror-selected {
+  background: rgba(113, 124, 180, 0.2);
 }
-
-#ty-tooltip {
-    background-color: black;
-    color: #eee;
+.CodeMirror-code{
+  margin-left: 5px;
 }
-
-.md-task-list-item>input {
-    margin-left: -1.3em;
-    margin-top: 0.3rem;
-    -webkit-appearance: none;
+.cm-s-inner .cm-keyword {
+  color: #c792ea;
+  font-weight: 450;
 }
-
-.md-mathjax-midline {
-    background-color: #57616b;
-    border-bottom: none;
+.cm-s-inner .cm-operator {
+  color: #89ddff;
 }
-
-footer.ty-footer {
-    border-color: #656565;
+.cm-s-inner .cm-variable-2 {
+  color: #eeffff;
 }
-
-.ty-preferences .btn-default {
-    background: transparent;
+.cm-s-inner .cm-variable-3,
+.cm-s-inner .cm-type {
+  color: #f07178;
 }
-.ty-preferences .btn-default:hover {
-    background: #57616b;
+.cm-s-inner .cm-builtin {
+  color: #ffcb6b;
 }
-
-.ty-preferences select {
-    border: 1px solid #989698;
-    height: 21px;
+.cm-s-inner .cm-atom {
+  color: #f78c6c;
 }
-
-.ty-preferences .nav-group-item.active {
-    background: var(--item-hover-bg-color);
+.cm-s-inner .cm-number {
+  color: #ff5370;
 }
-
-.ty-preferences input[type="search"] {
-    border-color: #333;
-    background: #333;
-    line-height: 22px;
-    border-radius: 6px;
-    color: white;
+.cm-s-inner .cm-def {
+  color: #82aaff;
 }
-
-.ty-preferences input[type="search"]:focus {
-    box-shadow: none;
+.cm-s-inner .cm-string {
+  color: #c3e88d;
 }
-
-[data-is-directory="true"] .file-node-content {
-    margin-bottom: 0;
+.cm-s-inner .cm-string-2 {
+  color: #f07178;
 }
-
-.file-node-title {
-    line-height: 22px;
+.cm-s-inner .cm-comment {
+  color: #676e95;
 }
-
-.html-for-mac .file-node-open-state, .html-for-mac .file-node-icon {
-    line-height: 26px;
+.cm-s-inner .cm-variable {
+  color: #f07178;
 }
-
-::-webkit-scrollbar-thumb {
-    background: rgba(230, 230, 230, 0.30);
+.cm-s-inner .cm-tag {
+  color: #ff5370;
 }
-
-::-webkit-scrollbar-thumb:active {
-    background: rgba(230, 230, 230, 0.50);
+.cm-s-inner .cm-meta {
+  color: #ffcb6b;
 }
-
-#typora-sidebar:hover div.sidebar-content-content::-webkit-scrollbar-thumb:horizontal {
-    background: rgba(230, 230, 230, 0.30);
+.cm-s-inner .cm-attribute {
+  color: #c792ea;
 }
-
-.nav-group-item:active {
-    background-color: #474d54;
+.cm-s-inner .cm-property {
+  color: #c792ea;
 }
-
-.md-search-hit {
-    background: rgba(199, 140, 60, 0.81);
-    color: #eee;
+.cm-s-inner .cm-qualifier {
+  color: #decb6b;
 }
-
-.md-search-hit * {
-    color: #eee;
+.cm-s-inner .cm-variable-3,
+.cm-s-inner .cm-type {
+  color: #decb6b;
 }
-
-#md-searchpanel input {
-    color: white;
+.cm-s-inner .cm-error {
+  color: rgba(255, 255, 255, 1);
+  background-color: #e9405c;
 }
 
-.export-detail,
-.export-item.active,
-.export-items-list-control {
-    background: #d6d6d4
+/*流程图样式*/
+pre[lang='sequence'],
+pre[lang='flow'],
+pre[lang='mermaid']
+{
+  background: #ffffff;
+  color: #333333;
 }
 
 
 </style>
 </head>
 <body class='typora-export os-windows'>
-<div id='write'  class=''><h1><a name="osm-and-overpass-api" class="md-header-anchor"></a><span>OSM and overpass api</span></h1><h1><a name="osm" class="md-header-anchor"></a><span>OSM</span></h1><p><span>元素是OpenStreetMap的物理世界概念數據模型的基本組成部分。其元素並非 點、線、面 資料，而是 </span><strong><span>node</span></strong><span>、</span><strong><span>way</span></strong><span>、</span><strong><span>relation</span></strong><span>，以上元素接可含有一個或多個關聯的 </span><strong><span>tag</span></strong><span></span><br/><span>後兩種資料皆以 </span><strong><span>node</span></strong><span> 為基礎形成，也就是 way、relation 資料都是2個或以上的node組合而成：  </span></p><ul><li><span>node 節點： 空間中的一個點，該點至少由緯度、經度、ID組成。任一 node 可能為&quot;</span><strong><span>點資料</span></strong><span>&quot;、</span><strong><span>線</span></strong><span>的節點、</span><strong><span>面</span></strong><span>的節點 </span><P></li><li><span>way 路徑/形狀： 由2~2000個 node 組成，可以是</span><strong><span>線資料</span></strong><span>(線性特徵)或者</span><strong><span>面資料</span></strong><span>(區域邊界)。當一個區域超過2000個 node 時，就必須使用 relation資料來定義 </span><p></li><li><span>relation 關係： 是一個多用途的結構資料，定義 兩個或更多 資料之間的關係。在 relation 中，可能會有</span><strong><span>點資料</span></strong><span>、</span><strong><span>線資料</span></strong><span>、</span><strong><span>面資料</span></strong><span>。可能是分別的 node、way、relation ，最後被整合在同一個群組，就成了 relation 資料 ( 也就表示可以由兩個以上的 relation 再次組成一個 relation，也可以是 點與面 有所關聯而group在一起 )，常見的是 兩個以上的 way 組成一個 relation </span><P></li><li><span>tag 標籤：OpenStreetMap represents physical features on the ground using tags attached to its basic data structures (its nodes, ways, and relations). Each tag describes a geographic attribute of the feature being shown by that specific node, way or relation.</span></li><li><span>因為 OSM 是開放的，且可以編輯，所以取得的資料</span><strong><span>無時無刻都有可能浮動</span></strong><span>，</span><strong><span>尤其是數量</span></strong><span>，搜尋同的條件下，此時得到的資料量，在未來也許會不同</span></li></ul><p><span>這次範例，軍事機場的標籤 → &quot;military&quot;=&quot;airfield&quot;</span></p><h1><a name="overpass-api" class="md-header-anchor"></a><span>Overpass API</span></h1><p><span>以下只筆記我使用到的 overpass turbo、overpy</span></p><h2><a name="overpass-turbohttpsoverpass-turboeu-" class="md-header-anchor"></a><a href='https://overpass-turbo.eu/ '><span>overpass turbo</span></a></h2><p><span>是一個能即時展示在網路地圖上的一個API，並且該網站功可能從</span><strong><span>地圖</span></strong><span>切換到</span><strong><span>資料</span></strong><span>，直接查看搜尋到的資料全部內容。</span></p><p><span>基本操作：只要在網頁中使用 &quot;</span><strong><span>精靈模式</span></strong><span>&quot; 打上 &quot;military&quot;=&quot;airfield&quot; 後就會自動生成以下</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="QL"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="ql"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><span><span>​</span>x</span></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">[out:json];</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">(</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">  node["military"="airfield"]({{bbox}});</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">  way["military"="airfield"]({{bbox}});</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">  relation["military"="airfield"]({{bbox}});</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">out body;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">&gt;;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">out skel qt;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 286px;"></div><div class="CodeMirror-gutters" style="display: none; height: 286px;"></div></div></div></pre><ul><li><span>[&quot;military&quot;=&quot;airfield&quot;] 中括號內放要搜尋的 </span><strong><span>tag</span></strong><span> </span></li><li><span>({{bbox}}) 表示在網頁中的</span><strong><span>可視範圍</span></strong><span>作為搜尋邊界，也可改成需要的範圍(緯,經,緯,經)，可以在</span><a href='http://tools.geofabrik.de/calc/'><span>這裡</span></a><span> 取得，請注意該網頁取得的是(經 緯 經 緯)，如果沒有輸入，就是搜尋全球資料</span></li><li><span>out body; : This prints all information necessary to use the data. These are also tags for all elements and the roles for relation members. see Print action. This first step will print all of the node details, the ways (without nodes(!)) and relations (without details about ways and nodes(!)) you requested.</span></li><li>&gt;<span> ; : This statement is called recurse down and resolves ways to its nodes, and relations to its ways and nodes.</span></li><li><span>out skel qt; - in this last statement, we will now print out the results of the previous &gt;; (recurse down) statement. To reduce the amount of unwanted by-catch, we use out skel instead of out body;. The idea here is to just return the geometry information, but leave out any tags. qt is a sorting option (by quadtile), which is also meant as a performance optimization.</span></li><li><span>內容很多，可參考 </span><a href='https://gis.stackexchange.com/questions/187447/understanding-overpassturbo-query'><span>這裡</span></a><span> 和 </span><a href='https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL'><span>這裡</span></a></li></ul><h2><a name="overpyhttpspython-overpyreadthedocsioenlatest-" class="md-header-anchor"></a><a href='https://python-overpy.readthedocs.io/en/latest/ '><span>overpy</span></a></h2><p><span>透過 Python 界接的 API，功能齊全， query() 來輸入 QL：</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="python"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="python"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">import</span> <span class="cm-variable">overpy</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">api</span> = <span class="cm-variable">overpy</span>.<span class="cm-property">Overpass</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">result</span> = <span class="cm-variable">api</span>.<span class="cm-property">query</span>(<span class="cm-string">'''</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">[out:json];</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">(</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">  node["military"="airfield"](30.82,128.82,34.67,132.81);</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">  way["military"="airfield"](30.82,128.82,34.67,132.81);</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">  relation["military"="airfield"](30.82,128.82,34.67,132.81);</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">);</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">out body;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">&gt;;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">out skel qt;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">'''</span>)</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 338px;"></div><div class="CodeMirror-gutters" style="display: none; height: 338px;"></div></div></div></pre><ul><li><span>其中()內必須座標是(緯,經,緯,經)，可以在 </span><a href='http://tools.geofabrik.de/calc/'><span>這裡</span></a><span> 取得，請注意該網頁取得的是(經 緯 經 緯)，如果沒有輸入，就是搜尋全球資料</span></li><li><span>out:json 也可以換成 out:xml</span></li></ul><p><span>因為整個資料的結構(node、way、relation)，以至於必須分開實作：</span></p><h3><a name="利用-node-取得點" class="md-header-anchor"></a><span>利用 node 取得點</span></h3><h4><a name="先引入套件並設定-ql" class="md-header-anchor"></a><span>先引入套件並設定 QL</span></h4><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="python"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="python"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">import</span> <span class="cm-variable">overpy</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">api</span> = <span class="cm-variable">overpy</span>.<span class="cm-property">Overpass</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">result</span> = <span class="cm-variable">api</span>.<span class="cm-property">query</span>(<span class="cm-string">'''</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">[out:json];</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">(</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">  node["military"="airfield"];</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">);</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">out body;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">&gt;;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">out skel qt;'''</span>)</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 286px;"></div><div class="CodeMirror-gutters" style="display: none; height: 286px;"></div></div></div></pre><ul><li><span>在QL中只要求點，且不輸入經緯度，以求全球資料。而因為有後兩行的輸入，才能得到所需的點，不然會沒有資料</span></li><li><span>因為 overpy 沒辦法可視化，所以 QL 的輸入，可以先在overpass turbo中測試，或者利用 </span><code>print(len(result.nodes))</code><span> 來查看取得多少資料</span></li></ul><h4><a name="接下來擷取所需資料" class="md-header-anchor"></a><span>接下來擷取所需資料</span></h4><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="python"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="python"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">namep</span> = []</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">xp</span> = []</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">yp</span> = []</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">for</span> <span class="cm-variable">point</span> <span class="cm-keyword">in</span> <span class="cm-variable">result</span>.<span class="cm-property">nodes</span>:</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">namep</span>.<span class="cm-property">append</span>(<span class="cm-variable">point</span>.<span class="cm-property">tags</span>.<span class="cm-property">get</span>(<span class="cm-string">"name"</span>, <span class="cm-string">""</span>))</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">xp</span>.<span class="cm-property">append</span>(<span class="cm-builtin">float</span>(<span class="cm-variable">point</span>.<span class="cm-property">lon</span>))</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">yp</span>.<span class="cm-property">append</span>(<span class="cm-builtin">float</span>(<span class="cm-variable">point</span>.<span class="cm-property">lat</span>))</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 208px;"></div><div class="CodeMirror-gutters" style="display: none; height: 208px;"></div></div></div></pre><ul><li><span>資料的結構可利用 overpass turbo 來觀看如下：</span></li></ul><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="json" style="break-inside: unset;"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="json"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-meta">...</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">{</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-string cm-property">"type"</span>: <span class="cm-string">"node"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-string cm-property">"id"</span>: <span class="cm-number">30353161</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-string cm-property">"lat"</span>: <span class="cm-operator">-</span><span class="cm-number">51.8208779</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-string cm-property">"lon"</span>: <span class="cm-operator">-</span><span class="cm-number">58.4565304</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-string cm-property">"tags"</span>: {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"aerodrome:type"</span>: <span class="cm-string">"military/public"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"aeroway"</span>: <span class="cm-string">"aerodrome"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"alt_name"</span>: <span class="cm-string">"Mount Pleasant Airport"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"ele"</span>: <span class="cm-string">"74"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"iata"</span>: <span class="cm-string">"MPN"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"icao"</span>: <span class="cm-string">"EGYP"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"is_in"</span>: <span class="cm-string">"Stanley"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"is_in:country_code"</span>: <span class="cm-string">"FK"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"military"</span>: <span class="cm-string">"airfield"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"name"</span>: <span class="cm-string">"RAF Mount Pleasant"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"name:es"</span>: <span class="cm-string">"Base Aerea Monte Agradable"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"operator"</span>: <span class="cm-string">"RAF"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"source"</span>: <span class="cm-string">"wikipedia"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"wikidata"</span>: <span class="cm-string">"Q2071294"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"wikipedia"</span>: <span class="cm-string">"en:RAF Mount Pleasant"</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">  }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-meta">...</span></span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 624px;"></div><div class="CodeMirror-gutters" style="display: none; height: 624px;"></div></div></div></pre><ul><li><p><span>利用 for 迴圈取的每個點資料 &quot;tags&quot; 中的屬性，而 tags 是一個字典，所以利用 get( )，括號內最多可以設定兩個</span></p><ul><li><span>(&quot;name&quot;, &quot; &quot;) 是找尋 &quot;name&quot; 屬性，沒有的話就找尋下一個 &quot; &quot; 屬性，如果還是沒有就會取後面的雙引號裡的名，當作回傳的資料</span></li></ul></li><li><p><span>而看了結構之後會發現，經緯度並不是在 tags 裡面，而是跟 tags 為同一層，所以直接利用 </span><code>.lon</code><span> </span><code>.lat</code><span> 直接取的經緯度</span></p></li><li><p><span>將要取得的屬性，存進個別的 list 裡，是為了將多個 list 存成 dataframe，方便等等一併加進資料庫</span></p></li></ul><h4><a name="連接-postgresql-資料庫前先打開終端機設定資料庫" class="md-header-anchor"></a><span>連接 PostgreSQL 資料庫前，先打開終端機設定資料庫</span></h4><ol start='' ><li><span>先導至選定的資料庫 (JLDB)，替該資料庫建立 postgis 套件</span></li></ol><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="CMD"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="cmd"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-identifier">CREATE</span> <span class="cm-identifier">EXTENSION</span> <span class="cm-identifier">postgis</span><span class="cm-punctuation">;</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-identifier">CREATE</span> <span class="cm-identifier">EXTENSION</span> <span class="cm-identifier">postgis_topology</span><span class="cm-punctuation">;</span></span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 52px;"></div><div class="CodeMirror-gutters" style="display: none; height: 52px;"></div></div></div></pre><ol start='2' ><li><span>再建立資料表 (airfield_point)</span></li></ol><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="CMD"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="cmd"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-identifier">CREATE</span> <span class="cm-identifier">TABLE</span> <span class="cm-identifier">airfield_point</span> <span class="cm-punctuation">(</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-identifier">point_id</span> <span class="cm-identifier">SERIAL</span> <span class="cm-identifier">PRIMARY</span> <span class="cm-identifier">KEY</span><span class="cm-punctuation">,</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-identifier">name</span> <span class="cm-identifier">VARCHAR</span><span class="cm-punctuation">(</span><span class="cm-number">144</span><span class="cm-punctuation">),</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-identifier">x</span> <span class="cm-identifier">double</span> <span class="cm-identifier">precision</span><span class="cm-punctuation">,</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-identifier">y</span> <span class="cm-identifier">double</span> <span class="cm-identifier">precision</span><span class="cm-punctuation">,</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-identifier">geom</span> <span class="cm-identifier">geometry</span><span class="cm-punctuation">(</span><span class="cm-identifier">point</span><span class="cm-punctuation">,</span><span class="cm-number">4326</span><span class="cm-punctuation">),</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-punctuation">);</span></span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 182px;"></div><div class="CodeMirror-gutters" style="display: none; height: 182px;"></div></div></div></pre><h4><a name="連接資料庫並將結果存進資料庫" class="md-header-anchor"></a><span>連接資料庫並將結果存進資料庫</span></h4><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded md-focus" lang="python" style="break-inside: unset;"><div class="CodeMirror cm-s-inner CodeMirror-wrap CodeMirror-focused" lang="python"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 572px; left: 4px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="" style="position: relative;"><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">import</span> <span class="cm-variable">pandas</span> <span class="cm-keyword">as</span> <span class="cm-variable">pd</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">import</span> <span class="cm-variable">psycopg2</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">df</span> = <span class="cm-variable">pd</span>.<span class="cm-property">DataFrame</span>(</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  {<span class="cm-string">'name'</span> : <span class="cm-variable">namep</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string">'x'</span> : <span class="cm-variable">xp</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string">'y'</span> : <span class="cm-variable">yp</span> })</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">dfp</span> = <span class="cm-variable">df</span>.<span class="cm-property">values</span>.<span class="cm-property">tolist</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">connection</span> = <span class="cm-variable">psycopg2</span>.<span class="cm-property">connect</span>(<span class="cm-variable">host</span>=<span class="cm-string">'localhost'</span>,<span class="cm-variable">port</span>=<span class="cm-number">5432</span>,<span class="cm-variable">user</span>=<span class="cm-string">'postgres'</span>,<span class="cm-variable">password</span>=<span class="cm-string">'postgresql'</span>,<span class="cm-variable">database</span>=<span class="cm-string">'JLDB'</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">cursor</span> = <span class="cm-variable">connection</span>.<span class="cm-property">cursor</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">sql</span> =(<span class="cm-string">'''</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">INSERT INTO "public"."airfield_point"(name,x,y) values (%s,%s,%s);</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">UPDATE "public"."airfield_point" SET geom = ST_SetSRID(ST_MakePoint(foo.x,foo.y),4326) FROM(SELECT point_id,x,y FROM "public"."airfield_point") as foo WHERE "public"."airfield_point".point_id = foo.point_id; &nbsp; &nbsp; &nbsp;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">'''</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">cursor</span>.<span class="cm-property">executemany</span>(<span class="cm-variable">sql</span>, <span class="cm-variable">dfp</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">connection</span>.<span class="cm-property">commit</span>()</span></pre><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">cursor</span>.<span class="cm-property">close</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">connection</span>.<span class="cm-property">close</span>()</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 650px;"></div><div class="CodeMirror-gutters" style="display: none; height: 650px;"></div></div></div></pre><ul><li><span>將剛剛個別的 list 存成 dataframe，再轉成 list，使得每一筆資料變成  [name ,lon , lat]，就能利用批次加進資料庫裡</span></li><li></li></ul><p>&nbsp;</p></div>
+<div id='write'  class=''><h1><a name="osm-and-overpass-api" class="md-header-anchor"></a><em><span>OSM and Overpass API</span></em></h1><h1><a name="osm" class="md-header-anchor"></a><span>OSM</span></h1><p><span>元素是OpenStreetMap的物理世界概念數據模型的基本組成部分。其元素並非 點、線、面 資料，而是 </span><strong><span>node</span></strong><span>、</span><strong><span>way</span></strong><span>、</span><strong><span>relation</span></strong><span>，以上元素接可含有一個或多個關聯的 </span><strong><span>tag</span></strong><span></span><br/><span>後兩種資料皆以 </span><strong><span>node</span></strong><span> 為基礎形成，也就是 way、relation 資料都是2個或以上的node組合而成：  </span></p><ul><li><span>node 節點： 空間中的一個點，該點至少由緯度、經度、ID組成。任一 node 可能為&quot;</span><strong><span>點資料</span></strong><span>&quot;、</span><strong><span>線</span></strong><span>的節點、</span><strong><span>面</span></strong><span>的節點</span></li><li><span>way 路徑/形狀： 由2~2000個 node 組成，可以是&quot;</span><strong><span>線資料</span></strong><span>&quot;(線性特徵)或者&quot;</span><strong><span>面資料</span></strong><span>&quot;(區域邊界)。當一個區域超過2000個 node 時，就必須使用 relation資料來定義</span></li><li><span>relation 關係： 是一個多用途的結構資料，定義 兩個或更多 資料之間的關係。在 relation 中，可能會有</span><strong><span>點資料</span></strong><span>、</span><strong><span>線資料</span></strong><span>、</span><strong><span>面資料</span></strong><span>，由 </span><strong><span>&quot;members&quot;</span></strong><span> 包在一起。</span>
+<img src="https://myfriends1033.github.io/article/photo/members.JPG" referrerpolicy="no-referrer" alt="members"></li><li><span>當然也可能是分別的 node、way、relation ，最後被整合在同一個群組，就成了 relation 資料 ( 也就表示可以由兩個以上的 relation 再次組成一個 relation，也可以是 點與面 有所關聯而group在一起 )，常見的是 兩個以上的 way 組成一個 relation</span></li><li><span>tag 標籤：OpenStreetMap represents physical features on the ground using tags attached to its basic data structures (its nodes, ways, and relations). Each tag describes a geographic attribute of the feature being shown by that specific node, way or relation.</span></li><li><span>因為 OSM 是開放的，且可以編輯，所以取得的資料</span><strong><span>無時無刻都有可能浮動</span></strong><span>，</span><strong><span>尤其是數量</span></strong><span>，搜尋同的條件下，此時得到的資料量，在未來也許會不同</span></li></ul><p><span>這次範例，軍事機場的標籤 → &quot;military&quot;=&quot;airfield&quot;</span></p><h1><a name="overpass-api" class="md-header-anchor"></a><span>Overpass API</span></h1><p><span>以下只筆記我使用到的 overpass turbo、overpy</span></p><h2><a name="overpass-turbohttpsoverpass-turboeu-" class="md-header-anchor"></a><a href='https://overpass-turbo.eu/ '><span>overpass turbo</span></a></h2><p><span>是一個能即時展示在網路地圖上的一個API，並且該網站功可能從</span><strong><span>地圖</span></strong><span>切換到</span><strong><span>資料</span></strong><span>，直接查看搜尋到的資料全部內容。</span></p><p><span>基本操作：只要在網頁中使用 &quot;</span><strong><span>精靈模式</span></strong><span>&quot; 打上 &quot;military&quot;=&quot;airfield&quot; 後就會自動生成以下</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="QL"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="ql"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 9px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">[out:json];</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">(</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">  node["military"="airfield"]({{bbox}});</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">  way["military"="airfield"]({{bbox}});</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">  relation["military"="airfield"]({{bbox}});</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">out body;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">&gt;;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">out skel qt;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 187px;"></div><div class="CodeMirror-gutters" style="display: none; height: 187px;"></div></div></div></pre><ul><li><span>[&quot;military&quot;=&quot;airfield&quot;] 中括號內放要搜尋的 </span><strong><span>tag</span></strong><span> </span></li><li><span>({{bbox}}) 表示在網頁中的</span><strong><span>可視範圍</span></strong><span>作為搜尋邊界，也可改成需要的範圍(緯,經,緯,經)，可以在</span><a href='http://tools.geofabrik.de/calc/'><span>這裡</span></a><span> 取得，請注意該網頁取得的是(經 緯 經 緯)，如果沒有輸入，就是搜尋全球資料</span></li><li><span>out body; : This prints all information necessary to use the data. These are also tags for all elements and the roles for relation members. see Print action. This first step will print all of the node details, the ways (without nodes(!)) and relations (without details about ways and nodes(!)) you requested.</span></li><li>&gt;<span> ; : This statement is called recurse down and resolves ways to its nodes, and relations to its ways and nodes.</span></li><li><span>out skel qt; - in this last statement, we will now print out the results of the previous &gt;; (recurse down) statement. To reduce the amount of unwanted by-catch, we use out skel instead of out body;. The idea here is to just return the geometry information, but leave out any tags. qt is a sorting option (by quadtile), which is also meant as a performance optimization.</span></li><li><span>內容很多，可參考 </span><a href='https://gis.stackexchange.com/questions/187447/understanding-overpassturbo-query'><span>這裡</span></a><span> 和 </span><a href='https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL'><span>這裡</span></a></li></ul><h2><a name="overpyhttpspython-overpyreadthedocsioenlatest-" class="md-header-anchor"></a><a href='https://python-overpy.readthedocs.io/en/latest/ '><span>overpy</span></a></h2><p><span>透過 Python 界接的 API，功能齊全， query() 來輸入 QL：</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="python"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="python"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 9px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">import</span> <span class="cm-variable">overpy</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">api</span> = <span class="cm-variable">overpy</span>.<span class="cm-property">Overpass</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">result</span> = <span class="cm-variable">api</span>.<span class="cm-property">query</span>(<span class="cm-string">'''</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">[out:json];</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">(</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">  node["military"="airfield"](30.82,128.82,34.67,132.81);</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">  way["military"="airfield"](30.82,128.82,34.67,132.81);</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">  relation["military"="airfield"](30.82,128.82,34.67,132.81);</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">);</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">out body;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">&gt;;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">out skel qt;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">'''</span>)</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 221px;"></div><div class="CodeMirror-gutters" style="display: none; height: 221px;"></div></div></div></pre><ul><li><span>其中()內必須座標是(緯,經,緯,經)，可以在 </span><a href='http://tools.geofabrik.de/calc/'><span>這裡</span></a><span> 取得，請注意該網頁取得的是(經 緯 經 緯)，如果沒有輸入，就是搜尋全球資料</span></li><li><span>out:json 也可以換成 out:xml</span></li></ul><p><span>因為整個資料的結構(node、way、relation)，以至於必須分開實作：</span></p><h3><a name="利用-node-取得點" class="md-header-anchor"></a><span>利用 node 取得點</span></h3><h4><a name="先引入套件並設定-ql" class="md-header-anchor"></a><span>先引入套件並設定 QL</span></h4><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="python"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="python"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 9px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">import</span> <span class="cm-variable">overpy</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">api</span> = <span class="cm-variable">overpy</span>.<span class="cm-property">Overpass</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">result</span> = <span class="cm-variable">api</span>.<span class="cm-property">query</span>(<span class="cm-string">'''</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">[out:json];</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">(</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">  node["military"="airfield"];</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">);</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">out body;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">&gt;;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">out skel qt;'''</span>)</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 187px;"></div><div class="CodeMirror-gutters" style="display: none; height: 187px;"></div></div></div></pre><ul><li><span>在QL中只要求點，且不輸入經緯度，以求全球資料。而因為有後兩行的輸入，才能得到所需的點，不然會沒有資料</span></li><li><span>因為 overpy 沒辦法可視化，所以 QL 的輸入，可以先在overpass turbo中測試，或者利用 </span><code>print(len(result.nodes))</code><span> 來查看取得多少資料</span></li></ul><h4><a name="接下來擷取所需資料" class="md-header-anchor"></a><span>接下來擷取所需資料</span></h4><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="python"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="python"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 9px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">namep</span> = []</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">xp</span> = []</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">yp</span> = []</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">for</span> <span class="cm-variable">point</span> <span class="cm-keyword">in</span> <span class="cm-variable">result</span>.<span class="cm-property">nodes</span>:</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">namep</span>.<span class="cm-property">append</span>(<span class="cm-variable">point</span>.<span class="cm-property">tags</span>.<span class="cm-property">get</span>(<span class="cm-string">"name"</span>, <span class="cm-string">""</span>))</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">xp</span>.<span class="cm-property">append</span>(<span class="cm-builtin">float</span>(<span class="cm-variable">point</span>.<span class="cm-property">lon</span>))</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">yp</span>.<span class="cm-property">append</span>(<span class="cm-builtin">float</span>(<span class="cm-variable">point</span>.<span class="cm-property">lat</span>))</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 136px;"></div><div class="CodeMirror-gutters" style="display: none; height: 136px;"></div></div></div></pre><ul><li><span>資料的結構可利用 overpass turbo 來觀看如下：</span></li></ul><blockquote><p><span>{</span><br/><span>&quot;type&quot;: &quot;node&quot;,</span><br/><span>&quot;id&quot;: 30353161,</span><br/><span>&quot;lat&quot;: -51.8208779,</span><br/><span>&quot;lon&quot;: -58.4565304,</span><br/><span>&quot;tags&quot;: {</span><br/><span>			</span><span>&quot;aerodrome:type&quot;: &quot;military/public&quot;,</span><br/><span>			</span><span>&quot;aeroway&quot;: &quot;aerodrome&quot;,</span><br/><span>			</span><span>&quot;alt_name&quot;: &quot;Mount Pleasant Airport&quot;,</span><br/><span>			</span><span>&quot;ele&quot;: &quot;74&quot;,</span><br/><span>			</span><span>&quot;iata&quot;: &quot;MPN&quot;,</span><br/><span>			</span><span>&quot;icao&quot;: &quot;EGYP&quot;,</span><br/><span>			</span><span>&quot;is_in&quot;: &quot;Stanley&quot;,</span><br/><span>			</span><span>&quot;is_in:country_code&quot;: &quot;FK&quot;,</span><br/><span>			</span><span>&quot;military&quot;: &quot;airfield&quot;,</span><br/><span>			</span><span>&quot;name&quot;: &quot;RAF Mount Pleasant&quot;,</span><br/><span>			</span><span>&quot;name:es&quot;: &quot;Base Aerea Monte Agradable&quot;,</span><br/><span>			</span><span>&quot;operator&quot;: &quot;RAF&quot;,</span><br/><span>			</span><span>&quot;source&quot;: &quot;wikipedia&quot;,</span><br/><span>			</span><span>&quot;wikidata&quot;: &quot;Q2071294&quot;,</span><br/><span>			</span><span>&quot;wikipedia&quot;: &quot;en:RAF Mount Pleasant&quot;}</span><br/><span>}</span></p></blockquote><ul><li><p><span>利用 for 迴圈取的每個點資料 &quot;tags&quot; 中的屬性，而 tags 是一個字典，所以利用 </span><code>.tag.get</code><span>，括號內最多可以設定兩個</span></p><ul><li><span>(&quot;name&quot;, &quot; &quot;) 是找尋 &quot;name&quot; 屬性，沒有的話就找尋下一個 &quot; &quot; 屬性，如果還是沒有就會取後面的雙引號裡的名，當作回傳的資料</span></li></ul></li><li><p><span>而看了結構之後會發現，經緯度並不是在 tags 裡面，而是跟 tags 為同一層，所以直接利用 </span><code>.lon</code><span> </span><code>.lat</code><span> 直接取的經緯度</span></p></li><li><p><span>將要取得的屬性，存進個別的 list 裡，是為了將多個 list 存成 dataframe，方便等等一併加進資料庫</span></p></li></ul><h4><a name="連接-postgresql-資料庫前先打開終端機設定資料庫" class="md-header-anchor"></a><span>連接 PostgreSQL 資料庫前，先打開終端機設定資料庫</span></h4><ol start='' ><li><span>先導至選定的資料庫 (JLDB)，替該資料庫建立 postgis 套件</span></li></ol><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="terminal"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="terminal"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 9px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">CREATE EXTENSION postgis;</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">CREATE EXTENSION postgis_topology;</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 34px;"></div><div class="CodeMirror-gutters" style="display: none; height: 34px;"></div></div></div></pre><ol start='2' ><li><span>再建立資料表 (airfield_point)</span></li></ol><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="terminal"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="terminal"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 9px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">CREATE TABLE airfield_point (</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  point_id SERIAL PRIMARY KEY,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  name VARCHAR(144),</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  x double precision,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  y double precision,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  geom geometry(point,4326)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  );</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 119px;"></div><div class="CodeMirror-gutters" style="display: none; height: 119px;"></div></div></div></pre><h4><a name="連接資料庫並將結果存進資料庫" class="md-header-anchor"></a><span>連接資料庫並將結果存進資料庫</span></h4><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="python" style="break-inside: unset;"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="python"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 9px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">import</span> <span class="cm-variable">pandas</span> <span class="cm-keyword">as</span> <span class="cm-variable">pd</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">import</span> <span class="cm-variable">psycopg2</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">df</span> = <span class="cm-variable">pd</span>.<span class="cm-property">DataFrame</span>(</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  {<span class="cm-string">'name'</span> : <span class="cm-variable">namep</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string">'x'</span> : <span class="cm-variable">xp</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string">'y'</span> : <span class="cm-variable">yp</span> })</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">dfp</span> = <span class="cm-variable">df</span>.<span class="cm-property">values</span>.<span class="cm-property">tolist</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">connection</span> = <span class="cm-variable">psycopg2</span>.<span class="cm-property">connect</span>(<span class="cm-variable">host</span>=<span class="cm-string">'localhost'</span>,<span class="cm-variable">port</span>=<span class="cm-number">5432</span>,<span class="cm-variable">user</span>=<span class="cm-string">'postgres'</span>,<span class="cm-variable">password</span>=<span class="cm-string">'postgresql'</span>,<span class="cm-variable">database</span>=<span class="cm-string">'JLDB'</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">cursor</span> = <span class="cm-variable">connection</span>.<span class="cm-property">cursor</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">sql</span> =(<span class="cm-string">'''</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">INSERT INTO "public"."airfield_point"(name,x,y) values (%s,%s,%s);</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">UPDATE "public"."airfield_point" SET geom = ST_SetSRID(ST_MakePoint(foo.x,foo.y),4326) FROM(SELECT point_id,x,y FROM "public"."airfield_point") as foo WHERE "public"."airfield_point".point_id = foo.point_id; &nbsp; &nbsp; &nbsp;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">'''</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">cursor</span>.<span class="cm-property">executemany</span>(<span class="cm-variable">sql</span>, <span class="cm-variable">dfp</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">connection</span>.<span class="cm-property">commit</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">cursor</span>.<span class="cm-property">close</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">connection</span>.<span class="cm-property">close</span>()</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 374px;"></div><div class="CodeMirror-gutters" style="display: none; height: 374px;"></div></div></div></pre><ul><li><span>將剛剛個別的 list 存成 dataframe，再轉成 list，使得每一筆資料變成  [name ,lon , lat]，就能利用批次 </span><code>.executemany</code><span> 加進資料庫裡</span></li><li><span>%s 是 PostgreSQL 可支援的 format ，數量必須剛好對應到後面的 dfp 內每個子資料的資料數量： [ [name ,lon , lat] , [name1 ,lon1 , lat1] , ...] </span></li><li><code>UPDATE &quot;public&quot;.&quot;airfield_point&quot; SET geom ...</code><span> 是為了讓 x,y 欄位轉換成點資料，存進 geom 欄位</span></li></ul><h4><a name="最後利用-qgis-連接-postgresql-展示結果" class="md-header-anchor"></a><span>最後利用 QGIS 連接 PostgreSQL 展示結果</span></h4><h3><a name="利用-way-取得面與線" class="md-header-anchor"></a><span>利用 way 取得面與線</span></h3><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="python"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="python"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 9px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">import</span> <span class="cm-variable">overpy</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">api</span> = <span class="cm-variable">overpy</span>.<span class="cm-property">Overpass</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">result</span> = <span class="cm-variable">api</span>.<span class="cm-property">query</span>(<span class="cm-string">'''</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">[out:json];</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">(</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">  way["military"="airfield"];</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">);</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">out body;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">&gt;;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">out skel qt;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">'''</span>)</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 204px;"></div><div class="CodeMirror-gutters" style="display: none; height: 204px;"></div></div></div></pre><ol start='' ><li><span>改為 way[&quot;military&quot;=&quot;airfield&quot;]</span></li><li><span>必須微調 overpy 套件，打開 \python3\Lib\site-packages\overpy 目錄下的 </span><span>_</span><span>_</span><span>init</span><span>_</span><span>_</span><span>.py ，更改如下：</span><br/><img src="https://myfriends1033.github.io/article/photo/套件更改.JPG" referrerpolicy="no-referrer" alt="套件更改1">
+<span>如此一來，迴圈裡的 </span><code>.nodes</code><span> 就能得到一連串經緯度 list [(經 緯),(經 緯), ...]</span></li></ol><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="python" style="break-inside: unset;"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="python"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 9px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">import</span> <span class="cm-variable">pandas</span> <span class="cm-keyword">as</span> <span class="cm-variable">pd</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">namew</span> = []</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">xyw</span> = []</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">xylw</span> = []</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">idw</span> = []</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">for</span> <span class="cm-variable">way</span> <span class="cm-keyword">in</span> <span class="cm-variable">result</span>.<span class="cm-property">ways</span>:</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">namew</span>.<span class="cm-property">append</span>(<span class="cm-variable">way</span>.<span class="cm-property">tags</span>.<span class="cm-property">get</span>(<span class="cm-string">"name"</span>, <span class="cm-string">""</span>))</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">xy</span> = <span class="cm-string">'POLYGON({})'</span>.<span class="cm-property">format</span>(<span class="cm-builtin">tuple</span>(<span class="cm-variable">way</span>.<span class="cm-property">nodes</span>))</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">xyw</span>.<span class="cm-property">append</span>(<span class="cm-variable">xy</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">xyl</span> = <span class="cm-string">'LINESTRING{}'</span>.<span class="cm-property">format</span>(<span class="cm-builtin">tuple</span>(<span class="cm-variable">way</span>.<span class="cm-property">nodes</span>)) &nbsp;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">xylw</span>.<span class="cm-property">append</span>(<span class="cm-variable">xyl</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">idw</span>.<span class="cm-property">append</span>(<span class="cm-variable">way</span>.<span class="cm-property">id</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">df</span> = <span class="cm-variable">pd</span>.<span class="cm-property">DataFrame</span>(</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  {<span class="cm-string">'name'</span> : <span class="cm-variable">namew</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string">'polgyon'</span> : <span class="cm-variable">xyw</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string">'polgline'</span> : <span class="cm-variable">xylw</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string">'id'</span> : <span class="cm-variable">idw</span>}</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  )</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">dfw</span> = <span class="cm-variable">df</span>.<span class="cm-property">values</span>.<span class="cm-property">tolist</span>()</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 374px;"></div><div class="CodeMirror-gutters" style="display: none; height: 374px;"></div></div></div></pre><ul><li><code>result.ways</code><span> 中利用 </span><code>.tags.get</code><span> 迴圈取得 tags 中的屬性資料</span></li></ul><h4><a name="以下說明-polygonpolyline-怎麼加入資料庫" class="md-header-anchor"></a><span>以下說明 POLYGON、POLYLINE 怎麼加入資料庫</span></h4><p><span>先建立資料表</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="terminal"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="terminal"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 9px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">CREATE TABLE airfield_polygon (</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  id SERIAL PRIMARY KEY,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  name VARCHAR(144),</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  geom geometry</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  );</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 85px;"></div><div class="CodeMirror-gutters" style="display: none; height: 85px;"></div></div></div></pre><p><span>PostgreSQL 如何加入面與線資料，如下：</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="terminal"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="terminal"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 9px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">INSERT INTO areas (name, polygon) VALUES (</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">'紗帽山',</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">ST_GeometryFromText('POLYGON((121.538805 25.151908,121.545940 25.151121,121.547917 25.149118,121.548638 25.146912,121.547345 25.143964,121.545256 25.142366,121.544187 25.142074,121.542696 25.143244,121.540955 25.142907,121.539439 25.143672,121.539290 25.143964,121.537574 25.147363,121.538805 25.151908))',4326)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">);</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 102px;"></div><div class="CodeMirror-gutters" style="display: none; height: 102px;"></div></div></div></pre><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="terminal"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="terminal"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 9px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">INSERT INTO areas (name, polyline) VALUES (</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">'光華路',</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">ST_GeometryFromText('LINESTRING(121.542541 25.136911,121.543168 25.137378,121.544962 25.137951,121.545797 25.136813,121.546347 25.136966)',4326)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">);</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 85px;"></div><div class="CodeMirror-gutters" style="display: none; height: 85px;"></div></div></div></pre><ul><li><span>為了生成 </span><code>ST_GeometryFromText( __ ,4326)</code><span> 中的一連串經緯度 ，於是將 </span><code>way.nodes</code><span> 得到的結果設定為 </span><code>xy = &#39;POLYGON({ }).format(tuple(way.nodes))&#39;</code><span>及</span><code>xyl = &#39;LINESTRING{}&#39;.format(tuple(way.nodes))</code><span>，以便後續加入資料庫</span></li><li><span>一連串的經緯度最後必須封閉才能被 Postgis 設定為面資料，而 way 事實上還包含 </span><strong><span>線資料</span></strong><span>，也就表示遇到線就無法加入資料庫，所以接下來改用 </span><code>for</code><span>迴圈，並利用 </span><code>.execute</code><span> 一筆一筆加入，以 </span><code>try</code><span> 加入面資料，失敗的則 </span><code>except</code><span> 再 </span><code>try</code><span> 改成線資料加入，如果還是失敗則 </span><code>except</code><span> 印出該筆 </span><strong><span>ID</span></strong></li></ul><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="python" style="break-inside: unset;"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="python"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 9px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">import</span> <span class="cm-variable">psycopg2</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">for</span> <span class="cm-variable">dfwfor</span> <span class="cm-keyword">in</span> <span class="cm-variable">dfw</span>:</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">try</span>:</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">connection</span> = <span class="cm-variable">psycopg2</span>.<span class="cm-property">connect</span>(<span class="cm-variable">host</span>=<span class="cm-string">'localhost'</span>,<span class="cm-variable">port</span>=<span class="cm-number">5432</span>,<span class="cm-variable">user</span>=<span class="cm-string">'postgres'</span>,<span class="cm-variable">password</span>=<span class="cm-string">'postgresql'</span>,<span class="cm-variable">database</span>=<span class="cm-string">'JLDB'</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">cursor</span> = <span class="cm-variable">connection</span>.<span class="cm-property">cursor</span>() </span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">sql</span> =(<span class="cm-string">'''</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string"> &nbsp; &nbsp; &nbsp;  INSERT INTO "public"."airfield_polygon" (name,geom) values (%s,ST_GeomFromText(%s,4326));</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string"> &nbsp; &nbsp; &nbsp;  '''</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">data</span> = (<span class="cm-variable">dfwfor</span>[<span class="cm-number">0</span>],<span class="cm-variable">dfwfor</span>[<span class="cm-number">1</span>])</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">cursor</span>.<span class="cm-property">execute</span>(<span class="cm-variable">sql</span>,<span class="cm-variable">data</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">connection</span>.<span class="cm-property">commit</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" class="cm-tab-wrap-hack" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">cursor</span>.<span class="cm-property">close</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">connection</span>.<span class="cm-property">close</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">except</span>:</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span> &nbsp; &nbsp;<span class="cm-keyword">try</span>:</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">connection</span> = <span class="cm-variable">psycopg2</span>.<span class="cm-property">connect</span>(<span class="cm-variable">host</span>=<span class="cm-string">'localhost'</span>,<span class="cm-variable">port</span>=<span class="cm-number">5432</span>,<span class="cm-variable">user</span>=<span class="cm-string">'postgres'</span>,<span class="cm-variable">password</span>=<span class="cm-string">'postgresql'</span>,<span class="cm-variable">database</span>=<span class="cm-string">'JLDB'</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">cursor</span> = <span class="cm-variable">connection</span>.<span class="cm-property">cursor</span>() </span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">sql</span> =(<span class="cm-string">'''</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  INSERT INTO "public"."airfield_polygon" (name,geom) values (%s,ST_GeomFromText(%s,4326));</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  '''</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">data</span> = (<span class="cm-variable">dfwfor</span>[<span class="cm-number">0</span>],<span class="cm-variable">dfwfor</span>[<span class="cm-number">2</span>])</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">cursor</span>.<span class="cm-property">execute</span>(<span class="cm-variable">sql</span>,<span class="cm-variable">data</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">connection</span>.<span class="cm-property">commit</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span> &nbsp; &nbsp;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">cursor</span>.<span class="cm-property">close</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">connection</span>.<span class="cm-property">close</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">except</span>:</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-builtin">print</span>(<span class="cm-variable">dfwfor</span>[<span class="cm-number">3</span>])</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 516px;"></div><div class="CodeMirror-gutters" style="display: none; height: 516px;"></div></div></div></pre><ul><li><span>以空軍基地來說，way 的 polgline 沒有很多，比較完整的在圖上看起來是 polygon，但因為沒有封閉，而只能是 polgline，還分屬不同筆資料，如下圖：</span>
+<img src="https://myfriends1033.github.io/article/photo/way_error2.JPG" referrerpolicy="no-referrer" alt="沒有封閉"></li><li><span>但有的甚至還沒編輯好，如下圖：</span>
+<img src="https://myfriends1033.github.io/article/photo/way_error.JPG" referrerpolicy="no-referrer" alt="尚未完成"></li></ul><h3><a name="relation" class="md-header-anchor"></a><span>relation</span></h3><p><span>relation 的資料很多元，，以空軍基地來說，有些是幾個相鄰的 polygon 組成的，有些是 </span><strong><span>MultiPolygon</span></strong><span> (甚至可能有 點、線、面 的  </span><strong><span>GeometryCollection</span></strong><span>，才組成一個 面資料)</span>
+<img src="https://myfriends1033.github.io/article/photo/multipolygon.JPG" referrerpolicy="no-referrer" alt="multi"></p><ul><li><span>relation 下的元素是由 </span><strong><span>&quot;members&quot;</span></strong><span> 包在一起，如先前所說，大部分是多個 </span><strong><span>way</span></strong><span> 組成一個 relation，而上圖就是一個 </span><strong><span>MultiPolygon</span></strong><span> 。利用 overpass-turbo 查看數據時，可在 members 下發現如下圖：</span>
+<img src="https://myfriends1033.github.io/article/photo/multi_data.JPG" referrerpolicy="no-referrer" alt="multidata">
+<span>也就是被挖空的部分是 </span><strong><span>inner</span></strong><span> ，所以取得資料時，無法簡單的將所有經緯度取得後，直接建立在資料庫內，甚至有的 </span><strong><span>outer</span></strong><span> 是 線資料，是由很多條線資料結合後封閉成完整的 面資料</span></li><li><span>除了 overpass-turbo 可查看資料，也可微調 overpy 套件來查看 outer、inner，打開 \python3\Lib\site-packages\overpy 目錄下的 </span><span>_</span><span>_</span><span>init</span><span>_</span><span>_</span><span>.py ，更改如下：</span><br/><img src="https://myfriends1033.github.io/article/photo/套件更改2.JPG" referrerpolicy="no-referrer" alt="套件更改2">
+<span>再來輸入以下並在 </span><code>id:</code><span> 後打上 id號 就能查看</span></li></ul><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="python"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="python"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 9px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">import</span> <span class="cm-variable">overpy</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">result</span> = <span class="cm-variable">api</span>.<span class="cm-property">query</span>(<span class="cm-string">'''</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">[out:json];</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">(</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">  relation(id:);</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">);</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">out;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">&gt;;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">out skel qt;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">'''</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-builtin">print</span>(<span class="cm-variable">result</span>.<span class="cm-property">relations</span>)</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 221px;"></div><div class="CodeMirror-gutters" style="display: none; height: 221px;"></div></div></div></pre><p><span>relation 是由 members 下的很多的元素(nodes、ways、relations)組成的，所有元素都有其經緯度，所以可能先獲取所有的空軍基地的 id 後，再想辦法組合 </span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="python" style="break-inside: unset;"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="python"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 9px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">import</span> <span class="cm-variable">overpy</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">api</span> = <span class="cm-variable">overpy</span>.<span class="cm-property">Overpass</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">idr</span> = []</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">def</span> <span class="cm-def">get_idr</span>():</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">global</span> <span class="cm-variable">idr</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">result</span> = <span class="cm-variable">api</span>.<span class="cm-property">query</span>(</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string">'''</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string"> &nbsp;  [out:json];</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string"> &nbsp;  (</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string"> &nbsp; &nbsp;  relation["military"="airfield"];</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string"> &nbsp;  );</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string"> &nbsp;  out body;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string"> &nbsp;  &gt;;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string"> &nbsp;  out skel qt;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string"> &nbsp;  '''</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">for</span> <span class="cm-variable">re</span> <span class="cm-keyword">in</span> <span class="cm-variable">result</span>.<span class="cm-property">relations</span>:</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">idr</span>.<span class="cm-property">append</span>(<span class="cm-variable">re</span>.<span class="cm-property">id</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-builtin">print</span>(<span class="cm-variable">get_idr</span>())</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 357px;"></div><div class="CodeMirror-gutters" style="display: none; height: 357px;"></div></div></div></pre><ul><li><span>找了一下資料，網路上說 relation 得到的數據，還是得定義如何將所有 members 組合，可能的步驟應該是撇除 node 後： </span></li></ul><ol start='' ><li><span>首先，先分出 outer 和 inner</span></li><li><span>再分是 way 的 面資料 組成面、way 的 線資料 封閉成面 (甚至 members 下可能還會有 </span><strong><span>子relation</span></strong><span>，但此案沒有)</span></li><li><span>最後將 outer 生成的面 merge 後， erase inner 的部分</span></li></ol><p><span>先不管多邊形如何，接著利用 id 一個一個搜尋，直接將所有 members 內</span><strong><span>所有的經緯度直接組合</span></strong><span>，試看看能得到多少正確的 面資料</span></p><p><span>先建立資料表</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="terminal"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="terminal"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 9px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">CREATE TABLE airfield_repolygon2 (</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  id SERIAL PRIMARY KEY,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  name VARCHAR(144),</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  geom geometry</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  );</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 85px;"></div><div class="CodeMirror-gutters" style="display: none; height: 85px;"></div></div></div></pre><p><span>接著利用 迴圈 取得資料並加入資料庫</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="python" style="break-inside: unset;"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="python"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 9px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">import</span> <span class="cm-variable">itertools</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">import</span> <span class="cm-variable">pandas</span> <span class="cm-keyword">as</span> <span class="cm-variable">pd</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">import</span> <span class="cm-variable">psycopg2</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">for</span> <span class="cm-builtin">id</span> <span class="cm-keyword">in</span> <span class="cm-variable">idr</span>:</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">result</span> = <span class="cm-variable">api</span>.<span class="cm-property">query</span>(</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string">'''</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string"> &nbsp;  [out:json];relation(id:{});(._;&gt;;);out;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string"> &nbsp;  '''</span>.<span class="cm-property">format</span>(<span class="cm-builtin">id</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  )</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">for</span> <span class="cm-variable">re</span> <span class="cm-keyword">in</span> <span class="cm-variable">result</span>.<span class="cm-property">relations</span>:</span></pre><div class="" style="position: relative;"><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">singlename</span> = <span class="cm-variable">re</span>.<span class="cm-property">tags</span>.<span class="cm-property">get</span>(<span class="cm-string">"name"</span>, <span class="cm-string">""</span>)</span></pre></div><div class="" style="position: relative;"><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;</span></pre></div><div class="" style="position: relative;"><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">singlexy</span> = []</span></pre></div><div class="" style="position: relative;"><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">for</span> <span class="cm-variable">reway</span> <span class="cm-keyword">in</span> <span class="cm-variable">result</span>.<span class="cm-property">ways</span>:</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">singlexy</span>.<span class="cm-property">append</span>(<span class="cm-variable">reway</span>.<span class="cm-property">nodes</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">outtuple</span> = <span class="cm-builtin">tuple</span>(<span class="cm-variable">itertools</span>.<span class="cm-property">chain</span>(<span class="cm-operator">*</span><span class="cm-variable">singlexy</span>))</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">xy</span> = <span class="cm-string">'POLYGON({})'</span>.<span class="cm-property">format</span>(<span class="cm-variable">outtuple</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">dfr</span> = [<span class="cm-variable">singlename</span>,<span class="cm-variable">xy</span>]</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">try</span>:</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">connection</span> = <span class="cm-variable">psycopg2</span>.<span class="cm-property">connect</span>(<span class="cm-variable">host</span>=<span class="cm-string">'localhost'</span>,<span class="cm-variable">port</span>=<span class="cm-number">5432</span>,<span class="cm-variable">user</span>=<span class="cm-string">'postgres'</span>,<span class="cm-variable">password</span>=<span class="cm-string">'postgresql'</span>,<span class="cm-variable">database</span>=<span class="cm-string">'JLDB'</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">cursor</span> = <span class="cm-variable">connection</span>.<span class="cm-property">cursor</span>() </span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">sql1</span> =(<span class="cm-string">'''</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  INSERT INTO "public"."airfield_repolygon2" (name,polygon) values (%s,ST_GeomFromText(%s,4326));</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string"> &nbsp; &nbsp; &nbsp;  '''</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">cursor</span>.<span class="cm-property">execute</span>(<span class="cm-variable">sql1</span>,<span class="cm-variable">dfr</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">connection</span>.<span class="cm-property">commit</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">cursor</span>.<span class="cm-property">close</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">connection</span>.<span class="cm-property">close</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">except</span>:</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-builtin">print</span>(<span class="cm-builtin">id</span>)</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 578px;"></div><div class="CodeMirror-gutters" style="display: none; height: 578px;"></div></div></div></pre><ul><li><span>可以發現，輸入 QL 的地方是利用 </span><strong><span>一組三個單引號(雙引號)</span></strong><span> ，這樣包起來也算是字串，如此一來當然可以用 </span><code>{}</code><span> 加上 </span><code>.format()</code></li><li><span>接續 </span><code>for re in result.relations:</code><span> 下，就能放入各種 </span><strong><span>tags</span></strong><span> 取得屬性資料</span></li></ul><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="python"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="python"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 9px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">singlexy</span> = []</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">for</span> <span class="cm-variable">reway</span> <span class="cm-keyword">in</span> <span class="cm-variable">result</span>.<span class="cm-property">ways</span>:</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">singlexy</span>.<span class="cm-property">append</span>(<span class="cm-variable">reway</span>.<span class="cm-property">nodes</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">outtuple</span> = <span class="cm-builtin">tuple</span>(<span class="cm-variable">itertools</span>.<span class="cm-property">chain</span>(<span class="cm-operator">*</span><span class="cm-variable">singlexy</span>))</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">xy</span> = <span class="cm-string">'POLYGON({})'</span>.<span class="cm-property">format</span>(<span class="cm-variable">outtuple</span>)</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 85px;"></div><div class="CodeMirror-gutters" style="display: none; height: 85px;"></div></div></div></pre><ul><li><span>因為是 relation，所以 </span><code>.ways</code><span> for迴圈 內的 </span><code>reway.nodes</code><span>，會得到 members 內每個 way 的經緯度，且每組經緯度都是一個 </span><strong><span>list</span></strong><span>，利用 </span><code>.append</code><span> 加入後，會得到 singlexy = [ [], [], [], ...] </span></li><li><span>所以利用 </span><code>import itertools</code><span>，</span><code>itertools.chain(*singlexy)</code><span> 來消除 list 內部的 []，也就是變成 [ ..., ..., ... ]，並且再轉為 tuple，最後加入 xy 內</span></li><li><span>接著用 </span><code>try</code><span> 加入資料庫、失敗則 </span><code>except</code><span> 印出 id，以便後續處理</span></li></ul><p><span>但可以加入資料庫的 面 並不多，且還有些 面 是錯誤的，如下圖；</span>
+<img src="https://myfriends1033.github.io/article/photo" referrerpolicy="no-referrer" alt="repolygon_error"></p><h3><a name="-backhttpsmyfriends1033githubio" class="md-header-anchor"></a><a href='https://myfriends1033.github.io/'><span>&lt;&lt; Back</span></a></h3><p>&nbsp;</p><article><h4><BR></h4><BR></article></div>
 </body>
 </html>
