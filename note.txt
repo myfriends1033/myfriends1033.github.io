@@ -1,0 +1,66 @@
+從 MD 轉 HTML 後
+
+(1)更改 meta 並將 <title> </title> 刪除
+<meta charset='UTF-8'><meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+(2)<< Back 後增加一格  在</body>上的 </div> 前 加上
+<article><h4><BR></h4><BR></article>
+
+(3)增加 TOP 按鈕
+   1. 在<head>下加入 jquery   
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+   2. 在 </style> 上增加 css
+/* 56px */
+.toTop-arrow {
+	width: 3.5rem;
+	height: 3.8rem;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	border-radius: 39%;
+	opacity: 0.6;
+	background: #FFE4C4;
+	cursor: pointer;
+	position:fixed;
+	right: 1rem;
+	bottom: 2rem;
+	display: none;
+}
+.toTop-arrow::before, .toTop-arrow::after {
+	width: 30px;
+	height: 7px;
+	border-radius: 3px;
+	background: black;
+	position: absolute;
+	content: "";
+}
+.toTop-arrow::before {
+	transform: rotate(-63deg) translate(10%, -50%);
+	left: 0.4rem;
+}
+.toTop-arrow::after {
+	transform: rotate(63deg) translate(-10%, -50%);
+	right: 0.4rem;
+}
+.toTop-arrow:focus {outline: none;}
+
+
+   3. 在 </body>上 加上按鈕
+<button type="button" id="BackTop" class="toTop-arrow"></button>
+<script>
+$(function(){
+	$('#BackTop').click(function(){ 
+		$('html,body').animate({scrollTop:0}, 333);
+	});
+	$(window).scroll(function() {
+		if ( $(this).scrollTop() > 200 ){
+			$('#BackTop').fadeIn(222);
+		} else {
+			$('#BackTop').stop().fadeOut(222);
+		}
+	}).scroll();
+});
+</script>
+
+
