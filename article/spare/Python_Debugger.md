@@ -128,3 +128,6 @@ PYTHONBREAKPOINT=ipdb.set_trace
 ## 結論
 
 學會使用 debugger 之後會讓你的生產力提升不少，當你下次在用 print 大法的時候，別忘記還有 debugger 可以用！
+
+### [<< Back](https://myfriends1033.github.io/article/py_debug.html)
+
