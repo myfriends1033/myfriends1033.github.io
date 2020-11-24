@@ -1,7 +1,6 @@
 <!doctype html>
 <html>
 <head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <meta charset='UTF-8'><meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1"><title>p.p_githubpage</title><link rel="icon" href="https://myfriends1033.github.io/favicon.ico"><style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color:#ffffff; --text-color:#333333; --select-text-bg-color:#B5D6FC; --select-text-font-color:auto; --monospace:"Lucida Console",Consolas,"Courier",monospace; }
 html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
 body { margin: 0px; padding: 0px; height: auto; bottom: 0px; top: 0px; left: 0px; right: 0px; font-size: 1rem; line-height: 1.42857; overflow-x: hidden; background: inherit; tab-size: 4; }
@@ -514,40 +513,6 @@ pre[lang='mermaid']
   color: #333333;
 }
 
-/* 40px */
-.toTop-arrow {
-	width: 2.5rem;
-	height: 2.8rem;
-	padding: 0;
-	margin: 0;
-	border: 0;
-	border-radius: 39%;
-	opacity: 0.6;
-	background: #FFE4C4;
-	cursor: pointer;
-	position:fixed;
-	right: 1rem;
-	bottom: 1rem;
-	display: none;
-}
-.toTop-arrow::before, .toTop-arrow::after {
-	width: 18px;
-	height: 5px;
-	border-radius: 3px;
-	background: black;
-	position: absolute;
-	content: "";
-}
-.toTop-arrow::before {
-	transform: rotate(-60deg) translate(0, -50%);
-	left: 0.48rem;
-}
-.toTop-arrow::after {
-	transform: rotate(60deg) translate(0, -50%);
-	right: 0.48rem;
-}
-.toTop-arrow:focus {outline: none;}
-
 </style>
 </head>
 <a id="TOP"></a>
@@ -556,20 +521,5 @@ pre[lang='mermaid']
 <span>tag：</span></p><h4><a name="20201106五-python如何debug" class="md-header-anchor"></a><span>2020.11.06(五) <a href="https://myfriends1033.github.io/article/py_debug.html">Python 如何 debug</a></span></h4><p><span>在不使用 IDE 的情況下，如何對自己的 python 專案 debug，文章沒有實際操作，主要放其他網站資料。</span>
 <span>tag：</span></p><h4><a name="20201105四-利用python建立虛擬環境" class="md-header-anchor"></a><span>2020.11.05(四) <a href="https://myfriends1033.github.io/article/myfirstvirjupyter.html">利用 Python 建立虛擬環境</a></span></h4><p><span>利用 python virtualenv 套件佈署虛擬環境，內容有很多重點，且在虛擬環境下安裝並使用 Jupyter。</span><br/><span>tag：</span></p><h4><a name="20201105四-區分python函式類別模組套件" class="md-header-anchor"></a><span>2020.11.05(四) <a href="https://myfriends1033.github.io/article/F_C_M_P.html">區分 Python 函式,類別,模組,套件</a></span></h4><p><span>簡單分類：函式(funcion)、類別(class)、模組(mould)、套件(package)，並實際操作。</span>
 <span>tag：</span></p><article><h4><BR></h4><BR></article><h2 style=text-align:center;"><a name="do-you-enjoy-my-pages" class="md-header-anchor"></a><span>Do you enjoy my pages?</span></h2><h4 style=text-align:center;"><a name="connect-me-→-githubhttpsgithubcommyfriends1033" class="md-header-anchor"></a><span>connect me → </span><a href='https://github.com/myfriends1033'><span>GitHub</span></a></h4><p style=text-align:center;"><span>create by </span><a href='https://typora.io/'><span>Typora</span></a><span> , theme </span><a href='http://theme.typora.io/theme/Maize/'><span>Maize</span></a></p><h5 style=text-align:center><a href='#TOP'>Top</a></p><article><h4><BR></h4><BR></article></div>
-<button type="button" id="BackTop" class="toTop-arrow"></button>
-<script>
-$(function(){
-	$('#BackTop').click(function(){ 
-		$('html,body').animate({scrollTop:0}, 333);
-	});
-	$(window).scroll(function() {
-		if ( $(this).scrollTop() > 200 ){
-			$('#BackTop').fadeIn(222);
-		} else {
-			$('#BackTop').stop().fadeOut(222);
-		}
-	}).scroll();
-});
-</script>
 </body>
 </html>

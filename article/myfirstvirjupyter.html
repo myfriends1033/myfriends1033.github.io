@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <meta charset='UTF-8'><meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1"><style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color:#ffffff; --text-color:#333333; --select-text-bg-color:#B5D6FC; --select-text-font-color:auto; --monospace:"Lucida Console",Consolas,"Courier",monospace; }
 html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
 body { margin: 0px; padding: 0px; height: auto; bottom: 0px; top: 0px; left: 0px; right: 0px; font-size: 1rem; line-height: 1.42857; overflow-x: hidden; background: inherit; tab-size: 4; }
@@ -586,6 +587,39 @@ pre[lang='mermaid']
   color: #333333;
 }
 
+/* 56px */
+.toTop-arrow {
+	width: 3.5rem;
+	height: 3.8rem;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	border-radius: 39%;
+	opacity: 0.6;
+	background: #FFE4C4;
+	cursor: pointer;
+	position:fixed;
+	right: 1rem;
+	bottom: 2rem;
+	display: none;
+}
+.toTop-arrow::before, .toTop-arrow::after {
+	width: 30px;
+	height: 7px;
+	border-radius: 3px;
+	background: black;
+	position: absolute;
+	content: "";
+}
+.toTop-arrow::before {
+	transform: rotate(-63deg) translate(10%, -50%);
+	left: 0.4rem;
+}
+.toTop-arrow::after {
+	transform: rotate(63deg) translate(-10%, -50%);
+	right: 0.4rem;
+}
+.toTop-arrow:focus {outline: none;}
 
 </style>
 </head>
@@ -596,5 +630,20 @@ pre[lang='mermaid']
 <span>可能是因為當時把 py3 裡的 python.exe 改成 </span><strong><span>python3.exe</span></strong><span>，且有沒有再新增一個 python.exe 的關係下安裝 </span><code>virtulvenv</code><span>，而導致的</span></li></ul><h3><a name="備註如何在同個電腦終端機配置-python2-及-python3" class="md-header-anchor"></a><span>備註：如何在同個電腦終端機配置 python2 及 python3</span></h3><ol start='' ><li><span>python2 及 python3 加入 </span><strong><span>path</span></strong><span> 時，python2 及 python2\Scripts 必須要在 python3 及 python3\Scripts 的上面，因為</span><strong><span>上下階層表示取用順序</span></strong></li><li><span>python3 資料夾內，</span><strong><span>複製一個 python.exe 並改名為 python3.exe</span></strong></li><li><span>再將 python2 的 pip 更新到最新，以及將 python3 的  pip 及 pip3 也更新到最新</span></li></ol><blockquote><p><span>python → py2</span>
 <span>pip → py2 pip</span></p><p><span>python3 → py3</span>
 <span>pip3 → py3 pip</span></p></blockquote><h4><a name="step3啟用虛擬環境模式" class="md-header-anchor"></a><span>Step3：啟用虛擬環境模式</span></h4><p><span>開啟終端機並導至 venvpy3 資料夾下的 Scripts，並打上 activate</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="terminal"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="terminal"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 9px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">C:\Users\123 &gt; cd/d D:\pyvirEX\venvpy3\Scripts</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">D:\pyvirEX\venvpy3\Scripts &gt; activate</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">(venvpy3) D:\pyvirEX\venvpy3\Scripts &gt;</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 85px;"></div><div class="CodeMirror-gutters" style="display: none; height: 85px;"></div></div></div></pre><p><span>出現 () 就表示進入了虛擬環境，打上 deactivate 便可離開虛擬環境</span></p><h4><a name="step4虛擬環境下安裝-jupyter" class="md-header-anchor"></a><span>Step4：虛擬環境下安裝 jupyter</span></h4><p><span>可參考 </span><a href='https://dwy6626.github.io/post/venv-jupyter/'><span>這裡3</span></a><span>  </span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="terminal"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="terminal"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 9px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">pip install --upgrade pip</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">pip install jupyter</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 34px;"></div><div class="CodeMirror-gutters" style="display: none; height: 34px;"></div></div></div></pre><h4><a name="step5建立資料夾存放ipynb檔案並開啟-jupyter" class="md-header-anchor"></a><span>Step5：建立資料夾存放ipynb檔案並開啟 jupyter</span></h4><p><span>也就是要在哪個資料夾下開啟 jupyter notebook</span><br/><span>參考 </span><a href='https://ithelp.ithome.com.tw/articles/10192614'><span>這裡4</span></a><span>  </span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang=""><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang=""><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 9px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">cd/d D:\pyvirEX\venvpy3</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">mkdir jupyterpy3</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">cd/d D:\pyvirEX\venvpy3\jupyterpy3</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">jupyter notebook</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 68px;"></div><div class="CodeMirror-gutters" style="display: none; height: 68px;"></div></div></div></pre><h4><a name="下次呼叫時" class="md-header-anchor"></a><span>下次呼叫時</span></h4><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang=""><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang=""><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 9px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">cd/d D:\pyvirEX\venvpy3\Scripts</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">activate</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">cd/d D:\pyvirEX\venvpy3\jupyterpy3</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">jupyter notebook</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 68px;"></div><div class="CodeMirror-gutters" style="display: none; height: 68px;"></div></div></div></pre><p><span> 若要關閉則在 jupyter notebook 按下 Quit 再關掉瀏覽器，可以回到終端機；到終端機後打上 </span><code>deactivate</code><span> 就能離開虛擬環境</span></p><h3><a name="後記" class="md-header-anchor"></a><span>後記</span></h3><p><span> 在建立虛擬環境資料夾並進入虛擬還就後，打上 path 就會發現第一層級一定是該資料夾內的Scripts，其他的直接複製本機環境變數裡的 path，此時會不會問題就在這發生了呢？ 似乎可以再去查查看，建立虛擬資料夾時，好像要用到跟 no site 有關的函數，來讓虛擬環境更乾淨？也許就不會直接複製本機 path 裡的變數了？ 要再確認找資料</span></p><h3><a name="雜七雜八" class="md-header-anchor"></a><span>雜七雜八</span></h3><h4><a name="為何在存放-ipynb檔案中會有-ipynbcheckpoints資料檔" class="md-header-anchor"></a><span>為何在存放 .ipynb檔案中會有 .ipynb_checkpoints資料檔？</span></h4><p><span> 每當你創建一個新的 notebook 時，都會多創建一個 </span><strong><span>checkpoint</span></strong><span> ；它將位於你保存位置的隱藏子目錄中稱作 .ipynb_checkpoints，也是一個 .ipynb 文件。默認情況下，Jupyter 將每隔 120 秒自動保存你的 notebook，或者可主動按下功能鍵中最左邊的儲存按鈕，notebook 和 checkpoint 文件都將被更新。因此，該文件使你能夠在發生意外事件時恢復未保存的工作。你可以通過 “File &gt; Revert to Checkpoint“ 從菜單恢復到上一個 checkpoint 時的模樣</span></p><h3><a name="-backhttpsmyfriends1033githubio" class="md-header-anchor"></a><a href='https://myfriends1033.github.io/'><span>&lt;&lt; Back</span></a></h3><p>&nbsp;</p><article><h4><BR></h4><BR></article></div>
+<button type="button" id="BackTop" class="toTop-arrow"></button>
+<script>
+$(function(){
+	$('#BackTop').click(function(){ 
+		$('html,body').animate({scrollTop:0}, 333);
+	});
+	$(window).scroll(function() {
+		if ( $(this).scrollTop() > 200 ){
+			$('#BackTop').fadeIn(222);
+		} else {
+			$('#BackTop').stop().fadeOut(222);
+		}
+	}).scroll();
+});
+</script>
 </body>
 </html>
