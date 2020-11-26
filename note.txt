@@ -64,3 +64,20 @@ $(function(){
 </script>
 
 
+更改 代码块主题 中
+
+1.
+.cm-s-inner .cm-variable {
+  color: rgb(236, 236, 236);
+
+2.
+.cm-s-inner .cm-property {
+  color: rgb(236, 236, 236);
+
+
+
+筆記
+githubpage create
+https://gitbook.tw/chapters/github/using-github-pages.html
+https://pages.github.com/
+https://www.youtube.com/watch?v=BA_c3bGQXlQ&ab_channel=ProgrammingLiftoff
