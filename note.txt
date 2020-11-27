@@ -1,3 +1,41 @@
+index MD 轉 HTML後
+(1)<HEAD>
+<meta charset='UTF-8'><meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1"><title>p.p_githubpage</title><link rel="icon" href="https://myfriends1033.github.io/favicon.ico">
+
+(2) h6 顏色
+#write h6 {
+  color: darkgray;
+  font-size: 1rem;
+
+(3)網站上圖片 CSS
+#bgp{
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+  \\opacity: 0.5;
+}
+
+(4) 加入 TOP 
+放在 <body> 正前面   <a id="TOP"></a> 
+替TOP加上連結  <a href="#TOP">Top</a>
+
+(5)在 <div id='write'class=''>後 加上圖片
+<img src="https://myfriends1033.github.io/article/photo/yueyue.jpg" id="bgp">
+
+(6)將所有 tag 改成 <h6> </h6>
+
+(7)在文章與 DO YOU ENJOY ....之間加上
+<article><h4><BR></h4><BR></article>
+
+(8)加一格  在</body>上的 </div> 前 加上
+<article><h4><BR></h4><BR></article>
+
+
+其實可以不用那麼麻煩 只需更改 MD 檔 後輸出 HTML 把增加(修改)的地方複製加入舊的 index.html 內就可以了
+
+
+
 從 MD 轉 HTML 後
 
 (1)更改 meta 並將 <title> </title> 刪除
