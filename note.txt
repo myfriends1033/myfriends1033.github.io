@@ -6,6 +6,10 @@
 (2)<< Back 後增加一格  在</body>上的 </div> 前 加上
 <article><h4><BR></h4><BR></article>
 
+(4)加入鼠標(在 <style/> 前一行加)
+* {cursor: url(https://cur.cursors-4u.net/user/use-1/use75.cur), auto !important;}
+
+
 (3)增加 TOP 按鈕
    1. 在<head>下加入 jquery   
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
