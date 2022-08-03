@@ -1,0 +1,92 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>AIS系統</title>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.19/"></script>
+
+  <script>
+    require([
+     "esri/config",
+      "esri/Map",
+      "esri/views/MapView",
+	  "esri/layers/MapImageLayer",
+	  "esri/widgets/LayerList",
+	  "esri/layers/GeoJSONLayer"
+    ], function (esriConfig,Map, MapView, MapImageLayer, LayerList, GeoJSONLayer) {
+
+      esriConfig.apiKey = "AAPKcdf1a16eb48d4510909ddc6fab400767UzktCkf_9glxAmx1oHcl86nqMsST53dTitvp-ad-2-OKtBCK3OH7PgGFzAwJ-60k";
+      const map = new Map({
+        basemap: "osm" // Basemap layer
+      });
+
+      const view = new MapView({
+        map: map,
+        center: [121.513881,25.055475],
+        zoom: 7, // scale: 72223.819286
+        container: "viewDiv",
+        constraints: {
+          snapToZoom: false
+        }
+      });
+
+      let base_layer = new MapImageLayer({
+        url: "https://geosrv.gis.geoinfor.com.tw/arcgis/rest/services/AIS_BASE/MapServer",
+		title: "基本圖資"
+      });
+	  map.add(base_layer);
+	  
+      let aisnow_layer = new MapImageLayer({
+        url: "https://geosrv.gis.geoinfor.com.tw/arcgis/rest/services/AIS_NOW/MapServer",
+		title: "船舶即時位置"
+      });
+	  map.add(aisnow_layer);
+
+      const labelClass = {  // autocasts as new LabelClass()
+        symbol: {
+          type: "text",  // autocasts as new TextSymbol()
+          color: "white",
+          haloColor: "blue",
+          haloSize: 1
+      }};
+      const geojsonlayer = new GeoJSONLayer({
+        url: "https://mpbais.motcmpb.gov.tw/aismpb/tools/geojsonais.ashx",
+        copyright: "mpbais",
+		title: "船舶即時位置",
+		labelingInfo: [labelClass]
+      },);
+	  geojsonlayer.refreshInterval = 0.5;
+	  geojsonlayer.popupEnabled = true;
+	  geojsonlayer.visible = false;
+	  //map.add(geojsonlayer);
+	  
+      let layerList = new LayerList({
+        view: view
+      });
+      // Adds widget below other elements in the top right corner of the view
+      view.ui.add(layerList, {
+        position: "top-right"
+      });
+
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+
+</html>
