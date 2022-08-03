@@ -19,69 +19,7 @@
   <script src="https://js.arcgis.com/4.19/"></script>
 
   <script>
-    require([
-     "esri/config",
-      "esri/Map",
-      "esri/views/MapView",
-	  "esri/layers/MapImageLayer",
-	  "esri/widgets/LayerList",
-	  "esri/layers/GeoJSONLayer"
-    ], function (esriConfig,Map, MapView, MapImageLayer, LayerList, GeoJSONLayer) {
-
-      esriConfig.apiKey = "AAPKcdf1a16eb48d4510909ddc6fab400767UzktCkf_9glxAmx1oHcl86nqMsST53dTitvp-ad-2-OKtBCK3OH7PgGFzAwJ-60k";
-      const map = new Map({
-        basemap: "osm" // Basemap layer
-      });
-
-      const view = new MapView({
-        map: map,
-        center: [121.513881,25.055475],
-        zoom: 7, // scale: 72223.819286
-        container: "viewDiv",
-        constraints: {
-          snapToZoom: false
-        }
-      });
-
-      let base_layer = new MapImageLayer({
-        url: "https://geosrv.gis.geoinfor.com.tw/arcgis/rest/services/AIS_BASE/MapServer",
-		title: "基本圖資"
-      });
-	  map.add(base_layer);
-	  
-      let aisnow_layer = new MapImageLayer({
-        url: "https://geosrv.gis.geoinfor.com.tw/arcgis/rest/services/AIS_NOW/MapServer",
-		title: "船舶即時位置"
-      });
-	  map.add(aisnow_layer);
-
-      const labelClass = {  // autocasts as new LabelClass()
-        symbol: {
-          type: "text",  // autocasts as new TextSymbol()
-          color: "white",
-          haloColor: "blue",
-          haloSize: 1
-      }};
-      const geojsonlayer = new GeoJSONLayer({
-        url: "https://mpbais.motcmpb.gov.tw/aismpb/tools/geojsonais.ashx",
-        copyright: "mpbais",
-		title: "船舶即時位置",
-		labelingInfo: [labelClass]
-      },);
-	  geojsonlayer.refreshInterval = 0.5;
-	  geojsonlayer.popupEnabled = true;
-	  geojsonlayer.visible = false;
-	  //map.add(geojsonlayer);
-	  
-      let layerList = new LayerList({
-        view: view
-      });
-      // Adds widget below other elements in the top right corner of the view
-      view.ui.add(layerList, {
-        position: "top-right"
-      });
-
-    });
+	require(["esri/config","esri/Map","esri/views/MapView","esri/layers/MapImageLayer","esri/widgets/LayerList","esri/layers/GeoJSONLayer"],function(e,i,s,t,o,r){e.apiKey="AAPKcdf1a16eb48d4510909ddc6fab400767UzktCkf_9glxAmx1oHcl86nqMsST53dTitvp-ad-2-OKtBCK3OH7PgGFzAwJ-60k";const a=new i({basemap:"osm"}),n=new s({map:a,center:[121.513881,25.055475],zoom:7,container:"viewDiv",constraints:{snapToZoom:!1}});let l=new t({url:"https://geosrv.gis.geoinfor.com.tw/arcgis/rest/services/AIS_BASE/MapServer",title:"基本圖資"});a.add(l);let p=new t({url:"https://geosrv.gis.geoinfor.com.tw/arcgis/rest/services/AIS_NOW/MapServer",title:"船舶即時位置"});a.add(p);const c=new r({url:"https://mpbais.motcmpb.gov.tw/aismpb/tools/geojsonais.ashx",copyright:"mpbais",title:"船舶即時位置",labelingInfo:[{symbol:{type:"text",color:"white",haloColor:"blue",haloSize:1}}]});c.refreshInterval=.5,c.popupEnabled=!0,c.visible=!1;let g=new o({view:n});n.ui.add(g,{position:"top-right"})});
   </script>
 </head>
 
