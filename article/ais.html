@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>AIS MAP</title>
+  <title>AIS MAP | p.p_githubpage</title>
   <style>
     html,
 	body {
@@ -13,11 +13,15 @@
       width: 100%;
     }
 
+	#toparea {
+		height: 12%;
+		width: 100%;
+	}
+
     #viewDiv {
         position: absolute;
-        top: 10%;
-        left: 0;
-        height: 90%;
+        top: 12%;
+		height: 88%;
         width: 100%;
     }
   </style>
@@ -34,17 +38,28 @@ require(["esri/config","esri/Map","esri/views/MapView","esri/layers/MapImageLaye
 
 <body>
 
-  <div>
-  <span>圖層顯示：</span>
-  <button id="layeropen" onclick="layerFopen()" style="display:none;">關</button>
-  <button id="layerclose" onclick="layerFclose()" style="display:inline;">開</button>
-  </div>
-  <div>
-  <span>圖例顯示：</span>
-  <button id="symbolopen" onclick="symbolFopen()" style="display:none;">關</button>
-  <button id="symbolclose" onclick="symbolFclose()" style="display:inline;">開</button>
-  </div>
-  <div id="viewDiv"></div>
+  <div class="toparea">
+    <div style="width:50%; height:12%; float:left;">
+      <h1>AIS船舶系統</h1>
+      </div>
+    
+    <div style="height:12%; float:right; position:relative; display:flex; align-items:center;">
+      <div>
+      <div>
+            <span>圖層顯示：</span>
+            <button id="layeropen" onclick="layerFopen()" style="display:none;">關</button>
+            <button id="layerclose" onclick="layerFclose()" style="display:inline;">開</button>
+          </div>
+      <br/>
+          <div>
+            <span>圖例顯示：</span>
+            <button id="symbolopen" onclick="symbolFopen()" style="display:none;">關</button>
+            <button id="symbolclose" onclick="symbolFclose()" style="display:inline;">開</button>
+          </div>
+      </div>
+    </div>
+    </div>
+    <div id="viewDiv"></div>  
 
 <script>
 function layerFopen(){document.querySelector(".esri-layer-list").style.cssText+="display:block",document.querySelector("#layeropen").style.cssText+="display:none",document.querySelector("#layerclose").style.cssText+="display:inline"}function layerFclose(){document.querySelector(".esri-layer-list").style.cssText+="display:none",document.querySelector("#layerclose").style.cssText+="display:none",document.querySelector("#layeropen").style.cssText+="display:inline"}function symbolFopen(){document.querySelector(".esri-legend").style.cssText+="display:block",document.querySelector("#symbolopen").style.cssText+="display:none",document.querySelector("#symbolclose").style.cssText+="display:inline"}function symbolFclose(){document.querySelector(".esri-legend").style.cssText+="display:none",document.querySelector("#symbolclose").style.cssText+="display:none",document.querySelector("#symbolopen").style.cssText+="display:inline"}
