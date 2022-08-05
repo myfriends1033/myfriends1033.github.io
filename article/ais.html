@@ -3,28 +3,53 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>ais map | p.p_githubpage</title>
+  <title>AIS MAP</title>
   <style>
     html,
-    body,
-    #viewDiv {
+	body {
       padding: 0;
       margin: 0;
       height: 100%;
       width: 100%;
     }
+
+    #viewDiv {
+        position: absolute;
+        top: 10%;
+        left: 0;
+        height: 90%;
+        width: 100%;
+    }
   </style>
 
+  <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
   <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/themes/light/main.css">
   <script src="https://js.arcgis.com/4.19/"></script>
 
   <script>
-	require(["esri/config","esri/Map","esri/views/MapView","esri/layers/MapImageLayer","esri/widgets/LayerList","esri/layers/GeoJSONLayer"],function(e,i,s,t,o,r){e.apiKey="AAPKcdf1a16eb48d4510909ddc6fab400767UzktCkf_9glxAmx1oHcl86nqMsST53dTitvp-ad-2-OKtBCK3OH7PgGFzAwJ-60k";const a=new i({basemap:"osm"}),n=new s({map:a,center:[121.513881,25.055475],zoom:7,container:"viewDiv",constraints:{snapToZoom:!1}});let l=new t({url:"https://geosrv.gis.geoinfor.com.tw/arcgis/rest/services/AIS_BASE/MapServer",title:"基本圖資"});a.add(l);let p=new t({url:"https://geosrv.gis.geoinfor.com.tw/arcgis/rest/services/AIS_NOW/MapServer",title:"船舶即時位置"});a.add(p);const c=new r({url:"https://mpbais.motcmpb.gov.tw/aismpb/tools/geojsonais.ashx",copyright:"mpbais",title:"船舶即時位置",labelingInfo:[{symbol:{type:"text",color:"white",haloColor:"blue",haloSize:1}}]});c.refreshInterval=.5,c.popupEnabled=!0,c.visible=!1;let g=new o({view:n});n.ui.add(g,{position:"top-right"})});
+require(["esri/config","esri/Map","esri/views/MapView","esri/layers/MapImageLayer","esri/layers/GeoJSONLayer","esri/layers/WMTSLayer","esri/widgets/LayerList","esri/widgets/ScaleBar","esri/widgets/Legend","esri/widgets/Search","esri/widgets/BasemapToggle",],function(i,j,k,b,l,m,n,o,p,q,r){i.apiKey="AAPKcdf1a16eb48d4510909ddc6fab400767UzktCkf_9glxAmx1oHcl86nqMsST53dTitvp-ad-2-OKtBCK3OH7PgGFzAwJ-60k";let s=new m({url:"http://wmts.nlsc.gov.tw/wmts",activeLayer:{id:"EMAP"}}),c=new j({basemap:"osm"}),a=new k({map:c,center:[120.972177,23.743345,],zoom:6,container:"viewDiv",constraints:{snapToZoom:!1}}),t=new b({url:"https://geosrv.gis.geoinfor.com.tw/arcgis/rest/services/AIS_BASE/MapServer",title:"\u57FA\u672C\u5716\u8CC7"});c.add(t);let f=new b({url:"https://geosrv.gis.geoinfor.com.tw/arcgis/rest/services/RESEARCH/MapServer",title:"\u6F01\u696D\u7814\u7A76"});f.visible=!1,c.add(f);let g=new b({url:"https://geosrv.gis.geoinfor.com.tw/arcgis/rest/services/SEA_TEMPERATURES/MapServer",title:"\u5168\u7403\u6D77\u6EAB",listMode:"hide-children"});g.visible=!1,c.add(g);let h=new b({url:"https://geosrv.gis.geoinfor.com.tw/arcgis/rest/services/WEATHER/MapServer",title:"\u6D77\u6D0B\u5927\u6C23"});h.visible=!1,c.add(h),new b({url:"https://geosrv.gis.geoinfor.com.tw/arcgis/rest/services/AIS_NOW/MapServer",title:"\u8239\u8236\u5373\u6642\u4F4D\u7F6E",listMode:"hide-children"}).refreshInterval=1;let d=new b({url:"https://geosrv.gis.geoinfor.com.tw/arcgis/rest/services/NOW_CRUISER/MapServer",title:"\u6D77\u5DE1\u8266\u5373\u6642\u4F4D\u7F6E",listMode:"hide-children"});d.refreshInterval=1,d.visible=!1,c.add(d);let e=new l({url:"https://mpbais.motcmpb.gov.tw/aismpb/tools/geojsonais.ashx",copyright:"mpbais",title:"\u8239\u8236\u5373\u6642\u4F4D\u7F6E",labelingInfo:[{symbol:{type:"text",color:"white",haloColor:"blue",haloSize:1}}]});e.refreshInterval=.5,e.popupEnabled=!0,e.visible=!1;let u=new q({view:a});a.ui.add(u,"top-right");let v=new n({view:a});a.ui.add(v,{position:"top-left"});let w=new p({view:a});a.ui.add(w,"top-right");let x=new o({view:a,unit:"metric"});a.ui.add(x,"bottom-left");let y=new r({view:a,nextBasemap:{baseLayers:[s]}});a.ui.add(y,"bottom-right")})
   </script>
+
 </head>
 
 <body>
+
+  <div>
+  <span>圖層顯示：</span>
+  <button id="layeropen" onclick="layerFopen()" style="display:none;">關</button>
+  <button id="layerclose" onclick="layerFclose()" style="display:inline;">開</button>
+  </div>
+  <div>
+  <span>圖例顯示：</span>
+  <button id="symbolopen" onclick="symbolFopen()" style="display:none;">關</button>
+  <button id="symbolclose" onclick="symbolFclose()" style="display:inline;">開</button>
+  </div>
   <div id="viewDiv"></div>
+
+<script>
+function layerFopen(){document.querySelector(".esri-layer-list").style.cssText+="display:block",document.querySelector("#layeropen").style.cssText+="display:none",document.querySelector("#layerclose").style.cssText+="display:inline"}function layerFclose(){document.querySelector(".esri-layer-list").style.cssText+="display:none",document.querySelector("#layerclose").style.cssText+="display:none",document.querySelector("#layeropen").style.cssText+="display:inline"}function symbolFopen(){document.querySelector(".esri-legend").style.cssText+="display:block",document.querySelector("#symbolopen").style.cssText+="display:none",document.querySelector("#symbolclose").style.cssText+="display:inline"}function symbolFclose(){document.querySelector(".esri-legend").style.cssText+="display:none",document.querySelector("#symbolclose").style.cssText+="display:none",document.querySelector("#symbolopen").style.cssText+="display:inline"}
+</script>
+
 </body>
 
 </html>
