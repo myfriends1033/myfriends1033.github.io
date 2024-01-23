@@ -1,0 +1,153 @@
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <title>ゆきぐに</title>
+    <link rel="icon" href="snow-icon.ico" sizes="32x32" />
+    <link rel="icon" href="snow-icon.ico" sizes="192x192" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      div,
+      p {
+        text-align: center;
+      }
+      .allText {
+        border-radius: 30px;
+        border: solid rgb(226, 236, 252);
+        margin-left: 5vw;
+        margin-right: 5vw;
+      }
+      .allText h1 {
+        color: rgb(112, 187, 236);
+      }
+      .allText p {
+        color: rgb(149, 212, 255);
+        margin-top: 1vh;
+        margin-bottom: 1vh;
+      }
+
+      .lyText {
+        display: none;
+        border: 1px dashed rgb(180, 180, 180);
+        margin-left: 12vw;
+        margin-right: 12vw;
+      }
+      .lyText h4 {
+        color: rgb(143, 148, 151);
+      }
+      .lyText p {
+        color: rgb(155, 157, 158);
+        margin-top: 1vh;
+        margin-bottom: 1vh;
+        font-size: 14px;
+      }
+
+      #lyButton {
+        font-size: 16px;
+        border-radius: 5px;
+        background-color: white;
+        color: black;
+        border: 2px solid #555555;
+      }
+      #lyButton:hover {
+        background-color: #555555;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div><br /></div>
+    <div class="allText">
+      <p><br /></p>
+      <h1>Dear ゆき:</h1>
+      <p>❄️❄️❄️❄️❄️</p>
+      <p>那一天有看到表演好開心！</p>
+      <p>我知道要有多大的勇氣</p>
+      <p>你真的很棒🥹</p>
+      <p>有點怕怕小禮物你會不喜歡</p>
+      <p>然後還強迫雪聽我唱歌</p>
+      <p>甚至做成小網頁令人傻眼</p>
+      <p>以第三人稱視角</p>
+      <p>其實我也知道元気就是個怪人😰</p>
+      <p>❄️❄️❄️❄️❄️</p>
+      <p>最後不管怎麼樣</p>
+      <p>希望今年都會順順利利的</p>
+      <p>然後健健康康的</p>
+      <p>Happy Birthday !</p>
+      <p>❄️❄️❄️❄️❄️</p>
+      <p><br /></p>
+    </div>
+    <div><br /></div>
+    <div>
+      <audio controls>
+        <source src="blackgirl.mp3" type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+    <div><br /></div>
+    <div class="lyText">
+      <p><br /></p>
+      <h4>黑色女孩</h4>
+      <p>(7uly)</p>
+      <p><br /></p>
+      <p>深紅的夜</p>
+      <p>又再次把我撕碎</p>
+      <p>只好沈進在每一次吸吐</p>
+      <p>a dream so far far away</p>
+      <p><br /></p>
+      <p>狂亂的夜</p>
+      <p>當時你被誰撕碎</p>
+      <p>以第三人稱視角</p>
+      <p>只好沈浸在另一個溫度</p>
+      <p>你以為的日出</p>
+      <p>a dream so far far away</p>
+      <p><br /></p>
+      <p>你若有所思的嘆</p>
+      <p>你淚流不止的盼</p>
+      <p>刻畫你身上的印記</p>
+      <p>在我眼前格外 閃爍 透明</p>
+      <p><br /></p>
+      <p>黑色女孩</p>
+      <p>住過你心裡還有誰</p>
+      <p>總徘徊絢爛複雜的夜</p>
+      <p>用沈醉 在傷痕累累 來拼湊破碎</p>
+      <p><br /></p>
+      <p>黑色女孩</p>
+      <p>住過你心裡還有誰</p>
+      <p>總徘徊絢爛複雜的夜</p>
+      <p>用沈醉 在傷痕累累 來拼湊破碎</p>
+      <p><br /></p>
+    </div>
+    <div id="lyBtn">
+      <button id="lyButton" type="button" onclick="lyDisplay()">歌詞</button>
+    </div>
+    <div><br /></div>
+
+    <!-- <button id="buttonA" onclick="toggleButtons()">Button A</button>
+    <button id="buttonB" onclick="toggleButtons()" disabled>Button B</button> -->
+    <script>
+      function toggleButtons() {
+        const buttonA = document.getElementById("buttonA");
+        const buttonB = document.getElementById("buttonB");
+
+        if (buttonA.disabled) {
+          buttonA.disabled = false;
+          buttonB.disabled = true;
+        } else {
+          buttonA.disabled = true;
+          buttonB.disabled = false;
+        }
+      }
+    </script>
+    <script>
+      function lyDisplay() {
+        document.getElementsByClassName("lyText")[0].style.cssText +=
+          "display:block";
+        document.getElementById("lyBtn").style.cssText += "display:none";
+      }
+    </script>
+  </body>
+</html>
