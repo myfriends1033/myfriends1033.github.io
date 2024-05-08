@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link
+      rel="Shortcut Icon"
+      type="image/x-icon"
+      href="https://web.hoone.com.tw/img/logo/hoone_rmbg.png"
+    />
+    <link rel="stylesheet" href="/static/css/ol7.5.1.css" type="text/css" />
+
+    <title>水域地圖</title>
+
+    <style>
+      html,
+      body {
+        padding: 0;
+        margin: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        font-family: "微軟正黑體";
+      }
+      #map {
+        width: 100%;
+        height: 100%;
+      }
+      #showcount {
+        position: absolute;
+        top: 5px;
+        right: 10px;
+        font-size: 40px;
+        color: #00ffec;
+        padding: 0px;
+        font-weight: bold;
+        text-shadow: 0px 2px 3px #636363, 1px 1px #fff;
+        font-family: monospace;
+        z-index: 3;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="js/viewerJs.js"></script>
+    <script
+      type="text/javascript"
+      src="/static/js/jquery-3.7.0.min.js"
+    ></script>
+    <script type="text/javascript" src="/static/js/ol7.5.1.js"></script>
+    <script type="text/javascript" src="/static/js/proj4.js"></script>
+    <div id="map"></div>
+    <div id="showcount">目前登打總數：</div>
+
+    <!-- dom END -->
+
+    <script type="text/javascript">
+      // 參數設置
+      var mapcenterxy = [121.552338, 24.024716];
+
+      /*initProjection*/
+      proj4.defs("EPSG:3824", "+proj=longlat +ellps=GRS80 +no_defs +type=crs");
+      proj4.defs(
+        "EPSG:3825",
+        "+proj=tmerc +lat_0=0 +lon_0=119 +k=0.9999 +x_0=250000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+      );
+      proj4.defs(
+        "EPSG:3826",
+        "+proj=tmerc +lat_0=0 +lon_0=121 +k=0.9999 +x_0=250000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+      );
+      proj4.defs(
+        "EPSG:3827",
+        "+proj=tmerc +lat_0=0 +lon_0=119 +k=0.9999 +x_0=250000 +y_0=0 +ellps=aust_SA +units=m +no_defs"
+      );
+      proj4.defs(
+        "EPSG:3828",
+        "+proj=tmerc +lat_0=0 +lon_0=121 +k=0.9999 +x_0=250000 +y_0=0 +ellps=aust_SA +units=m +no_defs"
+      );
+      proj4.defs("EPSG:4326", "+proj=longlat +datum=WGS84 +no_defs");
+      proj4.defs(
+        "EPSG:3857",
+        "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs"
+      );
+      ol.proj.proj4.register(proj4);
+
+      //比例尺
+      let scaleLineControl = new ol.control.ScaleLine();
+      let userscale = 8;
+
+      var baselayer = new ol.layer.Tile({ zIndex: 1 });
+      $.getJSON(
+        "https://tech.hoone.com.tw/nfa/getwaterzone/geojson",
+        function (geojson) {
+          function waterStyle(feature) {
+            if (userscale > 9) {
+              return [
+                new ol.style.Style({
+                  text: new ol.style.Text({
+                    font: "0.8rem sans-serif",
+                    text: feature.get("name"),
+                    fill: new ol.style.Fill({ color: "#00fffd" }),
+                    stroke: new ol.style.Stroke({
+                      color: "rgba(0,0,0,0.9)",
+                      width: 3,
+                    }),
+                  }),
+                }),
+                new ol.style.Style({
+                  image: new ol.style.Icon({
+                    anchor: [0.5, 1],
+                    anchorXUnits: "fraction",
+                    anchorYUnits: "fraction",
+                    src: "https://web.hoone.com.tw/img/mapicon/river.png",
+                    scale: 0.02 * userscale,
+                  }),
+                }),
+              ];
+            } else {
+              return new ol.style.Style({
+                image: new ol.style.Icon({
+                  anchor: [0.5, 1],
+                  anchorXUnits: "fraction",
+                  anchorYUnits: "fraction",
+                  src: "https://web.hoone.com.tw/img/mapicon/river.png",
+                  scale: 0.02 * userscale,
+                }),
+              });
+            }
+          }
+          let waterloc = new ol.layer.Vector({
+            source: new ol.source.Vector(),
+            zIndex: 13,
+            renderMode: "vector",
+            style: waterStyle,
+          });
+          for (let i = 0; i < geojson.features.length; i++) {
+            waterloc.getSource().addFeature(
+              new ol.Feature({
+                geometry: new ol.geom.Point(
+                  ol.proj.fromLonLat(geojson.features[i].geometry.coordinates)
+                ),
+                name: geojson.features[i].properties.id,
+              })
+            );
+          }
+          map.addLayer(waterloc);
+          document.getElementById("showcount").innerHTML =
+            "目前登打總數：" + geojson.features.length;
+        }
+      );
+
+      var map = new ol.Map({
+        controls: ol.control.defaults.defaults({
+          zoom: true,
+          attribution: false,
+          rotate: false,
+        }),
+        layers: [baselayer],
+        target: "map",
+        view: new ol.View({
+          projection: "EPSG:3857",
+          center: ol.proj.fromLonLat(mapcenterxy),
+          zoom: 8,
+          maxZoom: 19 + 2, //kuomod 20220521
+          minZoom: 5,
+          enableRotation: false,
+        }),
+        crossOrigin: null,
+      });
+
+      //底圖設置
+      baselayer.setSource(
+        new ol.source.XYZ({
+          url: "https://wmts.nlsc.gov.tw/wmts/EMAP5/default/EPSG:3857/{z}/{y}/{x}",
+          crossOrigin: "anonymous",
+          maxZoom: 20,
+        })
+      );
+
+      map.getView().on("change:resolution", (event) => {
+        mapzoom = map.getView().getZoom().toFixed(2);
+        userscale = mapzoom;
+      });
+    </script>
+  </body>
+</html>
