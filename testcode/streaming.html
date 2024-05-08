@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="streamingContent">
+      <!-- Your streaming content will be loaded here -->
+    </div>
+
+    <script>
+      // Function to load streaming content
+      function loadStreamingContent() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("streamingContent").innerHTML =
+              this.responseText;
+          }
+        };
+        xhttp.open(
+          "GET",
+          "https://cctvn.freeway.gov.tw/abs2mjpg/bmjpg?camera=10000",
+          true
+        );
+        xhttp.send();
+      }
+
+      // Call the function once when the page loads
+      loadStreamingContent();
+
+      // Then set it to be called every 7 seconds
+      setInterval(loadStreamingContent, 7000);
+    </script>
+  </body>
+</html>
