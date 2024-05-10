@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/ol@v9.1.0/dist/ol.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/ol@v9.1.0/ol.css"
+    />
+    <style>
+      html,
+      body {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+
+      #map {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+
+      #layerControl {
+        background-color: #ebebeb;
+        position: absolute;
+        top: 60px;
+        left: 10px;
+      }
+
+      .ol-popup {
+        position: absolute;
+        background-color: white;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid black;
+        bottom: 12px;
+        left: 0px;
+        min-width: 200px;
+      }
+
+      .ol-popup * {
+        border: 1px solid;
+        border-radius: 2px;
+      }
+
+      #cctvSidebar {
+        position: absolute;
+        top: 0;
+        right: 0px; /* Initially hide the sidebar */
+        width: 330px;
+        height: 100vh;
+        background-color: #f0f0f0;
+        text-align: center;
+        overflow-y: auto;
+      }
+
+      #cctvSidebar > div > svg {
+        cursor: pointer;
+      }
+    </style>
+    <title>cctv map</title>
+  </head>
+
+  <body>
+    <div id="map" class="map"></div>
+    <div id="layerControl">
+      <div id="baseMapList">
+        <div>底圖庫</div>
+        <input type="checkbox" id="chkOsm" checked />OSM<br />
+        <input type="checkbox" id="chkGoogle" />google<br />
+      </div>
+      <div id="vectorMap">
+        <div>圖層</div>
+        <input type="checkbox" id="chkLayerPoint" />桃園台北<br />
+        <input type="checkbox" id="chkCctvPoint" />cctv<br />
+      </div>
+    </div>
+    <div id="popup" class="ol-popup"></div>
+    <div id="cctvSidebar">
+      <br />
+    </div>
+
+    <!-- -->
+    <script type="text/javascript">
+      // basemap
+      const OSM = new ol.layer.Tile({
+        source: new ol.source.OSM(),
+      });
+      // init map
+      const oplyMap = new ol.Map({
+        target: "map",
+        layers: [OSM],
+        view: new ol.View({
+          center: ol.proj.fromLonLat([121.516602, 25.046891]),
+          zoom: 10,
+        }),
+      });
+
+      //google map tile
+      const googleMap = new ol.layer.Tile({
+        source: new ol.source.XYZ({
+          url: "https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}",
+        }),
+        // opacity: 0.5,
+      });
+      // oplyMap.addLayer(googleMap);
+
+      //
+      //use json url to create layer
+      // Create an empty vector source
+      const cctvSource = new ol.source.Vector({});
+      var cctvdata;
+      var cctvPoint;
+      fetch("data/cctvtest.json").then((res) => {
+        res.text().then((result) => {
+          cctvdata = JSON.parse(result).response.cctv;
+          cctvdataRun();
+        });
+      });
+
+      function cctvdataRun() {
+        // Iterate over your JSON data to create features and add them to the source
+        cctvdata.forEach(function (point) {
+          const feature = new ol.Feature({
+            geometry: new ol.geom.Point(
+              ol.proj.fromLonLat([
+                parseFloat(point.longitude),
+                parseFloat(point.latitude),
+              ])
+            ),
+            // add the name property here
+            name: point.web_title,
+            uniqueid: point.uniqueid,
+            direction: point.web_direction,
+            url: point.videourl,
+            // you can add more properties here if needed
+          });
+          cctvSource.addFeature(feature);
+        });
+        // add layer
+        cctvPoint = new ol.layer.Vector({
+          source: cctvSource,
+          style: cctvStyle,
+          zIndex: 1,
+        });
+        // oplyMap.addLayer(cctvPoint);
+      }
+      // Create a cctv style for the features
+      function cctvStyle(feature) {
+        return new ol.style.Style({
+          image: new ol.style.Icon({
+            // anchor: [0.5, 1],
+            // anchorXUnits: "fraction",
+            // anchorYUnits: "fraction",
+            src: "photo/cctv.png",
+            scale: 0.18,
+          }),
+          text: new ol.style.Text({
+            text: feature.get("name"),
+            font: "15px Calibri,sans-serif",
+            fill: new ol.style.Fill({ color: "#000" }),
+            stroke: new ol.style.Stroke({ color: "#fff", width: 3 }),
+            offsetY: -16,
+            // textBaseline: "bottom",
+          }),
+        });
+      }
+
+      //
+      // json data here
+      const jsonData = [
+        {
+          x: "121.3",
+          y: "24.99",
+          name: "桃園",
+          enname: "taoyuan",
+          // other properties...
+        },
+        {
+          x: "121.55",
+          y: "25.035",
+          name: "台北",
+          enname: "tapei",
+          // other properties...
+        },
+        // more points...
+      ];
+      // create layer var
+      var layerPoint;
+      function createVector_layerPoint() {
+        // Create an empty vector source
+        const vectorSource = new ol.source.Vector({});
+        // Iterate over your JSON data to create features and add them to the source
+        jsonData.forEach(function (point) {
+          const feature = new ol.Feature({
+            geometry: new ol.geom.Point(
+              ol.proj.fromLonLat([parseFloat(point.x), parseFloat(point.y)])
+            ),
+            name: point.name, // add the name property here
+            enname: point.enname,
+            // you can add more properties here if needed
+          });
+          vectorSource.addFeature(feature);
+        });
+        // add layer
+        layerPoint = new ol.layer.Vector({
+          source: vectorSource,
+          style: pointStyle,
+          zIndex: 1,
+        });
+      }
+      createVector_layerPoint();
+      // oplyMap.addLayer(layerPoint);
+
+      // Create a style for the features
+      function pointStyle(feature) {
+        return new ol.style.Style({
+          image: new ol.style.Circle({
+            radius: 4,
+            fill: new ol.style.Fill({ color: "red" }),
+            stroke: new ol.style.Stroke({ color: "black", width: 2 }),
+          }),
+          text: new ol.style.Text({
+            text: feature.get("name"),
+            font: "15px Calibri,sans-serif",
+            fill: new ol.style.Fill({ color: "#000" }),
+            stroke: new ol.style.Stroke({ color: "#fff", width: 3 }),
+            offsetY: -12,
+            // textBaseline: "bottom",
+          }),
+        });
+      }
+
+      //
+      // Create an overlay for the popup
+      const element = document.getElementById("popup");
+      const popup = new ol.Overlay({
+        element: element,
+        positioning: "bottom-center",
+        stopEvent: false,
+        offset: [0, -10],
+      });
+      oplyMap.addOverlay(popup);
+      // Display the popup when the mouse hovers over a feature
+      oplyMap.on("pointermove", function (evt) {
+        var feature = oplyMap.forEachFeatureAtPixel(
+          evt.pixel,
+          function (feature) {
+            // console.log(feature);
+            return feature;
+          }
+        );
+        if (feature) {
+          var coordinates = feature.getGeometry().getCoordinates();
+          popup.setPosition(coordinates);
+          // Create a table with all properties of the feature
+          var table = "<table>";
+          feature.getKeys().forEach(function (key) {
+            if (key !== "geometry") {
+              // Exclude the geometry property
+              table +=
+                "<tr><td>" +
+                key +
+                "</td><td>" +
+                feature.get(key) +
+                "</td></tr>";
+            }
+          });
+          table += "</table>";
+
+          element.innerHTML = table; // Set the content of the popup
+          element.style.display = "block"; // Show the popup
+        } else {
+          element.style.display = "none"; // Hide the popup
+        }
+      });
+
+      // cctvSidebar
+      const cctvElement = document.getElementById("cctvSidebar");
+      // Add a click event to the map
+      oplyMap.on("click", function (evt) {
+        // Get the feature at the clicked pixel
+        var feature = oplyMap.forEachFeatureAtPixel(
+          evt.pixel,
+          function (feature, layer) {
+            // Check if the feature belongs to layerPoint
+            if (layer === cctvPoint) {
+              return feature;
+            }
+          }
+        );
+        // If a feature of layerPoint was clicked
+        if (feature) {
+          var addImg = "";
+          addImg += "<div id='";
+          addImg += feature.get("uniqueid");
+          addImg += "'>";
+          addImg +=
+            "<svg class='cctvClose' width='15' height='15' viewbox='0 0 40 40'><path d='M 10,10 L 30,30 M 30,10 L 10,30' stroke='black' stroke-width='4' /></svg>";
+          addImg += "<span>";
+          addImg += feature.get("name");
+          addImg += "</span>";
+          addImg += "<img src='";
+          addImg += feature.get("url");
+          addImg += "&dummy=";
+          addImg += "' ";
+          addImg += "style='width: 300px; height: 200px' />";
+          addImg += "</div>";
+          // Log the enname property of the feature
+          // console.log(feature.get("name"));
+          // console.log(feature.get("uniqueid"));
+          // console.log(feature.get("url"));
+          cctvElement.innerHTML += addImg;
+        }
+        // set refresh cctv img
+        cctvRefresh();
+      });
+
+      //
+      // checkbox change listener
+      document.getElementById("chkOsm").addEventListener("change", function () {
+        this.checked ? oplyMap.addLayer(OSM) : oplyMap.removeLayer(OSM);
+      });
+      document
+        .getElementById("chkGoogle")
+        .addEventListener("change", function () {
+          this.checked
+            ? oplyMap.addLayer(googleMap)
+            : oplyMap.removeLayer(googleMap);
+        });
+      document
+        .getElementById("chkLayerPoint")
+        .addEventListener("change", function () {
+          this.checked
+            ? oplyMap.addLayer(layerPoint)
+            : oplyMap.removeLayer(layerPoint);
+        });
+      document
+        .getElementById("chkCctvPoint")
+        .addEventListener("change", function () {
+          this.checked
+            ? oplyMap.addLayer(cctvPoint)
+            : oplyMap.removeLayer(cctvPoint);
+        });
+    </script>
+
+    <!-- for the basemap checkbox -->
+    <script>
+      // Get the container for baseMapList
+      const baseMapListContainer = document.getElementById("baseMapList");
+
+      // Add event listener to the container
+      baseMapListContainer.addEventListener("change", function (event) {
+        // Check if the event target is a checkbox
+        if (event.target && event.target.type === "checkbox") {
+          // Uncheck all other checkboxes when one is checked
+          const checkboxes = baseMapListContainer.querySelectorAll(
+            'input[type="checkbox"]'
+          );
+          checkboxes.forEach((checkbox) => {
+            if (checkbox !== event.target) {
+              checkbox.checked = false;
+            }
+          });
+        }
+      });
+    </script>
+
+    <script>
+      // here is for refresh cctv code
+      const cctvRefreshTime = 8000; // 8 seconds
+      var timeoutId;
+      function cctvRefresh() {
+        // stop timeout first
+        if (typeof timeoutId !== "undefined") {
+          clearTimeout(timeoutId);
+          timeoutId = undefined;
+        }
+
+        // set now time for cctv img src change
+        var now = new Date();
+        // get cctv div
+        var imgElement = document.querySelectorAll("#cctvSidebar div");
+        // if length > 0 run the timeoutId
+        if (imgElement.length > 0) {
+          imgElement.forEach(function (aCctv) {
+            // console.log(aCctv);
+            aCctv.getElementsByTagName("img")[0].src =
+              aCctv.getElementsByTagName("img")[0].src.split("&dummy=")[0] +
+              "&dummy=" +
+              now.getTime();
+          });
+          timeoutId = setTimeout(cctvRefresh, cctvRefreshTime);
+          // console.log(timeoutId);
+        }
+      }
+      // close cctv div
+      var cctvDiv = document.getElementById("cctvSidebar");
+      cctvDiv.addEventListener("click", function (ele) {
+        // Check if the clicked element is an SVG element
+        if (ele.target.tagName.toLowerCase() === "svg") {
+          ele.target.parentElement.remove();
+        }
+      });
+    </script>
+  </body>
+</html>
