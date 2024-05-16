@@ -582,6 +582,45 @@
           );
         }
       });
+
+      // here for touch device
+      mapForEvent.addEventListener("touchstart", function (evt) {
+        if (evt.target.className == "cctvPopup") {
+          // set if move down on the cctv div to true
+          cctvIsDown = true;
+          cctvMoveDiv = evt.target;
+          // get the old xy of mouse and cctv div
+          mouseOldXy = autoMousePosition;
+          cctvOldXy = window[cctvMoveDiv.id].getPosition();
+        }
+      });
+      mapForEvent.addEventListener("touchend", function () {
+        cctvIsDown = false;
+        cctvMoveDiv = undefined;
+        mouseOldXy = undefined;
+        cctvOldXy = undefined;
+      });
+      mapForEvent.addEventListener("touchmove", function (evt) {
+        if (cctvIsDown) {
+          evt.preventDefault();
+          var addX = autoMousePosition[0] - mouseOldXy[0];
+          var addY = autoMousePosition[1] - mouseOldXy[1];
+          var cctvNewXy = [cctvOldXy[0] + addX, cctvOldXy[1] + addY];
+          window[cctvMoveDiv.id].setPosition(cctvNewXy);
+          window["cctvLine" + cctvMoveDiv.id.split("cctvPop")[1]].setSource(
+            new ol.source.Vector({
+              features: [
+                new ol.Feature({
+                  geometry: new ol.geom.LineString([
+                    window["cctvPopXy" + cctvMoveDiv.id.split("cctvPop")[1]],
+                    cctvNewXy,
+                  ]),
+                }),
+              ],
+            })
+          );
+        }
+      });
     </script>
 
     <script>
