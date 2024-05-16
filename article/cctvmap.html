@@ -29,35 +29,78 @@
         left: 10px;
       }
 
-      .ol-popup {
+      #mainPopup {
+        padding: 10px;
+        min-width: 100px;
+        max-height: 200px;
+        overflow-y: auto;
         position: absolute;
         background-color: white;
-        padding: 10px;
         border-radius: 5px;
         border: 1px solid black;
+        border-collapse: collapse;
         bottom: 12px;
         left: 0px;
-        min-width: 200px;
+        box-shadow: rgba(0, 0, 0, 0.2) 3px 3px 5px;
+        box-sizing: border-box;
       }
 
-      .ol-popup * {
+      #mainPopup table,
+      th,
+      td {
         border: 1px solid;
         border-radius: 2px;
+        border-collapse: collapse;
       }
 
-      #cctvSidebar {
+      #rightClickMenu {
+        padding: 0;
+        margin: 0;
+        min-width: 150px;
         position: absolute;
-        top: 0;
-        right: 0px; /* Initially hide the sidebar */
-        width: 330px;
-        height: 100vh;
-        background-color: #f0f0f0;
-        text-align: center;
-        overflow-y: auto;
+        background: #fff;
+        color: #222;
+        font-size: 20px;
+        border-radius: 5px;
+        box-shadow: rgba(0, 0, 0, 0.2) 3px 3px 5px;
+        box-sizing: border-box;
       }
 
-      #cctvSidebar > div > svg {
-        cursor: pointer;
+      #rightClickMenu ul {
+        list-style-type: none;
+        padding: 8px;
+        margin: 0;
+      }
+
+      #rightClickMenu li {
+        white-space: nowrap;
+      }
+
+      #rightClickMenu li:hover {
+        background: #e2e2e2;
+      }
+
+      #rightClickMenu hr {
+        padding: 0;
+        margin: 0;
+      }
+
+      #cctvPopupTemp {
+        display: none;
+      }
+
+      .cctvPopup {
+        padding: 0 5px 0 5px;
+        margin: 0;
+        width: 320px;
+        position: absolute;
+        background: #fff;
+        font-size: 20px;
+        border-radius: 5px;
+        border: 1px solid black;
+        border-collapse: collapse;
+        box-shadow: rgba(0, 0, 0, 0.2) 3px 3px 5px;
+        box-sizing: border-box;
       }
     </style>
     <title>cctv map</title>
@@ -77,9 +120,16 @@
         <input type="checkbox" id="chkCctvPoint" />cctv<br />
       </div>
     </div>
-    <div id="popup" class="ol-popup"></div>
-    <div id="cctvSidebar">
-      <br />
+    <div id="mainPopup"></div>
+    <div id="cctvPopupTemp"></div>
+    <div id="rightClickMenu">
+      <ul class="">
+        <li class="">這裡是哪裡？</li>
+        <hr />
+        <li class="">這裡有多高？</li>
+        <hr />
+        <li class="">？</li>
+      </ul>
     </div>
 
     <!-- -->
@@ -109,18 +159,21 @@
 
       //
       //use json url to create layer
-      // Create an empty vector source
-      const cctvSource = new ol.source.Vector({});
-      var cctvdata;
       var cctvPoint;
-      fetch("data/cctvtest.json").then((res) => {
-        res.text().then((result) => {
-          cctvdata = JSON.parse(result).response.cctv;
-          cctvdataRun();
+      // add cctv point
+      function addCctvPoint(cctvPoint) {
+        fetch("data/cctvtest.json").then((res) => {
+          res.text().then((result) => {
+            const cctvdata = JSON.parse(result).response.cctv;
+            // Create an empty vector source
+            const cctvSource = new ol.source.Vector({});
+            cctvdataRun(cctvSource, cctvdata);
+            // cctvPoint.setMinZoom(10);
+          });
         });
-      });
-
-      function cctvdataRun() {
+      }
+      // run cctv data for the features
+      function cctvdataRun(cctvSource, cctvdata) {
         // Iterate over your JSON data to create features and add them to the source
         cctvdata.forEach(function (point) {
           const feature = new ol.Feature({
@@ -139,36 +192,74 @@
           });
           cctvSource.addFeature(feature);
         });
-        // add layer
-        cctvPoint = new ol.layer.Vector({
+        // Create a cluster source with the original vector source
+        var cctvClusterSource = new ol.source.Cluster({
+          distance: 60, // The distance in pixels within which to cluster features
           source: cctvSource,
+        });
+        // set layer
+        cctvPoint = new ol.layer.Vector({
+          source: cctvClusterSource,
           style: cctvStyle,
           zIndex: 1,
         });
-        // oplyMap.addLayer(cctvPoint);
+        cctvPoint.setMinZoom(10);
       }
       // Create a cctv style for the features
       function cctvStyle(feature) {
-        return new ol.style.Style({
-          image: new ol.style.Icon({
-            // anchor: [0.5, 1],
-            // anchorXUnits: "fraction",
-            // anchorYUnits: "fraction",
-            src: "photo/cctv.png",
-            scale: 0.18,
-          }),
-          text: new ol.style.Text({
-            text: feature.get("name"),
-            font: "15px Calibri,sans-serif",
-            fill: new ol.style.Fill({ color: "#000" }),
-            stroke: new ol.style.Stroke({ color: "#fff", width: 3 }),
-            offsetY: -16,
-            // textBaseline: "bottom",
-          }),
-        });
+        // console.log(feature.get("features"));
+        var styleCache = {};
+        var size = feature.get("features").length;
+        var style = styleCache[size];
+        if (size > 1) {
+          if (!style) {
+            style = new ol.style.Style({
+              image: new ol.style.Circle({
+                radius: 15,
+                stroke: new ol.style.Stroke({
+                  color: "#fff",
+                }),
+                fill: new ol.style.Fill({
+                  color: "#3399CC",
+                }),
+              }),
+              text: new ol.style.Text({
+                text: size.toString(),
+                font: "16px sans-serif",
+                fill: new ol.style.Fill({
+                  color: "#fff",
+                }),
+              }),
+            });
+            styleCache[size] = style;
+          }
+        } else {
+          style = new ol.style.Style({
+            image: new ol.style.Icon({
+              // anchor: [0.5, 1],
+              // anchorXUnits: "fraction",
+              // anchorYUnits: "fraction",
+              src: "icon/cctv.png",
+              scale: 0.18,
+            }),
+            text: new ol.style.Text({
+              text: feature["values_"]["features"][0]["values_"]["name"],
+              font: "15px Calibri,sans-serif",
+              fill: new ol.style.Fill({ color: "#000" }),
+              stroke: new ol.style.Stroke({ color: "#fff", width: 3 }),
+              offsetY: -16,
+              // textBaseline: "bottom",
+            }),
+          });
+        }
+        return style;
       }
+      // run add cctv
+      addCctvPoint();
 
       //
+      // create layer var
+      var layerPoint;
       // json data here
       const jsonData = [
         {
@@ -187,9 +278,7 @@
         },
         // more points...
       ];
-      // create layer var
-      var layerPoint;
-      function createVector_layerPoint() {
+      function addLayerPoint() {
         // Create an empty vector source
         const vectorSource = new ol.source.Vector({});
         // Iterate over your JSON data to create features and add them to the source
@@ -211,9 +300,6 @@
           zIndex: 1,
         });
       }
-      createVector_layerPoint();
-      // oplyMap.addLayer(layerPoint);
-
       // Create a style for the features
       function pointStyle(feature) {
         return new ol.style.Style({
@@ -232,19 +318,27 @@
           }),
         });
       }
+      // run layerpoint
+      addLayerPoint();
 
       //
       // Create an overlay for the popup
-      const element = document.getElementById("popup");
-      const popup = new ol.Overlay({
+      const element = document.getElementById("mainPopup");
+      const mainPopup = new ol.Overlay({
         element: element,
         positioning: "bottom-center",
         stopEvent: false,
         offset: [0, -10],
       });
-      oplyMap.addOverlay(popup);
+      oplyMap.addOverlay(mainPopup);
+      // when map move close popup
+      oplyMap.on("movestart", function () {
+        mainPopup.setPosition(undefined); // Hide the popup
+      });
+      //
       // Display the popup when the mouse hovers over a feature
-      oplyMap.on("pointermove", function (evt) {
+      oplyMap.on("click", function (evt) {
+        // console.log(evt["originalEvent"]["target"]);
         var feature = oplyMap.forEachFeatureAtPixel(
           evt.pixel,
           function (feature) {
@@ -254,11 +348,49 @@
         );
         if (feature) {
           var coordinates = feature.getGeometry().getCoordinates();
-          popup.setPosition(coordinates);
+
+          mainPopup.setPosition(coordinates);
           // Create a table with all properties of the feature
-          var table = "<table>";
+          var table = "<button id='closePopup'>X</button>" + "<table>";
           feature.getKeys().forEach(function (key) {
-            if (key !== "geometry") {
+            // this if is for getting Cluster source
+            if (key == "features") {
+              // Exclude the geometry property
+              feature.get(key).forEach(function (apoint) {
+                // console.log(typeof apoint.values_["name"]);
+                var geometry = apoint["values_"]["geometry"].getCoordinates();
+                var url = apoint.values_["url"];
+                var name = apoint.values_["name"];
+                var uniqueid = apoint.values_["uniqueid"];
+                table += "<tr><td style='white-space: nowrap'>";
+                table +=
+                  "<a href='" +
+                  "javascript:addCctvDiv(" +
+                  '"' +
+                  name +
+                  '"' +
+                  "," +
+                  '"' +
+                  uniqueid +
+                  '"' +
+                  "," +
+                  '"' +
+                  url +
+                  '"' +
+                  "," +
+                  '"' +
+                  geometry[0] +
+                  '"' +
+                  "," +
+                  '"' +
+                  geometry[1] +
+                  '"' +
+                  ")'>";
+                table += name + "</a>";
+                table += "</td></tr>";
+              });
+              // this else if is for other point
+            } else if (key !== "geometry") {
               // Exclude the geometry property
               table +=
                 "<tr><td>" +
@@ -271,54 +403,211 @@
           table += "</table>";
 
           element.innerHTML = table; // Set the content of the popup
-          element.style.display = "block"; // Show the popup
+        }
+        // else if (evt["originalEvent"]["target"].tagName == "A") {
+        //   // if click url A tag do not close popup
+        // }
+        else if (evt["originalEvent"]["target"].id == "closePopup") {
+          mainPopup.setPosition(coordinates); // Hide the popup
         } else {
-          element.style.display = "none"; // Hide the popup
+          // element.style.display = "none"; // Hide the popup
         }
       });
+    </script>
 
-      // cctvSidebar
-      const cctvElement = document.getElementById("cctvSidebar");
-      // Add a click event to the map
-      oplyMap.on("click", function (evt) {
-        // Get the feature at the clicked pixel
-        var feature = oplyMap.forEachFeatureAtPixel(
-          evt.pixel,
-          function (feature, layer) {
-            // Check if the feature belongs to layerPoint
-            if (layer === cctvPoint) {
-              return feature;
-            }
-          }
-        );
-        // If a feature of layerPoint was clicked
-        if (feature) {
-          var addImg = "";
-          addImg += "<div id='";
-          addImg += feature.get("uniqueid");
-          addImg += "'>";
-          addImg +=
-            "<svg class='cctvClose' width='15' height='15' viewbox='0 0 40 40'><path d='M 10,10 L 30,30 M 30,10 L 10,30' stroke='black' stroke-width='4' /></svg>";
-          addImg += "<span>";
-          addImg += feature.get("name");
-          addImg += "</span>";
-          addImg += "<img src='";
-          addImg += feature.get("url");
-          addImg += "&dummy=";
-          addImg += "' ";
-          addImg += "style='width: 300px; height: 200px' />";
-          addImg += "</div>";
-          // Log the enname property of the feature
-          // console.log(feature.get("name"));
-          // console.log(feature.get("uniqueid"));
-          // console.log(feature.get("url"));
-          cctvElement.innerHTML += addImg;
-        }
+    <script>
+      // get temp cctv list div
+      var cctvPopList = document.getElementById("cctvPopupTemp");
+      // cctv pop div number
+      var cctvDivNumber = 0;
+      // Add a click cctv a tag
+      function addCctvDiv(name, uniqueid, url, x, y) {
+        var cctvDiv = "";
+        var cctvPopName = "cctvPop" + cctvDivNumber;
+        var cctvPopOrginxyName = "cctvPopXy" + cctvDivNumber;
+        var cctvLineName = "cctvLine" + cctvDivNumber;
+        cctvDiv += "<div id='" + cctvPopName + "'" + " class='cctvPopup'>";
+        cctvDiv += "<button onclick='closeCctvDiv(this)'>X</button>";
+        cctvDiv += "<span>" + name + "</span>";
+        cctvDiv += "<img src='";
+        cctvDiv += url;
+        cctvDiv += "&dummy=";
+        cctvDiv += "' ";
+        cctvDiv += "style='width: 300px; height: 200px'; display: block; />";
+        cctvDiv += "</div>";
+        // add a cctv div to temp list div
+        cctvPopList.innerHTML = cctvDiv;
+        window[cctvPopName] = new ol.Overlay({
+          element: document.getElementById(cctvPopName),
+        });
+        oplyMap.addOverlay(window[cctvPopName]);
+        window[cctvPopOrginxyName] = [parseFloat(x), parseFloat(y)];
+        window[cctvPopName].setPosition([parseFloat(x), parseFloat(y)]);
+        // add cctv line for moving
+        addCctvLine(cctvLineName, cctvPopOrginxyName);
+
+        // update cctv div used number
+        cctvDivNumber += 1;
         // set refresh cctv img
         cctvRefresh();
+      }
+
+      // fuc of add cctv line
+      function addCctvLine(linename, linelocation) {
+        window[linename] = new ol.layer.Vector({
+          source: new ol.source.Vector({
+            features: [
+              new ol.Feature({
+                geometry: new ol.geom.LineString([
+                  window[linelocation],
+                  window[linelocation],
+                ]),
+              }),
+            ],
+          }),
+        });
+        oplyMap.addLayer(window[linename]);
+      }
+
+      // close cctv
+      function closeCctvDiv(evt) {
+        // remove overlay to close div and del var
+        oplyMap.removeOverlay(window[evt.parentElement.id]);
+        delete window[evt.parentElement.id];
+        // evt.parentElement.remove();
+        // remove line and orginxy
+        delete window["cctvPopXy" + evt.parentElement.id.split("cctvPop")[1]];
+        oplyMap.removeLayer(
+          window["cctvLine" + evt.parentElement.id.split("cctvPop")[1]]
+        );
+        delete window["cctvLine" + evt.parentElement.id.split("cctvPop")[1]];
+      }
+    </script>
+
+    <script>
+      // here is for refresh cctv code
+      const cctvRefreshTime = 8000; // 8 seconds
+      var timeoutId;
+      function cctvRefresh() {
+        // stop timeout first
+        if (typeof timeoutId !== "undefined") {
+          clearTimeout(timeoutId);
+          timeoutId = undefined;
+        }
+        // set now time for cctv img src change
+        var now = new Date();
+        // get cctv div
+        var imgElement = document.querySelectorAll(".cctvPopup");
+        // if length > 0 run the timeoutId
+        if (imgElement.length > 0) {
+          imgElement.forEach(function (aCctv) {
+            // console.log(aCctv);
+            aCctv.getElementsByTagName("img")[0].src =
+              aCctv.getElementsByTagName("img")[0].src.split("&dummy=")[0] +
+              "&dummy=" +
+              now.getTime();
+          });
+          timeoutId = setTimeout(cctvRefresh, cctvRefreshTime);
+          // console.log(timeoutId);
+        }
+      }
+      // close cctv div
+      var cctvDiv = document.getElementById("cctvPopupTemp");
+      cctvDiv.addEventListener("click", function (ele) {
+        // Check if the clicked element is an SVG element
+        if (ele.target.tagName.toLowerCase() === "svg") {
+          ele.target.parentElement.remove();
+        }
+      });
+    </script>
+
+    <script>
+      // add mouse position
+      var autoMousePosition;
+      var mousePosition = new ol.control.MousePosition({
+        coordinateFormat: function (xy) {
+          autoMousePosition = xy;
+          var xy4326 = ol.proj.transform(xy, "EPSG:3857", "EPSG:4326");
+          // autoMousePosition = xy4326;
+          var dotNumber = ol.coordinate.createStringXY(3);
+          return dotNumber(xy4326);
+        },
+        projection: "EPSG:3857",
+      });
+      oplyMap.addControl(mousePosition);
+      // add event listener for the cctv div moving
+      // set if move down on the cctv div to true
+      var cctvIsDown = false;
+      // set which the cctv div is moving
+      var cctvMoveDiv;
+      // set mouse position and cctv move position
+      var mouseOldXy;
+      var cctvOldXy;
+      // add map event listener for cctv popup div
+      var mapForEvent = document.getElementById("map");
+      mapForEvent.addEventListener("mousedown", function (evt) {
+        if (evt.target.className == "cctvPopup") {
+          // set if move down on the cctv div to true
+          cctvIsDown = true;
+          cctvMoveDiv = evt.target;
+          // get the old xy of mouse and cctv div
+          mouseOldXy = autoMousePosition;
+          cctvOldXy = window[cctvMoveDiv.id].getPosition();
+        }
+      });
+      mapForEvent.addEventListener("mouseup", function () {
+        cctvIsDown = false;
+        cctvMoveDiv = undefined;
+        mouseOldXy = undefined;
+        cctvOldXy = undefined;
+      });
+      mapForEvent.addEventListener("mousemove", function (evt) {
+        if (cctvIsDown) {
+          evt.preventDefault();
+          var addX = autoMousePosition[0] - mouseOldXy[0];
+          var addY = autoMousePosition[1] - mouseOldXy[1];
+          var cctvNewXy = [cctvOldXy[0] + addX, cctvOldXy[1] + addY];
+          window[cctvMoveDiv.id].setPosition(cctvNewXy);
+          window["cctvLine" + cctvMoveDiv.id.split("cctvPop")[1]].setSource(
+            new ol.source.Vector({
+              features: [
+                new ol.Feature({
+                  geometry: new ol.geom.LineString([
+                    window["cctvPopXy" + cctvMoveDiv.id.split("cctvPop")[1]],
+                    cctvNewXy,
+                  ]),
+                }),
+              ],
+            })
+          );
+        }
+      });
+    </script>
+
+    <script>
+      //Popup right click event
+      var rightClickPopup = new ol.Overlay({
+        element: document.getElementById("rightClickMenu"),
+      });
+      oplyMap.addOverlay(rightClickPopup);
+
+      //Hide the default right click menu and show the context menu
+      var rightClickCoordinate;
+      oplyMap.getViewport().addEventListener("contextmenu", function (event) {
+        event.preventDefault();
+        rightClickCoordinate = oplyMap.getEventCoordinate(event);
+        // console.log("123");
+        //開啟自訂的右鍵選單
+        rightClickPopup.setPosition(rightClickCoordinate);
       });
 
-      //
+      //when left click Close the context menu
+      oplyMap.on("click", function () {
+        rightClickPopup.setPosition(undefined);
+      });
+    </script>
+
+    <script>
       // checkbox change listener
       document.getElementById("chkOsm").addEventListener("change", function () {
         this.checked ? oplyMap.addLayer(OSM) : oplyMap.removeLayer(OSM);
@@ -344,10 +633,8 @@
             ? oplyMap.addLayer(cctvPoint)
             : oplyMap.removeLayer(cctvPoint);
         });
-    </script>
 
-    <!-- for the basemap checkbox -->
-    <script>
+      // for the basemap checkbox
       // Get the container for baseMapList
       const baseMapListContainer = document.getElementById("baseMapList");
 
@@ -364,44 +651,6 @@
               checkbox.checked = false;
             }
           });
-        }
-      });
-    </script>
-
-    <script>
-      // here is for refresh cctv code
-      const cctvRefreshTime = 8000; // 8 seconds
-      var timeoutId;
-      function cctvRefresh() {
-        // stop timeout first
-        if (typeof timeoutId !== "undefined") {
-          clearTimeout(timeoutId);
-          timeoutId = undefined;
-        }
-
-        // set now time for cctv img src change
-        var now = new Date();
-        // get cctv div
-        var imgElement = document.querySelectorAll("#cctvSidebar div");
-        // if length > 0 run the timeoutId
-        if (imgElement.length > 0) {
-          imgElement.forEach(function (aCctv) {
-            // console.log(aCctv);
-            aCctv.getElementsByTagName("img")[0].src =
-              aCctv.getElementsByTagName("img")[0].src.split("&dummy=")[0] +
-              "&dummy=" +
-              now.getTime();
-          });
-          timeoutId = setTimeout(cctvRefresh, cctvRefreshTime);
-          // console.log(timeoutId);
-        }
-      }
-      // close cctv div
-      var cctvDiv = document.getElementById("cctvSidebar");
-      cctvDiv.addEventListener("click", function (ele) {
-        // Check if the clicked element is an SVG element
-        if (ele.target.tagName.toLowerCase() === "svg") {
-          ele.target.parentElement.remove();
         }
       });
     </script>
