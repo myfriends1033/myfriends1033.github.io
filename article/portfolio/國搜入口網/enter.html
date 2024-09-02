@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>國搜中心智慧搜救平臺入口網</title>
+    <link
+      href="https://web.hoone.com.tw/Public/fontdemo/font/dist/icons.css"
+      rel="stylesheet"
+    />
+    <link rel="shortcut icon" href="enter_logo.png" type="image/x-icon" />
+    <style>
+      :root {
+        --color-blue1: #739ff6;
+        --color-blue2: #0000ff;
+        --color-blue3: #afaff8;
+        --color-blue4: #3060be;
+      }
+      .hoone {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      body,
+      html {
+        overflow: auto;
+        outline: none;
+        /* user-select: none; */
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        font-size: 19px;
+      }
+      body {
+        background-image: url("enter_background2.png");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+      }
+
+      .content {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        box-sizing: border-box;
+        padding-block: 1rem;
+        gap: 1rem;
+      }
+
+      .title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        font-size: 3.5rem;
+        font-weight: bold;
+        text-shadow: 0 0.1rem 0.3rem black;
+        color: white;
+
+        img {
+          filter: drop-shadow(0.1rem 0.2rem 0.3rem black);
+        }
+      }
+
+      .login {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 760px;
+        height: 500px;
+        /* aspect-ratio: 2 / 1; */
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 1.5rem;
+        box-shadow: 0 0.1rem 0.5rem black;
+
+        .tab {
+          display: flex;
+          align-items: center;
+          justify-content: space-evenly;
+          width: 100%;
+          height: 10vh;
+          font-size: 1.6rem;
+          text-shadow: 0 0.05rem 0.1rem var(--color-gray1);
+          user-select: none;
+
+          input {
+            display: none;
+          }
+          input:checked + label {
+            background-color: var(--color-blue1);
+            color: white;
+          }
+
+          .tabChild {
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 0.1rem solid black;
+            gap: 2%;
+          }
+          label[for="tab1"] {
+            border-radius: 1.5rem 0 0 0;
+          }
+          label[for="tab3"] {
+            border-radius: 0 1.5rem 0 0;
+          }
+          .tabChild:hover {
+            background-color: var(--color-blue1);
+            color: white;
+          }
+        }
+
+        .tabContent {
+          flex-grow: 1;
+          width: 100%;
+          font-size: 1.5rem;
+          box-sizing: border-box;
+          padding-inline: 10%;
+
+          .tabContentChild {
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            padding-top: 8%;
+            padding-bottom: 5%;
+            /* display: flex; */
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            /* justify-content: space-evenly; */
+            gap: 10%;
+
+            strong {
+              color: red;
+            }
+
+            .buttonDiv {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 5px;
+              width: 300px;
+              height: 100px;
+              /* aspect-ratio: 3 / 1; */
+              /* border: 0.2rem solid var(--color-blue4); */
+              border: 0.2rem solid black;
+              border-radius: 0.5rem;
+              font-weight: bold;
+              box-shadow: 0 0.1rem 0.3rem black;
+              cursor: pointer;
+              user-select: none;
+              font-size: 1.7rem;
+              /* background-image: linear-gradient(
+                  rgba(255, 255, 255, 0.8),
+                  rgba(220, 220, 220, 0.8)
+                ),
+                url("enter_button.jpg"); */
+              background-repeat: no-repeat;
+              background-position: center;
+              background-size: cover;
+              /* color: var(--color-blue4); */
+            }
+            .buttonDiv:hover {
+              /* background-color: white; */
+              /* color: var(--color-blue4); */
+              /* background-image: linear-gradient(
+                  rgba(255, 255, 255, 0.5),
+                  rgba(220, 220, 220, 0.5)
+                ),
+                url("enter_button.jpg"); */
+              color: white;
+              text-shadow: 0 0.1rem 0.3rem black;
+            }
+            .buttonDiv:active {
+              box-shadow: 0 0 0rem white;
+              scale: 0.95;
+            }
+            #TWFidoButton {
+              background-image: linear-gradient(
+                  rgba(255, 255, 255, 0.8),
+                  rgba(220, 220, 220, 0.8)
+                ),
+                url("enter_button.jpg");
+            }
+            #TWFidoButton:hover {
+              background-image: linear-gradient(
+                  rgba(255, 255, 255, 0.5),
+                  rgba(220, 220, 220, 0.5)
+                ),
+                url("enter_button.jpg");
+            }
+            #FIDOButton {
+              background-image: linear-gradient(
+                  rgba(255, 255, 255, 0.7),
+                  rgba(220, 220, 220, 0.7)
+                ),
+                url("enter_button2.jpg");
+            }
+            #FIDOButton:hover {
+              background-image: linear-gradient(
+                  rgba(255, 255, 255, 0.5),
+                  rgba(220, 220, 220, 0.5)
+                ),
+                url("enter_button2.jpg");
+            }
+            #OTPButton {
+              background-image: linear-gradient(
+                  rgba(255, 255, 255, 0.7),
+                  rgba(220, 220, 220, 0.7)
+                ),
+                url("enter_button3.jpg");
+            }
+            #OTPButton:hover {
+              background-image: linear-gradient(
+                  rgba(255, 255, 255, 0.5),
+                  rgba(220, 220, 220, 0.5)
+                ),
+                url("enter_button3.jpg");
+            }
+
+            ul,
+            li {
+              width: fit-content;
+              padding: 0;
+              list-style: none;
+              font-size: 1.4rem;
+
+              i {
+                margin-right: 0.4rem;
+                color: var(--color-blue3);
+                cursor: auto;
+              }
+            }
+            li {
+              display: flex;
+              align-items: center;
+              cursor: pointer;
+              margin: 0.3rem;
+
+              a {
+                text-decoration: underline;
+                color: var(--color-blue2);
+              }
+            }
+          }
+          #tabContentChild3 {
+            flex-direction: inherit;
+            padding-top: 0;
+
+            .buttonDiv {
+              height: 40%;
+            }
+          }
+          .tabContentActive {
+            display: flex;
+          }
+        }
+      }
+
+      @media (max-width: 767.98px) {
+        html {
+          font-size: 16px;
+        }
+
+        .title {
+          flex-direction: column;
+        }
+        .login {
+          width: 95vw;
+          height: 65vh;
+
+          .tab {
+            font-size: 1.35rem;
+          }
+
+          .tabContent {
+            .tabContentChild {
+              .buttonDiv {
+                width: 50vw;
+                font-size: 5vw;
+              }
+            }
+            #tabContentChild3 {
+              flex-direction: column;
+              padding-top: 8%;
+
+              .buttonDiv {
+                height: 100px;
+              }
+            }
+          }
+        }
+      }
+      @media (max-width: 575.98px) {
+        html {
+          font-size: 14px;
+        }
+        .title {
+          font-size: 9vw;
+        }
+        .login {
+          .tab {
+            font-size: 1.45rem;
+            .tabChild {
+              width: 20%;
+              div {
+                display: none;
+              }
+            }
+
+            input:checked + label {
+              flex-grow: 1;
+              div {
+                display: block;
+              }
+            }
+          }
+          .tabContent {
+            .tabContentChild {
+              .buttonDiv {
+                width: 60vw;
+                font-size: 7vw;
+              }
+            }
+          }
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="content">
+      <div class="title">
+        <img src="enter_logo.png" />
+        <div>國搜中心智慧搜救平臺</div>
+      </div>
+      <div class="login">
+        <div class="tab">
+          <input
+            type="radio"
+            id="tab1"
+            name="tabSelect"
+            value="1"
+            onclick="changeTab(this)"
+            checked
+          />
+          <label for="tab1" class="tabChild tabActive">
+            <i class="hoone hoone-idcard" title="自然人憑證"></i>
+            <div>自然人憑證</div>
+          </label>
+          <input
+            type="radio"
+            id="tab2"
+            name="tabSelect"
+            value="2"
+            onclick="changeTab(this)"
+          />
+          <label for="tab2" class="tabChild">
+            <i class="hoone hoone-phone" title="行動自然人憑證"></i>
+            <div>行動自然人憑證</div>
+          </label>
+          <input
+            type="radio"
+            id="tab3"
+            name="tabSelect"
+            value="3"
+            onclick="changeTab(this)"
+          />
+          <label for="tab3" class="tabChild">
+            <i class="hoone hoone-link" title="雙因子驗證"></i>
+            <div>雙因子驗證</div>
+          </label>
+        </div>
+        <div class="tabContent">
+          <div class="tabContentChild tabContentActive" id="tabContentChild1">
+            <div>
+              未安裝客戶端程式或未啟動服務，請點選「<strong>自然人憑證驅動程式</strong>」進行安裝。
+            </div>
+            <ul>
+              <li>
+                <i class="hoone hoone-share"></i><a>忘記密碼-自然人憑證</a>
+              </li>
+              <li>
+                <i class="hoone hoone-share"></i><a>自然人或機關憑證驅動程式</a>
+              </li>
+              <li>
+                <i class="hoone hoone-share"></i><a>MAC及Linux跨平台網站元件</a>
+              </li>
+            </ul>
+          </div>
+          <div class="tabContentChild" id="tabContentChild2">
+            <div id="TWFidoButton" class="buttonDiv" ontouchstart>
+              <i class="hoone hoone-phone"></i>TWFido 登入
+            </div>
+            <ul>
+              <li>
+                <i class="hoone hoone-share"></i><a>如何使用自然人憑證註冊</a>
+              </li>
+              <li>
+                <i class="hoone hoone-share"></i><a>如何使用行動自然人憑證</a>
+              </li>
+              <li><i class="hoone hoone-share"></i><a>其他使用問題</a></li>
+            </ul>
+          </div>
+          <div class="tabContentChild" id="tabContentChild3">
+            <div id="FIDOButton" class="buttonDiv" ontouchstart>
+              <i class="hoone hoone-link"></i>推播 FIDO 登入
+            </div>
+            <div id="OTPButton" class="buttonDiv" ontouchstart>
+              <i class="hoone hoone-link"></i>OTP 登入
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function changeTab(element) {
+        document.querySelectorAll(".tabContentChild").forEach((ele) => {
+          ele.classList.remove("tabContentActive");
+        });
+        document
+          .getElementById(`tabContentChild${element.value}`)
+          .classList.add("tabContentActive");
+      }
+    </script>
+  </body>
+</html>

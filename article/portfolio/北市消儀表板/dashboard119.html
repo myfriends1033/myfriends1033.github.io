@@ -1,0 +1,2046 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>dashboard</title>
+    <link
+      rel="stylesheet"
+      href="https://web.hoone.com.tw/Public/fontdemo/font/dist/icons.css"
+    />
+    <link rel="stylesheet" href="css/ol9.2.2.css" type="text/css" />
+    <script
+      type="text/javascript"
+      src="js/echarts5.4.3.min.js"
+    ></script>
+    <script type="text/javascript" src="js/countUp.umd.js"></script>
+    <script type="text/javascript" src="js/ol9.2.2.js"></script>
+    <script type="text/javascript" src="js/proj4.js"></script>
+    <!-- <script src="/static/js/html2canvas.min.js"></script> -->
+
+    <style>
+      :root {
+        --color-gray1: rgba(255, 255, 255, 0.3);
+        --color-gray2: #222222;
+        --color-gray3: rgba(149, 165, 180, 0.8);
+        --color-gray4: rgb(131 131 131);
+        --color-gray5: #3f3f3f;
+      }
+
+      ::-webkit-scrollbar {
+        width: 0.8vw;
+      }
+      ::-webkit-scrollbar-button {
+        display: none;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--color-gray5);
+        border-radius: 0.8vw;
+        border: 1px solid var(--color-gray4);
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--color-gray4);
+        border-radius: 0.8vw;
+      }
+
+      .hoone {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .backgroundGray {
+        border: 1px solid var(--color-gray1);
+        background: var(--color-gray2);
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        color: white;
+        background: black;
+      }
+
+      .container {
+        width: 98vw;
+        height: 98vh;
+        display: flex;
+        flex-direction: column;
+        /* align-items: center; */
+        gap: 1vh;
+        padding-inline: 1vw;
+        padding-block: 1vh;
+      }
+
+      .title {
+        width: 96vw;
+        height: 6vh;
+        padding-left: 2vw;
+        display: flex;
+        align-items: center;
+        font-size: 3vh;
+        font-weight: bold;
+
+        i {
+          margin-right: 6px;
+        }
+      }
+
+      .dashboard {
+        width: 98vw;
+        display: flex;
+        height: 91vh;
+        gap: 1vw;
+      }
+      .leftContent {
+        width: 20vw;
+        display: flex;
+        flex-direction: column;
+        gap: 1vh;
+
+        .callStatistics {
+          width: 20vw;
+          height: 30vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+
+          .callTotleTitle {
+            height: 9vh;
+            font-size: 3rem;
+            font-weight: bold;
+            letter-spacing: -5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          #callTotle {
+            height: 20vh;
+            font-family: monospace;
+            font-size: 7rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+
+        .callType {
+          height: 30vh;
+        }
+
+        .callCasePercent {
+          height: 29vh;
+        }
+      }
+      .middleContent {
+        width: 50vw;
+        height: 91vh;
+        display: flex;
+        flex-direction: column;
+        gap: 1vh;
+
+        .map {
+          height: 61vh;
+        }
+        .callStatus {
+          height: 29vh;
+        }
+      }
+      .rightContent {
+        width: 28vw;
+        height: 91vh;
+
+        .callList {
+          height: 100%;
+          overflow-y: auto;
+
+          > input {
+            display: none;
+          }
+          > input[type="checkbox"] + label {
+            cursor: pointer;
+          }
+          > input:checked + label {
+            background: var(--color-gray1);
+          }
+
+          > .call {
+            font-size: 1.2rem;
+            height: 15vh;
+            border: 2px var(--color-gray3);
+            border-style: groove;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            user-select: none;
+
+            .callIcon {
+              width: 3.5vw;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+
+              img {
+                width: 70%;
+              }
+            }
+
+            .callDetail {
+              flex-grow: 1;
+
+              span {
+                font-weight: bold;
+                color: #fff200;
+              }
+            }
+          }
+          .call:hover {
+            background: var(--color-gray1);
+          }
+          > .callRed {
+            background: rgba(255, 0, 0, 0.5);
+          }
+          > .callGreen {
+            background: rgba(0, 255, 0, 0.5);
+          }
+        }
+      }
+
+      #map {
+        position: relative;
+
+        /*經緯度標示START*/
+        .lonlatbox {
+          color: black;
+          font-size: 18px;
+          font-weight: bold;
+          font-family: monospace;
+          text-shadow: 0 0.1rem 0.2rem #5e5e5e;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          top: 2%;
+          z-index: 1;
+          user-select: none;
+        }
+        /*經緯度標示END*/
+
+        .topLeft {
+          z-index: 1;
+          position: absolute;
+          top: 3%;
+          left: 2%;
+          width: 4%;
+        }
+
+        .bottomRight {
+          z-index: 1;
+          position: absolute;
+          bottom: 3%;
+          right: 2%;
+          width: 4%;
+        }
+
+        .topRight {
+          z-index: 1;
+          position: absolute;
+          top: 3%;
+          right: 2%;
+          width: 4%;
+
+          img {
+            width: 90%;
+          }
+
+          label[for="calledClose"] {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: var(--color-gray2) !important;
+          }
+          label[for="calledClose"]:hover {
+            opacity: 0.5;
+          }
+          input:checked + label {
+            opacity: 0.5;
+          }
+        }
+
+        .bottomRightDiv {
+          z-index: 1;
+          position: absolute;
+          /* bottom: 9%; */
+          right: 7%;
+          box-sizing: border-box;
+          padding: 1.5%;
+          /* width: 4%; */
+          /* height: 6%; */
+          display: none;
+          /* display: flex; */
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          border: 2px solid var(--color-gray1);
+          border-radius: 8px;
+          background: var(--color-gray5);
+
+          label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            border: 2px solid var(--color-gray1);
+            border-radius: 8px;
+            background: var(--color-gray2);
+            font-size: 1.3rem;
+            cursor: pointer;
+          }
+          label:hover {
+            background-color: var(--color-gray4);
+          }
+        }
+        #layerListDiv {
+          bottom: 9%;
+        }
+        #basemapDiv {
+          bottom: 3%;
+        }
+
+        .scale_bar {
+          position: absolute;
+          bottom: 2.5%;
+          left: 3%;
+          color: black;
+          font-size: 20px;
+          font-weight: bold;
+          font-family: monospace;
+          text-shadow: 0 0.1rem 0.2rem #5e5e5e;
+          vertical-align: middle;
+          border: 2px solid black;
+          border-top: none;
+          text-align: center;
+          background-color: rgba(0, 0, 0, 0);
+          height: 10px;
+          line-height: 0;
+        }
+
+        input {
+          display: none;
+        }
+        input:checked + label {
+          background-color: var(--color-gray4) !important;
+        }
+
+        .mapButton {
+          width: 100%;
+          aspect-ratio: 1 / 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          font-size: 1.4rem;
+          text-shadow: 0 0.2rem 0.3rem var(--color-gray1);
+        }
+        .mapButton:hover {
+          background: var(--color-gray4);
+        }
+
+        #clickPopup {
+          position: absolute;
+          background-color: var(--color-gray2);
+          border-radius: 0.8vh;
+          padding: 0.3vh;
+          box-sizing: border-box;
+          /* display: none; */
+          border: solid 0.1vh black;
+          box-shadow: 0px 0.2vh 0.4vh black;
+
+          th,
+          tr,
+          td {
+            white-space: nowrap;
+            font-size: 2vh;
+            padding-inline: 3px;
+          }
+          th {
+            background-color: var(--color-gray4);
+            color: white;
+          }
+          .evenTr {
+            background-color: var(--color-gray5);
+          }
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="title backgroundGray">
+        <i class="hoone hoone-file-o"></i>即時戰力話務儀表板
+      </div>
+      <div class="dashboard">
+        <div class="leftContent">
+          <div class="callStatistics backgroundGray">
+            <div class="callTotleTitle">當日來話件數</div>
+            <div id="callTotle">1234</div>
+          </div>
+          <div class="callType backgroundGray"></div>
+          <div class="callCasePercent backgroundGray"></div>
+        </div>
+        <div class="middleContent">
+          <!-- map -->
+          <div id="map" class="map">
+            <!-- lonlat start -->
+            <div class="lonlatbox" id="lonlatdiv">
+              <div class="row1" id="lonlatdiv0">Longitude°E , Latitude°N</div>
+            </div>
+            <!-- lonlat end -->
+            <div class="topLeft">
+              <div class="mapButton backgroundGray" onclick="zoomMode('in')">
+                <i class="hoone hoone-plus"></i>
+              </div>
+              <div class="mapButton backgroundGray" onclick="zoomMode('out')">
+                <i class="hoone hoone-minus"></i>
+              </div>
+              <div
+                class="mapButton backgroundGray"
+                style="margin-top: 10px"
+                onclick="goHome()"
+              >
+                <i class="hoone hoone-home"></i>
+              </div>
+            </div>
+            <div class="topRight">
+              <input
+                id="calledClose"
+                type="checkbox"
+                onclick="calledCloseNoShow(this)"
+              />
+              <label for="calledClose" class="backgroundGray">
+                <img src="img/telHangUp.png" alt="切換掛斷" />
+              </label>
+            </div>
+            <div class="bottomRight">
+              <input
+                id="layerListInput"
+                type="checkbox"
+                onclick="mapBottomRightCheckbox(this)"
+              />
+              <label for="layerListInput" class="mapButton backgroundGray">
+                <i class="hoone hoone-layers"></i>
+              </label>
+              <input
+                id="basemapInput"
+                type="checkbox"
+                onclick="mapBottomRightCheckbox(this)"
+              />
+              <label for="basemapInput" class="mapButton backgroundGray">
+                <i class="hoone hoone-map"></i>
+              </label>
+            </div>
+            <!-- layer start -->
+            <div class="bottomRightDiv" id="layerListDiv">
+              <input
+                id="case"
+                type="checkbox"
+                onclick="layerOpen(this.id, this.checked)"
+                checked
+              />
+              <label for="case">處理中案件</label>
+              <input
+                id="ambulance"
+                type="checkbox"
+                onclick="layerOpen(this.id, this.checked)"
+              />
+              <label for="ambulance">救護車機</label>
+              <input
+                id="pad"
+                type="checkbox"
+                onclick="layerOpen(this.id, this.checked)"
+              />
+              <label for="pad">平板位置</label>
+            </div>
+            <!-- layer end -->
+            <!-- basemap start -->
+            <div class="bottomRightDiv" id="basemapDiv"></div>
+            <!-- basemap end -->
+            <!-- popup start -->
+            <div id="clickPopup"></div>
+            <!-- popup end -->
+          </div>
+          <div class="callStatus backgroundGray"></div>
+        </div>
+        <!-- map -->
+        <div class="rightContent backgroundGray">
+          <div class="callList"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    //
+    // map
+    //
+    // 參數設置
+    let userscale = 6;
+    var mapcenterxy = [121.5468768, 25.06302659];
+    // initProjection
+    proj4.defs("EPSG:3824", "+proj=longlat +ellps=GRS80 +no_defs +type=crs");
+    proj4.defs(
+      "EPSG:3825",
+      "+proj=tmerc +lat_0=0 +lon_0=119 +k=0.9999 +x_0=250000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+    );
+    proj4.defs(
+      "EPSG:3826",
+      "+proj=tmerc +lat_0=0 +lon_0=121 +k=0.9999 +x_0=250000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+    );
+    proj4.defs(
+      "EPSG:3827",
+      "+proj=tmerc +lat_0=0 +lon_0=119 +k=0.9999 +x_0=250000 +y_0=0 +ellps=aust_SA +units=m +no_defs"
+    );
+    proj4.defs(
+      "EPSG:3828",
+      "+proj=tmerc +lat_0=0 +lon_0=121 +k=0.9999 +x_0=250000 +y_0=0 +ellps=aust_SA +units=m +no_defs"
+    );
+    proj4.defs("EPSG:4326", "+proj=longlat +datum=WGS84 +no_defs");
+    proj4.defs(
+      "EPSG:3857",
+      "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs"
+    );
+    ol.proj.proj4.register(proj4);
+    // initProjection
+
+    // OSM
+    // const basemap = new ol.layer.Tile({
+    //   source: new ol.source.OSM(),
+    // });
+    // basemap
+    // const basemap = new ol.layer.Tile({
+    //   source: new ol.source.XYZ({
+    //     url: "https://gis119.tfd.gov.tw/server/rest/services/Hosted/%E5%BA%95%E5%9C%96%E8%A8%AD%E8%A8%8820230509/MapServer/tile/{z}/{y}/{x}",
+    //     crossOrigin: "anonymous",
+    //     maxZoom: 20,
+    //   }),
+    // });
+
+    //init map
+    var map = new ol.Map({
+      controls: ol.control.defaults.defaults({
+        zoom: false,
+        attribution: false,
+        rotate: false,
+      }),
+      layers: [],
+      target: "map",
+      enableRotation: false,
+      view: new ol.View({
+        projection: "EPSG:3857",
+        center: ol.proj.fromLonLat(mapcenterxy),
+        zoom: 12,
+        maxZoom: 21,
+        minZoom: 3,
+      }),
+      crossOrigin: null,
+    });
+
+    // 底圖 START
+    // basemap
+    var baselayer = new ol.layer.Tile({});
+
+    // basemap dict
+    basemapDict = {
+      name0: ["map119", "emap5", "emap2", "photo_mix"],
+      name1: ["自建底圖", "通用地圖", "深色地圖", "衛星地圖"],
+      url0: [
+        "https://gis119.tfd.gov.tw/server/rest/services/Hosted/%E5%BA%95%E5%9C%96%E8%A8%AD%E8%A8%8820230509/MapServer/tile/{z}/{y}/{x}",
+        "https://wmts.nlsc.gov.tw/wmts/EMAP5/default/EPSG:3857/{z}/{y}/{x}",
+        "https://wmts.nlsc.gov.tw/wmts/EMAP2/default/EPSG:3857/{z}/{y}/{x}",
+        "https://wmts.nlsc.gov.tw/wmts/PHOTO_MIX/default/EPSG:3857/{z}/{y}/{x}",
+      ],
+    };
+
+    // 產出底圖按鈕
+    function createbaselayer() {
+      //
+      var basemapDiv = document.getElementById("basemapDiv");
+      //
+      for (i = 0; i < basemapDict.name0.length; i++) {
+        basemapDiv.innerHTML += `
+          <input type="radio" id="basemap${i}" onchange="changeBaselayer(this)" name='basemapRadio'>
+          <label for="basemap${i}" class="item0">${basemapDict.name1[i]}</label>
+          `;
+      }
+      //
+      baselayer.setSource(
+        new ol.source.XYZ({
+          url: basemapDict.url0[0],
+          crossOrigin: "anonymous",
+          maxZoom: 20,
+        })
+      );
+      map.addLayer(baselayer);
+      document.getElementById("basemap0").checked = true;
+    }
+    createbaselayer();
+    // if (typeof callback === "function") {
+    //   callback(); // 在生成label完成後调用callback函式
+    // }
+
+    // change basemap
+    function changeBaselayer(ele) {
+      var id = Number(ele.id.split("basemap")[1]);
+      baselayer.setSource(
+        new ol.source.XYZ({
+          url: basemapDict.url0[id],
+          crossOrigin: "anonymous",
+          maxZoom: 20,
+        })
+      );
+    }
+    // 底圖 END
+
+    //
+    // button function START
+    // + or -
+    function zoomMode(mode) {
+      if (mode == "in") {
+        var zoom = map.getView().getZoom() + 1;
+      } else {
+        var zoom = map.getView().getZoom() - 1;
+      }
+
+      map.getView().animate({
+        center: map.getView().getCenter(),
+        zoom: zoom,
+        duration: 200,
+      });
+    }
+
+    // go to home extent
+    function goHome() {
+      map.getView().animate({
+        center: ol.proj.fromLonLat(mapcenterxy),
+        zoom: 12,
+        duration: 200,
+      });
+    }
+
+    //
+    // button & div open、map single click close
+    //
+    function mapBottomRightCheckbox(ele) {
+      var inputs = document.querySelectorAll(
+        ".bottomRight > input[type='checkbox']"
+      );
+      inputs.forEach((input) => {
+        if (input != ele) {
+          input.checked = false;
+        }
+        document
+          .getElementById(input.id.replace("Input", "Div"))
+          .removeAttribute("style");
+        if (input.checked) {
+          document.getElementById(
+            `${ele.id.replace("Input", "Div")}`
+          ).style.display = "flex";
+        }
+      });
+    }
+    map.on("singleclick", function (evt) {
+      mapBottomRightCheckbox();
+    });
+
+    //
+    // layerOpen button
+    //
+    function layerOpen(layername, ifchecked) {
+      layername = layername + "Layer";
+      if (ifchecked) {
+        map.addLayer(window[layername]);
+      } else {
+        map.removeLayer(window[layername]);
+      }
+    }
+
+    //
+    // called close no show
+    //
+    function calledCloseNoShow(ele) {
+      if (ele.checked) {
+        // list close
+        document
+          .querySelectorAll(
+            ".callIcon > img[src='img/telHangUp.png']"
+          )
+          .forEach(function (element) {
+            element.parentElement.parentElement.style.display = "none";
+          });
+        // map feature close
+        callLayer.setStyle(callStyle);
+      } else {
+        // list close
+        document
+          .querySelectorAll(
+            ".callIcon > img[src='img/telHangUp.png']"
+          )
+          .forEach(function (element) {
+            element.parentElement.parentElement.removeAttribute("style");
+          });
+        // map feature close
+        callLayer.setStyle(callStyle);
+      }
+    }
+
+    //
+    // time convert
+    //
+    function returnTime(date) {
+      var time =
+        date.substr(0, 4) +
+        "/" +
+        date.substr(4, 2) +
+        "/" +
+        date.substr(6, 2) +
+        " " +
+        date.substr(8, 2) +
+        ":" +
+        date.substr(10, 2) +
+        ":" +
+        date.substr(12, 2);
+      return time;
+    }
+
+    //
+    // feature layers
+    //
+
+    // 119 call center layer
+    var callCenterXY = [121.56891160558726, 25.04083920666433];
+    const callCenter = new ol.layer.Vector({
+      source: new ol.source.Vector({
+        features: [
+          new ol.Feature({
+            geometry: new ol.geom.Point(callCenterXY).transform(
+              "EPSG:4326",
+              "EPSG:3857"
+            ),
+          }),
+        ],
+      }),
+      style: new ol.style.Style({
+        image: new ol.style.Icon({
+          anchor: [0.5, 46],
+          anchorXUnits: "fraction",
+          anchorYUnits: "pixels",
+          src: "img/119center.png",
+          scale: 0.03 * userscale,
+          // displacement: [0, 43],
+          // opacity: 0.8,
+        }),
+      }),
+      zIndex: 22,
+    });
+    map.addLayer(callCenter);
+
+    // create ersi vector source
+    function esriSource(layerurl, layernumber) {
+      return new ol.source.Vector({
+        format: new ol.format.EsriJSON(),
+        url: function (extent, resolution, projection) {
+          // ArcGIS Server only wants the numeric portion of the projection ID.
+          const srid = projection
+            .getCode()
+            .split(/:(?=\d+$)/)
+            .pop();
+
+          const url =
+            layerurl +
+            layernumber +
+            "/query/?f=json&" +
+            "returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=" +
+            encodeURIComponent(
+              '{"xmin":' +
+                extent[0] +
+                ',"ymin":' +
+                extent[1] +
+                ',"xmax":' +
+                extent[2] +
+                ',"ymax":' +
+                extent[3] +
+                ',"spatialReference":{"wkid":' +
+                srid +
+                "}}"
+            ) +
+            "&geometryType=esriGeometryEnvelope&inSR=" +
+            srid +
+            "&outFields=*" +
+            "&outSR=" +
+            srid;
+
+          return url;
+        },
+        strategy: ol.loadingstrategy.tile(
+          ol.tilegrid.createXYZ({
+            tileSize: 512,
+          })
+        ),
+      });
+    }
+
+    // caseLayer 處理中案件
+    var caseLayer = new ol.layer.Vector({
+      name: "caseLayer",
+      source: esriSource(
+        "https://gis119.tfd.gov.tw/server/rest/services/DIS_CASE_HANDLE/FeatureServer/",
+        "0"
+      ),
+      // sytle: caseLayerStyle,
+      zIndex: 20,
+    });
+    //
+    function caseLayerStyle(feature) {
+      var type = feature.getProperties().CS_KIND;
+      switch (type) {
+        case "01":
+          var src =
+            "https://gis119.tfd.gov.tw/portal/sharing/rest/content/items/edab8c69ebbe470f97ce9f9bcc98074f/data";
+          break;
+        case "02":
+          var src =
+            "https://gis119.tfd.gov.tw/portal/sharing/rest/content/items/864e9b8802d440379e03017174d195f4/data";
+          break;
+        case "03":
+          var src =
+            "https://gis119.tfd.gov.tw/portal/sharing/rest/content/items/d85af26d66334b59adf6f6e097dbc469/data";
+          break;
+        case "10":
+          var src =
+            "https://gis119.tfd.gov.tw/portal/sharing/rest/content/items/d85af26d66334b59adf6f6e097dbc469/data";
+          break;
+        default:
+          var src =
+            "https://gis119.tfd.gov.tw/portal/sharing/rest/content/items/d85af26d66334b59adf6f6e097dbc469/data";
+          break;
+      }
+      return new ol.style.Style({
+        image: new ol.style.Icon({
+          anchor: [0.5, 46],
+          anchorXUnits: "fraction",
+          anchorYUnits: "pixels",
+          src: src,
+          scale: 0.03 * userscale,
+          // displacement: [0, 43],
+          // opacity: 0.8,
+        }),
+      });
+    }
+    map.addLayer(caseLayer);
+    caseLayer.setStyle(caseLayerStyle);
+    //
+    function updateCaseLayer() {
+      padLayer.setSource(
+        esriSource(
+          "https://gis119.tfd.gov.tw/server/rest/services/GPS_MOBILE_GPS_FENCE/FeatureServer/",
+          "0"
+        )
+      );
+    }
+
+    //
+    // ambulanceLayer 救護車機
+    var ambulanceLayer = new ol.layer.Vector({
+      name: "ambulanceLayer",
+      source: esriSource(
+        "https://gis119.tfd.gov.tw/server/rest/services/GPSDATA_GIS/FeatureServer/",
+        "0"
+      ),
+      zIndex: 20,
+    });
+    //
+    function ambulanceLayerStyle(feature) {
+      var style = [];
+
+      var MESSAGE_DATE = feature.getProperties().MESSAGE_DATE;
+      var time = new Date(returnTime(MESSAGE_DATE)).getTime();
+      var yesterday = new Date().getTime() - 86400;
+
+      var carno = feature.getProperties().CarNo;
+      if (carno != null && time > yesterday) {
+        var car;
+        var callno = feature.getProperties().RadioNo;
+        callno.includes("9") ? (car = "ambu") : (car = "");
+        var status;
+        switch (feature.getProperties().dispatch_status) {
+          case "1":
+            status = "Green";
+            break;
+          case ("-1", "-2"):
+            status = "Red";
+            break;
+          default:
+            status = "Gray";
+            break;
+        }
+        // console.log(car + status);
+        switch (car + status) {
+          case "ambuGreen":
+            var src =
+              "https://gis119.tfd.gov.tw/portal/sharing/rest/content/items/043462789e9849a98e87bea105279d26/data";
+            break;
+          case "ambuRed":
+            var src =
+              "https://gis119.tfd.gov.tw/portal/sharing/rest/content/items/5838f1bdc60343ac99bf02b8d673d91f/data";
+            break;
+          case "ambuGray":
+            var src =
+              "https://gis119.tfd.gov.tw/portal/sharing/rest/content/items/c36d9308a1394795a5c7cd471e439c4b/data";
+            break;
+          default:
+            var src =
+              "https://gis119.tfd.gov.tw/portal/sharing/rest/content/items/c36d9308a1394795a5c7cd471e439c4b/data";
+            break;
+        }
+        //
+        var carStyle = new ol.style.Style({
+          image: new ol.style.Icon({
+            anchor: [0.5, 46],
+            anchorXUnits: "fraction",
+            anchorYUnits: "pixels",
+            src: src,
+            scale: 0.04 * userscale,
+            // displacement: [0, 43],
+            // opacity: 0.8,
+          }),
+        });
+        style.push(carStyle);
+        //
+
+        var carLabel = new ol.style.Style({
+          text: new ol.style.Text({
+            text: callno,
+            font: "bold 13px Microsoft JhengHei",
+            fill: new ol.style.Fill({
+              color: "red",
+            }),
+            // padding: [10, 5, 5, 5],
+            // textAlign: "left",
+            offsetY: -18,
+          }),
+        });
+        style.push(carLabel);
+      } else {
+        style.push(new ol.style.Style({}));
+      }
+
+      return style;
+    }
+    // map.addLayer(ambulanceLayer);
+    ambulanceLayer.setStyle(ambulanceLayerStyle);
+
+    //
+    // padLayer 平板位置
+    var padLayer = new ol.layer.Vector({
+      name: "padLayer",
+      source: esriSource(
+        "https://gis119.tfd.gov.tw/server/rest/services/GPS_MOBILE_GPS_FENCE/FeatureServer/",
+        "0"
+      ),
+      zIndex: 20,
+    });
+    //
+    function padLayerStyle(feature) {
+      var style = [];
+
+      var MESSAGE_DATE = feature.getProperties().MESSAGE_DATE;
+      var time = new Date(returnTime(MESSAGE_DATE)).getTime();
+      var yesterday = new Date().getTime() - 86400;
+
+      var carno = feature.getProperties().CAR_NO;
+      if (carno != null && time > yesterday) {
+        var car;
+        var callno = feature.getProperties().CALL_NO;
+        callno.includes("9") ? (car = "ambu") : (car = "fire");
+        var status;
+        switch (feature.getProperties().dispatch_status) {
+          case "1":
+            status = "Green";
+            break;
+          case ("-1", "-2"):
+            status = "Red";
+            break;
+          default:
+            status = "Gray";
+            break;
+        }
+        // console.log(car + status);
+        switch (car + status) {
+          case "ambuGreen":
+            var src =
+              "https://gis119.tfd.gov.tw/portal/sharing/rest/content/items/043462789e9849a98e87bea105279d26/data";
+            break;
+          case "ambuRed":
+            var src =
+              "https://gis119.tfd.gov.tw/portal/sharing/rest/content/items/5838f1bdc60343ac99bf02b8d673d91f/data";
+            break;
+          case "ambuGray":
+            var src =
+              "https://gis119.tfd.gov.tw/portal/sharing/rest/content/items/c36d9308a1394795a5c7cd471e439c4b/data";
+            break;
+          case "fireGreen":
+            var src =
+              "https://gis119.tfd.gov.tw/portal/sharing/rest/content/items/56996e31c61b49e2992610cf9c50bf37/data";
+            break;
+          case "fireRed":
+            var src =
+              "https://gis119.tfd.gov.tw/portal/sharing/rest/content/items/6b3be68125d34c5592e353427b16bb77/data";
+            break;
+          case "fireGray":
+            var src =
+              "https://gis119.tfd.gov.tw/portal/sharing/rest/content/items/4dac09fcaed6442c86a3e16fd8caf409/data";
+            break;
+          // default:
+          //   var src =
+          //     "https://gis119.tfd.gov.tw/portal/home/item.html?id=4dac09fcaed6442c86a3e16fd8caf409";
+          //   break;
+        }
+        //
+        var carStyle = new ol.style.Style({
+          image: new ol.style.Icon({
+            anchor: [0.5, 46],
+            anchorXUnits: "fraction",
+            anchorYUnits: "pixels",
+            src: src,
+            scale: 0.04 * userscale,
+            // displacement: [0, 43],
+            // opacity: 0.8,
+          }),
+        });
+        style.push(carStyle);
+        //
+
+        var carLabel = new ol.style.Style({
+          text: new ol.style.Text({
+            text: callno,
+            font: "bold 13px Microsoft JhengHei",
+            fill: new ol.style.Fill({
+              color: "red",
+            }),
+            // padding: [10, 5, 5, 5],
+            // textAlign: "left",
+            offsetY: -18,
+          }),
+        });
+        style.push(carLabel);
+      } else {
+        style.push(new ol.style.Style({}));
+      }
+
+      return style;
+    }
+    // map.addLayer(padLayer);
+    padLayer.setStyle(padLayerStyle);
+    //
+    function updateCarLayer() {
+      caseLayer.setSource(
+        esriSource(
+          "https://gis119.tfd.gov.tw/server/rest/services/DIS_CASE_HANDLE/FeatureServer/",
+          "0"
+        )
+      );
+      ambulanceLayer.setSource(
+        esriSource(
+          "https://gis119.tfd.gov.tw/server/rest/services/GPSDATA_GIS/FeatureServer/",
+          "0"
+        )
+      );
+    }
+
+    // callLayer 話務
+    function callStyle(feature) {
+      var styleList = [];
+
+      // highlight
+      var highlight = feature.get("highlight");
+      if (highlight) {
+        styleList.push(
+          new ol.style.Style({
+            image: new ol.style.Circle({
+              radius: 22,
+              fill: new ol.style.Fill({ color: "rgba(255, 0, 0, 0.5)" }),
+              // stroke: new ol.style.Stroke({ color: "black", width: 2 }),
+              displacement: [0, -9],
+            }),
+          })
+        );
+      }
+
+      // icon
+      var icon = feature.get("statusIcon");
+      var iconStyle;
+      switch (icon) {
+        case "telHangUp":
+          var hide = document.getElementById("calledClose").checked;
+          if (hide) {
+            iconStyle = new ol.style.Style({});
+          } else {
+            iconStyle = new ol.style.Style({
+              image: new ol.style.Icon({
+                anchor: [0.5, 46],
+                anchorXUnits: "fraction",
+                anchorYUnits: "pixels",
+                src: `img/${icon}.png`,
+                scale: 0.03 * userscale,
+                // displacement: [0, 43],
+                // opacity: 0.8,
+              }),
+            });
+          }
+          break;
+        default:
+          iconStyle = new ol.style.Style({
+            image: new ol.style.Icon({
+              anchor: [0.5, 46],
+              anchorXUnits: "fraction",
+              anchorYUnits: "pixels",
+              src: `img/${icon}.png`,
+              scale: 0.03 * userscale,
+              // displacement: [0, 43],
+              // opacity: 0.8,
+            }),
+          });
+          break;
+      }
+      styleList.push(iconStyle);
+
+      // point connect line
+      var connectLineStyle = new ol.style.Style({
+        stroke: new ol.style.Stroke({
+          color: "red",
+          width: 3,
+          lineDash: [10, 10],
+        }),
+      });
+      var connectTextStyle = new ol.style.Style({
+        text: new ol.style.Text({
+          font: "bold 24px Calibri,sans-serif",
+          text: "話",
+          fill: new ol.style.Fill({
+            color: "red",
+          }),
+        }),
+      });
+      var statusIcon = feature.get("statusIcon");
+      var lon = feature.get("lon");
+      var lat = feature.get("lat");
+      var positionPercent = feature.get("positionPercent");
+      // console.log(feature);
+      if (statusIcon == "telTraffic" && lon != null) {
+        var lineGeometry = new ol.geom.LineString([
+          [lon, lat],
+          callCenterXY,
+        ]).transform("EPSG:4326", "EPSG:3857");
+        connectLineStyle.setGeometry(lineGeometry);
+        connectTextStyle.setGeometry(
+          new ol.geom.Point(lineGeometry.getCoordinateAt(positionPercent))
+        );
+        styleList.push(connectLineStyle);
+        styleList.push(connectTextStyle);
+      }
+
+      //
+      return styleList;
+    }
+
+    //
+    var callLayer = new ol.layer.Vector({
+      name: "callLayer",
+      source: new ol.source.Vector({}),
+      style: function (feature) {
+        return callStyle(feature);
+      },
+      zIndex: 23,
+    });
+    map.addLayer(callLayer);
+
+    //
+    var list50 = [];
+    function updateCallLayer() {
+      fetch("data/call119Api.json").then((res) => {
+        res.text().then((result) => {
+          var callJson = JSON.parse(result);
+
+          // add layer
+          function addNewFeature() {
+            var feature = new ol.Feature({
+              //
+              positionPercent: 0,
+              reverse: false,
+              //
+              highlight: false,
+              pk: pk,
+              ans: ans,
+              hangup: hangup,
+              tel: tel,
+              teladdr: teladdr,
+              telname: telname,
+              timeStamp: timeStamp,
+              date: date,
+              statusIcon: statusIcon,
+              lon: lon,
+              lat: lat,
+              geometry: new ol.geom.Point(
+                lon != null ? [lon, lat] : []
+              ).transform("EPSG:4326", "EPSG:3857"),
+            });
+            feature.setId(pk);
+            callLayer.getSource().addFeature(feature);
+            // if telTraffic run marker
+            if (
+              feature.getProperties().statusIcon == "telTraffic" &&
+              feature.getProperties().lon != null
+            ) {
+              runConnectLineMarker(pk);
+            }
+          }
+          //
+
+          // add list
+          function addNewChild() {
+            var callChild = `<input id="pk${pk}" type="${
+              lon != null ? "checkbox" : "button"
+            }" ${
+              lon != null
+                ? "onclick='callZoomHighlight(this, this.checked)'"
+                : ""
+            }><label for="pk${pk}" class="call ${addbgColorClass}"><div class="callIcon"><img src="img/${statusIcon}.png" alt="通話狀態" /></div><div class="callDetail"><div>[<span>${status}</span>] ${date}</div><div>${
+              teladdr != null ? teladdr : "未顯示"
+            }</div><div>${
+              lon != null ? lat + ", " + lon : "無定位"
+            }</div><div>來話人：${telname} 　📞 ${tel}</div></div></label>`;
+            // console.log(callChild);
+            document.querySelector(".callList").innerHTML =
+              callChild + document.querySelector(".callList").innerHTML;
+          }
+          //
+
+          //
+          for (let i = 0; i < callJson.length; i++) {
+            var pk = callJson[i].pk;
+            var lon = callJson[i].longitude;
+            var lat = callJson[i].latitude;
+            var ans = callJson[i].ans;
+            var hangup = callJson[i].o;
+            var tel = callJson[i].tel;
+            var teladdr = callJson[i].teladdr;
+            var telname = callJson[i].telname;
+            var ringtime = callJson[i].ring_time;
+            var date = returnTime(ringtime);
+            var timeStamp = new Date(returnTime(ringtime)).getTime();
+            if (ans == false && hangup == false) {
+              var status = "等待中";
+              var statusIcon = "telWait";
+            } else if (ans == true && hangup == false) {
+              var status = "接聽中";
+              var statusIcon = "telTraffic";
+            } else if (ans == false && hangup == true) {
+              var status = "已掛斷";
+              var statusIcon = "telHangUp";
+            } else if (ans == true && hangup == true) {
+              var status = "已掛斷";
+              var statusIcon = "telHangUp";
+            }
+            switch (statusIcon) {
+              case "telWait":
+                var addbgColorClass = "callRed";
+                break;
+              case "telTraffic":
+                var addbgColorClass = "callGreen";
+                break;
+              default:
+                var addbgColorClass = "callGray";
+                break;
+            }
+
+            //
+            var orgCall;
+            if (!list50.includes(pk)) {
+              // add
+              addNewFeature();
+              addNewChild();
+              list50.unshift(pk);
+              // list50.push(pk);
+            } else {
+              // update
+              orgCall = callLayer.getSource().getFeatureById(pk);
+              switch (statusIcon) {
+                case "telWait":
+                  break;
+                case "telTraffic":
+                  if (
+                    orgCall.getProperties().statusIcon == "telWait" &&
+                    lon != null
+                  ) {
+                    // run timeout
+                    runConnectLineMarker(pk);
+                  }
+                  break;
+                case "telHangUp":
+                  // stop timeout
+                  try {
+                    clearTimeout(runTimeoutDict[pk]);
+                    delete runTimeoutDict[pk];
+                  } catch (error) {}
+                  break;
+              }
+              // feature update
+              orgCall.setProperties({
+                ans: ans,
+                hangup: hangup,
+                tel: tel,
+                teladdr: teladdr,
+                telname: telname,
+                timeStamp: timeStamp,
+                date: date,
+                statusIcon: statusIcon,
+                lon: lon,
+                lat: lat,
+              });
+              orgCall.setGeometry(
+                new ol.geom.Point(lon != null ? [lon, lat] : []).transform(
+                  "EPSG:4326",
+                  "EPSG:3857"
+                )
+              );
+              // child update
+              document.querySelector(`input[id="pk${pk}"]`).type =
+                lon != null ? "checkbox" : "button";
+              var callChildLabel = `<div class="callIcon"><img src="img/${statusIcon}.png" alt="通話狀態" /></div><div class="callDetail"><div>[<span>${status}</span>] ${date}</div><div>${
+                teladdr != null ? teladdr : "未顯示"
+              }</div><div>${
+                lon != null ? lat + ", " + lon : "無定位"
+              }</div><div>來話人：${telname} 　📞 ${tel}</div></div>`;
+              document.querySelector(`label[for="pk${pk}"]`).innerHTML =
+                callChildLabel;
+              document
+                .querySelector(`label[for="pk${pk}"]`)
+                .classList.remove("callRed");
+              document
+                .querySelector(`label[for="pk${pk}"]`)
+                .classList.remove("callGreen");
+              document
+                .querySelector(`label[for="pk${pk}"]`)
+                .classList.remove("callGray");
+              document
+                .querySelector(`label[for="pk${pk}"]`)
+                .classList.add(addbgColorClass);
+            }
+          }
+          //
+
+          //
+          if (list50.length > 50) {
+            for (let i = list50.length; i > 50; i--) {
+              var removePk = list50[i - 1];
+              // console.log(removePk);
+              // if timeout, remove
+              if (typeof runTimeoutDict[removePk] == undefined) {
+                clearTimeout(runTimeoutDict[removePk]);
+                delete runTimeoutDict[removePk];
+              }
+              // feature remove
+              callLayer
+                .getSource()
+                .removeFeature(callLayer.getSource().getFeatureById(removePk));
+              // list remove
+              document.querySelector(`#pk${removePk}`).remove();
+              document.querySelector(`label[for="pk${removePk}"]`).remove();
+              // list50 array remove
+              list50.pop();
+              //
+            }
+          }
+          //
+        });
+      });
+    }
+
+    //
+    //call zoom and highlight
+    //
+    function callZoomHighlight(ele, checked) {
+      var id = ele.id;
+      var layerId = id.split("pk")[1];
+      //
+      document
+        .querySelectorAll(".callList > input")
+        .forEach(function (element) {
+          if (element.id != id) {
+            element.checked = false;
+          }
+        });
+      //
+      if (checked) {
+        // zoom
+        var featurexy = callLayer
+          .getSource()
+          .getFeatureById(layerId)
+          .getGeometry()
+          .getCoordinates();
+        map.getView().animate({
+          center: featurexy,
+          zoom: 16,
+          duration: 300,
+        });
+        // style
+        callLayer
+          .getSource()
+          .getFeatures()
+          .forEach(function (feature) {
+            feature.setProperties({ highlight: false });
+          });
+        callLayer
+          .getSource()
+          .getFeatureById(layerId)
+          .setProperties({ highlight: true });
+      } else {
+        // zoom
+        goHome();
+        // style
+        callLayer
+          .getSource()
+          .getFeatureById(layerId)
+          .setProperties({ highlight: false });
+      }
+    }
+
+    //
+    // call connect line set time pot
+    //
+    var runTimeoutDict = {};
+    function runConnectLineMarker(pk) {
+      // if exist
+      if (typeof runTimeoutDict[pk] == undefined) {
+        var timeoutId;
+      } else {
+        var timeoutId = runTimeoutDict[pk];
+        clearTimeout(timeoutId);
+      }
+      // random add percent
+      var newPercent = callLayer
+        .getSource()
+        .getFeatureById(pk)
+        .getProperties().positionPercent;
+      if (!callLayer.getSource().getFeatureById(pk).getProperties().reverse) {
+        newPercent += 0.1 + (Math.random() / 50 - 0.01);
+        if (newPercent >= 1) {
+          newPercent = 1;
+          callLayer
+            .getSource()
+            .getFeatureById(pk)
+            .setProperties({ reverse: 1 });
+        }
+      } else {
+        newPercent -= 0.1 + (Math.random() / 50 - 0.01);
+        if (newPercent <= 0) {
+          newPercent = 0;
+          callLayer
+            .getSource()
+            .getFeatureById(pk)
+            .setProperties({ reverse: 0 });
+        }
+      }
+      callLayer
+        .getSource()
+        .getFeatureById(pk)
+        .setProperties({ positionPercent: newPercent });
+      //
+      timeoutId = setTimeout(function () {
+        runConnectLineMarker(pk);
+      }, 300);
+      runTimeoutDict[pk] = timeoutId;
+    }
+
+    //
+    // popup
+    //
+    let onclickPopup = new ol.Overlay({
+      element: document.getElementById("clickPopup"),
+    });
+    map.addOverlay(onclickPopup);
+    map.on("singleclick", function (evt) {
+      var popupDiv = document.getElementById("clickPopup");
+      var feature = map.forEachFeatureAtPixel(
+        evt.pixel,
+        function (feature, layer) {
+          return feature;
+        }
+      );
+      var layer = map.forEachFeatureAtPixel(
+        evt.pixel,
+        function (feature, layer) {
+          return layer;
+        }
+      );
+      // 獲取當前指向座標，並設置到HTML元素
+      if (feature) {
+        var vectorType = feature.getGeometry().getType();
+        switch (vectorType) {
+          case "Point":
+            var coordinates = feature.getGeometry().getCoordinates();
+            break;
+          case "LineString":
+            var coordinates = feature.getGeometry().getCoordinateAt(0.5);
+            break;
+          case "Polygon":
+            var coordinates = feature
+              .getGeometry()
+              .getInteriorPoint().flatCoordinates;
+            break;
+          case "Circle":
+            var coordinates = feature.getGeometry().getCenter();
+            break;
+          default:
+            var coordinates = evt.coordinate;
+        }
+        onclickPopup.setPosition(coordinates);
+
+        feature.getKeys().forEach(function (key) {
+          if (key !== "geometry") {
+            if (typeof layer.get("name") !== "undefined") {
+              switch (layer.get("name")) {
+                // 處理中案件
+                case "caseLayer":
+                  var name = feature.get("CS_NO");
+                  var place = feature.get("CS_PLACE");
+                  var x = feature.get("X");
+                  var y = feature.get("Y");
+                  var ldate = feature.get("LDATE");
+                  var time = returnTime(ldate);
+                  var luser = feature.get("LUSER");
+                  var popupContent = `<table><thead><tr><th colspan="2">案件: ${name}</th></tr></thead><tbody><tr><td>案件編號</td><td>${name}</td></tr><tr class="evenTr"><td>案件位置</td><td>${place}</td></tr><tr><td>X</td><td>${x}</td></tr><tr class="evenTr"><td>Y</td><td>${y}</td></tr><tr><td>更新時間</td><td>${time}</td></tr><tr class="evenTr"><td>LUSER</td><td>${luser}</td></tr></tbody></table>`;
+                  popupDiv.innerHTML = popupContent;
+                  popupDiv.style.display = "block";
+                  break;
+                // 救護車機
+                case "ambulanceLayer":
+                  var name = feature.get("RadioNo");
+                  var carno = feature.get("CarNo");
+                  var gpsx = feature.get("GPSX");
+                  var gpsy = feature.get("GPSY");
+                  var csno = feature.get("CS_NO");
+                  var messagedate = feature.get("MESSAGE_DATE");
+                  var time = returnTime(messagedate);
+                  var member = feature.get("member");
+                  var popupContent = `<table><thead><tr><th colspan="2">${name}</th></tr></thead><tbody><tr><td>車號</td><td>${carno}</td></tr><tr class="evenTr"><td>X</td><td>${gpsx}</td></tr><tr><td>Y</td><td>${gpsy}</td></tr><tr class="evenTr"><td>案件編號</td><td>${csno}</td></tr><tr><td>更新時間</td><td>${time}</td></tr><tr class="evenTr"><td>人員</td><td>${member}</td></tr></tbody></table>`;
+                  popupDiv.innerHTML = popupContent;
+                  popupDiv.style.display = "block";
+                  break;
+                // 平板位置
+                case "padLayer":
+                  var name = feature.get("CALL_NO");
+                  var carno = feature.get("CAR_NO");
+                  var tm97x = feature.get("TM97X").toFixed(3);
+                  var tm97y = feature.get("TM97Y").toFixed(3);
+                  var csno = feature.get("CS_NO");
+                  var lon = feature.get("LONGITUDE").toFixed(3);
+                  var lat = feature.get("LATITUDE").toFixed(3);
+                  var speed = feature.get("INSTANT_SPEED");
+                  var messagedate = feature.get("MESSAGE_DATE");
+                  var time = returnTime(messagedate);
+                  var member = feature.get("member");
+                  var phonenumber = feature.get("ambu_phone");
+                  var popupContent = `<table><thead><tr><th colspan="2">${name}</th></tr></thead><tbody><tr><td>車號</td><td>${carno}</td></tr><tr class="evenTr"><td>X</td><td>${tm97x}</td></tr><tr><td>Y</td><td>${tm97y}</td></tr><tr class="evenTr"><td>案件編號</td><td>${csno}</td></tr><tr><td>經度</td><td>${lon}</td></tr><tr class="evenTr"><td>緯度</td><td>${lat}</td></tr><tr><td>速度</td><td>${speed}</td></tr><tr class="evenTr"><td>更新時間</td><td>${time}</td></tr><tr><td>人員</td><td>${member}</td></tr><tr class="evenTr"><td>電話</td><td>${phonenumber}</td></tr></tbody></table>`;
+                  popupDiv.innerHTML = popupContent;
+                  popupDiv.style.display = "block";
+                  break;
+                case "callLayer":
+                  var pk = feature.get("pk");
+                  var pkLabel = document.querySelector(`label[for="pk${pk}"]`);
+                  // scroll
+                  pkLabel.scrollIntoView({ behavior: "smooth" });
+                  // highlight
+                  setTimeout(function () {
+                    pkLabel.style.background = "var(--color-gray1)";
+                    setTimeout(function () {
+                      pkLabel.removeAttribute("style");
+                    }, 800);
+                  }, 400);
+                  break;
+              }
+            } else {
+            }
+          }
+        });
+        //
+      } else {
+        popupDiv.innerHTML = "";
+        popupDiv.style.display = "none";
+      }
+    });
+
+    // 比例尺 START
+    let scaleLineControl = new ol.control.ScaleLine({ className: "scale_bar" });
+    scaleLineControl.setUnits("metric");
+    map.addControl(scaleLineControl);
+
+    // 滑鼠座標位置 START
+    var autoMousePosition;
+    map.on("pointermove", function (evt) {
+      autoMousePosition = evt;
+      var coordinate = ol.proj.toLonLat(evt.coordinate);
+      var lon = coordinate[0].toFixed(5);
+      var lat = coordinate[1].toFixed(5);
+      if (lon > 0) {
+        var EW = "E";
+      } else {
+        var EW = "W";
+      }
+      lon = Math.abs(lon);
+      if (lat > 0) {
+        var NS = "N";
+      } else {
+        var NS = "S";
+      }
+      lat = Math.abs(lat);
+      // here for switch projection
+      document.getElementById(
+        "lonlatdiv0"
+      ).innerHTML = `${lat}°${NS}, ${lon}°${EW}`;
+    });
+    // 滑鼠座標位置 END
+  </script>
+
+  <script>
+    //
+    //countUp
+    //
+    function countNumber(tagId, targeNum) {
+      const options = {
+        separator: "",
+      };
+      new countUp.CountUp(tagId, targeNum, options).start();
+    }
+    countNumber("callTotle", 1234);
+    //enf of func countnumber
+
+    //
+    // echart
+    //
+    // 來話裝置類別
+    var callType;
+    function setfillPieCallType() {
+      //
+      var callTypeData = [
+        { name: "市內電話", value: 73 },
+        { name: "公共電話", value: 15 },
+        { name: "行動電話", value: 5 },
+      ];
+
+      try {
+        callType.setOption({ series: [] }, { replaceMerge: ["series"] });
+      } catch (error) {}
+      //
+      try {
+        window.removeEventListener("resize", callType.resize);
+      } catch (error) {}
+      //
+      if (!callType) {
+        callType = echarts.init(document.querySelector(".callType"));
+      }
+      // callType.clear();
+      var option = {
+        tooltip: { trigger: "item", position: "top", formatter: "{b}: {c}" },
+        title: {
+          text: "來話裝置類別",
+          textStyle: {
+            color: "white",
+            fontSize: 26,
+          },
+          textAlign: "center",
+          left: "49%",
+          top: "3%",
+        },
+        legend: {
+          // top: "0%",
+          // left: "0%",
+          // itemWidth: 25,
+          bottom: "5%",
+          orient: "horizontal",
+          // formatter: "{name}",
+          formatter: function (name) {
+            let target;
+            for (i = 0; i < callTypeData.length; i++) {
+              if (name == callTypeData[i].name) {
+                target = callTypeData[i].value;
+                break;
+              }
+            }
+            return `${name} ${target}`;
+          },
+          textStyle: {
+            fontSize: 18,
+            color: "white",
+            width: 180,
+            overflow: "truncate",
+            padding: [0, 0, 0, 4],
+          },
+          itemStyle: {
+            borderColor: "#feeafa",
+            borderWidth: 1,
+            shadowColor: "#ffc100",
+            shadowBlur: 2,
+          },
+          padding: [
+            60, // 上
+            0, // 右
+            0, // 下
+            15, // 左
+          ],
+        },
+        series: [
+          {
+            data: callTypeData,
+            name: "來話類別",
+            type: "pie",
+            // radius: ["75%", "20%"], //內外半徑占寬高比
+            // left: "40%",
+            top: "10%",
+            // width:'50%',
+            height: "70%",
+            avoidLabelOverlap: false,
+            // padAngle: 5,
+            itemStyle: {
+              borderRadius: 10,
+              borderColor: "#feeafa",
+              borderWidth: 3,
+              shadowColor: "#ffc100",
+              shadowBlur: 2,
+            },
+            label: {
+              show: false,
+              formatter: "{b}:{@score}",
+              position: "center",
+              // color: "inherit",
+              color: "white",
+              textShadowColor: "black",
+              textShadowBlur: 3,
+            }, //center出現在中央
+            labelLine: { show: true }, //label為outside時顯示
+            emphasis: {
+              scale: true,
+              scaleSize: 10,
+              focus: "self",
+              label: { show: true, fontSize: 30, fontWeight: "bold" },
+            },
+            blur: { itemStyle: { color: "#f4f9e9", opacity: 0.2 } },
+          },
+        ],
+      };
+      callType.setOption(option);
+      window.addEventListener("resize", callType.resize);
+    }
+    setfillPieCallType();
+
+    //
+    // 進線狀態
+    var callStatus;
+    function setstackCallStatus() {
+      //
+      var callStatusData = [
+        { name: "放棄電話", value: 21 },
+        { name: "語音留言", value: 2 },
+        { name: "等待中", value: 5 },
+        { name: "通話中", value: 1 },
+      ];
+
+      try {
+        callStatus.setOption({ series: [] }, { replaceMerge: ["series"] });
+      } catch (error) {}
+      //
+      try {
+        window.removeEventListener("resize", callStatus.resize);
+      } catch (error) {}
+      //
+      if (!callStatus) {
+        callStatus = echarts.init(document.querySelector(".callStatus"));
+      }
+
+      var dictList = callStatusData.map((item) => item);
+      var series = [];
+      for (i = 0; i < dictList.length; i++) {
+        var dict = {
+          name: dictList[i]["name"],
+          type: "bar",
+          data: [dictList[i]["value"]],
+          // color: color[i],
+          colorby: "data",
+          itemStyle: {
+            borderRadius: [5, 5, 0, 0],
+            borderColor: "#feeafa",
+            borderWidth: 2,
+            shadowColor: "#ffc100",
+            shadowBlur: 2,
+          },
+          label: {
+            formatter: "{@score}",
+            show: true,
+            position: "top",
+            color: "inherit",
+            textShadowColor: "black",
+            textShadowBlur: 3,
+          }, //center出現在中央
+          // labelLine: { show: true }, //label為outside時顯示
+          emphasis: {
+            scale: true,
+            scaleSize: 10,
+            focus: "self",
+            label: { show: true, fontSize: 30, fontWeight: "bold" },
+          },
+          blur: { itemStyle: { color: "#f4f9e9", opacity: 0.2 } },
+        };
+        series.push(dict);
+      }
+
+      callStatus.clear();
+      var option = {
+        title: {
+          text: "進線狀態",
+          textStyle: {
+            color: "white",
+            fontSize: 26,
+          },
+          textAlign: "center",
+          left: "49%",
+          top: "3%",
+        },
+        xAxis: {
+          type: "category",
+          data: [
+            {
+              value: "放棄電話",
+              textStyle: {
+                color: "white",
+                fontSize: 18,
+              },
+            },
+            {
+              value: "語音留言",
+              textStyle: {
+                color: "white",
+                fontSize: 18,
+              },
+            },
+            {
+              value: "等待中",
+              textStyle: {
+                color: "white",
+                fontSize: 18,
+              },
+            },
+            {
+              value: "通話中",
+              textStyle: {
+                color: "white",
+                fontSize: 18,
+              },
+            },
+          ],
+        },
+        yAxis: {
+          type: "value",
+        },
+        grid: {
+          top: "20%",
+          // left: "45%",
+          // right: "3%",
+          bottom: "20%",
+          // containLabel: true,
+        },
+        series: [
+          {
+            data: [
+              {
+                value: 21,
+                itemStyle: { color: "#5470C6" },
+              },
+              {
+                value: 2,
+                itemStyle: { color: "#91CC75" },
+              },
+              {
+                value: 5,
+                itemStyle: { color: "#FAC858" },
+              },
+              {
+                value: 1,
+                itemStyle: { color: "#EE6666" },
+              },
+            ],
+            type: "bar",
+            label: {
+              formatter: "{@score}",
+              show: true,
+              position: "top",
+              color: "white",
+              // color: "inherit",
+              // colorby: "data",
+              fontSize: 18,
+              textShadowColor: "black",
+              textShadowBlur: 2,
+            },
+            itemStyle: {
+              borderRadius: 5,
+              borderColor: "#feeafa",
+              borderWidth: 3,
+              shadowColor: "#ffc100",
+              shadowBlur: 2,
+            },
+            emphasis: {
+              scale: true,
+              scaleSize: 10,
+              focus: "self",
+              label: { show: true, fontSize: 30, fontWeight: "bold" },
+            },
+            blur: { itemStyle: { color: "#f4f9e9", opacity: 0.2 } },
+          },
+        ],
+      };
+      callStatus.setOption(option);
+      window.addEventListener("resize", callStatus.resize);
+    }
+    setstackCallStatus();
+
+    //
+    // 成案比例
+    var callCasePercent;
+    function setgaugeCallCasePercent() {
+      //
+      var callCasePercentData = 0.244;
+
+      try {
+        callCasePercent.setOption({ series: [] }, { replaceMerge: ["series"] });
+      } catch (error) {}
+      //
+      try {
+        window.removeEventListener("resize", callCasePercent.resize);
+      } catch (error) {}
+      //
+      if (!callCasePercent) {
+        callCasePercent = echarts.init(
+          document.querySelector(".callCasePercent")
+        );
+      }
+
+      option = {
+        title: {
+          text: "成案比例",
+          textStyle: {
+            color: "white",
+            fontSize: 26,
+          },
+          textAlign: "center",
+          left: "49%",
+          top: "10%",
+        },
+        series: [
+          {
+            type: "gauge",
+            progress: {
+              show: true,
+              width: 40,
+              itemStyle: {
+                color: "#55FF00",
+              },
+            },
+            startAngle: 180,
+            endAngle: 0,
+            center: ["50%", "80%"],
+            radius: "90%",
+            min: 0,
+            max: 1,
+            axisLine: {
+              lineStyle: {
+                width: 40,
+                // color: [
+                //   [callCasePercentData, "#55FF00"],
+                //   [1, "#D6D6D6"],
+                // ],
+              },
+            },
+            pointer: {
+              show: false,
+            },
+            axisTick: {
+              show: false,
+            },
+            splitLine: {
+              show: false,
+            },
+            axisLabel: {
+              show: false,
+            },
+            detail: {
+              fontSize: 30,
+              offsetCenter: [0, "-3%"],
+              valueAnimation: true,
+              formatter: function (value) {
+                return (value * 100).toFixed(1) + "%";
+              },
+              color: "white",
+            },
+            data: [
+              {
+                value: callCasePercentData,
+              },
+            ],
+          },
+        ],
+      };
+
+      callCasePercent.setOption(option);
+      window.addEventListener("resize", callCasePercent.resize);
+    }
+    setgaugeCallCasePercent();
+  </script>
+
+  <script>
+    //
+    // update pre 10sec car and call
+    //
+    function updatePer10Sec() {
+      updateCarLayer();
+      updateCallLayer();
+      setTimeout(updatePer10Sec, 10000);
+    }
+    updatePer10Sec();
+    //
+
+    //
+    // update pre 30sec caseLayer and all echart
+    //
+    function updatePer30Sec() {
+      updateCaseLayer();
+      countNumber("callTotle", 1234);
+      setfillPieCallType();
+      setstackCallStatus();
+      setgaugeCallCasePercent();
+      setTimeout(updatePer30Sec, 30000);
+    }
+    updatePer30Sec();
+    //
+  </script>
+</html>

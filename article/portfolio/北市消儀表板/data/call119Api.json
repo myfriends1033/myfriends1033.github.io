@@ -1,0 +1,51 @@
+
+[
+  {
+    "telname": "魏鏡明",
+    "tel": "2799712",
+    "teladdr": "臺北市大安區忠孝東路四段200號",
+    "telkind": "市內電話",
+    "ring_time": "20240820103058",
+    "longitude": 121.552149,
+    "latitude": 25.041089,
+    "pk": 15316439,
+    "o": true,
+    "ans": true
+  },
+  {
+    "telname": "暫不提供資料",
+    "tel": "2562244",
+    "teladdr": "臺北市中山區長春路55號",
+    "telkind": "市內電話",
+    "ring_time": "20240820103113",
+    "longitude": 121.52609,
+    "latitude": 25.055018,
+    "pk": 15316451,
+    "o": true,
+    "ans": true
+  },
+  {
+    "telname": "蔡金菜",
+    "tel": "981715327",
+    "teladdr": "臺北市士林區前街21巷3號2樓",
+    "telkind": "行動電話",
+    "ring_time": "20240820103204",
+    "longitude": 121.525058,
+    "latitude": 25.09778,
+    "pk": 15316490,
+    "o": false,
+    "ans": true
+  },
+  {
+    "telname": "謝珮珮",
+    "tel": "910888546",
+    "teladdr": "臺北市天祥路",
+    "telkind": "行動電話",
+    "ring_time": "20240820103544",
+    "longitude": null,
+    "latitude": null,
+    "pk": 19316582,
+    "o": false,
+    "ans": false
+  }
+]
