@@ -1051,11 +1051,18 @@
     }
     // map.addLayer(padLayer);
     padLayer.setStyle(padLayerStyle);
+    
     //
     function updateCarLayer() {
       caseLayer.setSource(
         esriSource(
           "https://gis119.tfd.gov.tw/server/rest/services/DIS_CASE_HANDLE/FeatureServer/",
+          "0"
+        )
+      );
+      padLayer.setSource(
+        esriSource(
+          "https://gis119.tfd.gov.tw/server/rest/services/GPS_MOBILE_GPS_FENCE/FeatureServer/",
           "0"
         )
       );
@@ -1626,13 +1633,14 @@
     //
     //countUp
     //
-    function countNumber(tagId, targeNum) {
+    function countNumber(tagId) {
+      var targeNum = 1234;
       const options = {
         separator: "",
       };
       new countUp.CountUp(tagId, targeNum, options).start();
     }
-    countNumber("callTotle", 1234);
+    countNumber("callTotle");
     //enf of func countnumber
 
     //
@@ -1759,10 +1767,10 @@
     function setstackCallStatus() {
       //
       var callStatusData = [
-        { name: "放棄電話", value: 21 },
-        { name: "語音留言", value: 2 },
         { name: "等待中", value: 5 },
         { name: "通話中", value: 1 },
+        { name: "語音留言", value: 2 },
+        { name: "放棄電話", value: 21 },
       ];
 
       try {
@@ -1777,41 +1785,42 @@
         callStatus = echarts.init(document.querySelector(".callStatus"));
       }
 
-      var dictList = callStatusData.map((item) => item);
-      var series = [];
-      for (i = 0; i < dictList.length; i++) {
-        var dict = {
-          name: dictList[i]["name"],
-          type: "bar",
-          data: [dictList[i]["value"]],
-          // color: color[i],
-          colorby: "data",
-          itemStyle: {
-            borderRadius: [5, 5, 0, 0],
-            borderColor: "#feeafa",
-            borderWidth: 2,
-            shadowColor: "#ffc100",
-            shadowBlur: 2,
-          },
-          label: {
-            formatter: "{@score}",
-            show: true,
-            position: "top",
-            color: "inherit",
-            textShadowColor: "black",
-            textShadowBlur: 3,
-          }, //center出現在中央
-          // labelLine: { show: true }, //label為outside時顯示
-          emphasis: {
-            scale: true,
-            scaleSize: 10,
-            focus: "self",
-            label: { show: true, fontSize: 30, fontWeight: "bold" },
-          },
-          blur: { itemStyle: { color: "#f4f9e9", opacity: 0.2 } },
-        };
-        series.push(dict);
-      }
+      // callStatus.clear();
+      // var dictList = callStatusData.map((item) => item);
+      // var series = [];
+      // for (i = 0; i < dictList.length; i++) {
+      //   var dict = {
+      //     name: dictList[i]["name"],
+      //     type: "bar",
+      //     data: [dictList[i]["value"]],
+      //     // color: color[i],
+      //     colorby: "data",
+      //     itemStyle: {
+      //       borderRadius: [5, 5, 0, 0],
+      //       borderColor: "#feeafa",
+      //       borderWidth: 2,
+      //       shadowColor: "#ffc100",
+      //       shadowBlur: 2,
+      //     },
+      //     label: {
+      //       formatter: "{@score}",
+      //       show: true,
+      //       position: "top",
+      //       color: "inherit",
+      //       textShadowColor: "black",
+      //       textShadowBlur: 3,
+      //     }, //center出現在中央
+      //     // labelLine: { show: true }, //label為outside時顯示
+      //     emphasis: {
+      //       scale: true,
+      //       scaleSize: 10,
+      //       focus: "self",
+      //       label: { show: true, fontSize: 30, fontWeight: "bold" },
+      //     },
+      //     blur: { itemStyle: { color: "#f4f9e9", opacity: 0.2 } },
+      //   };
+      //   series.push(dict);
+      // }
 
       callStatus.clear();
       var option = {
@@ -1829,7 +1838,14 @@
           type: "category",
           data: [
             {
-              value: "放棄電話",
+              value: "等待中",
+              textStyle: {
+                color: "white",
+                fontSize: 18,
+              },
+            },
+            {
+              value: "通話中",
               textStyle: {
                 color: "white",
                 fontSize: 18,
@@ -1843,14 +1859,7 @@
               },
             },
             {
-              value: "等待中",
-              textStyle: {
-                color: "white",
-                fontSize: 18,
-              },
-            },
-            {
-              value: "通話中",
+              value: "放棄電話",
               textStyle: {
                 color: "white",
                 fontSize: 18,
@@ -1872,20 +1881,20 @@
           {
             data: [
               {
-                value: 21,
-                itemStyle: { color: "#5470C6" },
+                value: 5,
+                itemStyle: { color: "#EE6666" },
               },
               {
-                value: 2,
+                value: 3,
                 itemStyle: { color: "#91CC75" },
               },
               {
-                value: 5,
-                itemStyle: { color: "#FAC858" },
+                value: 2,
+                itemStyle: { color: "#5470C6" },
               },
               {
-                value: 1,
-                itemStyle: { color: "#EE6666" },
+                value: 21,
+                itemStyle: { color: "#FAC858" },
               },
             ],
             type: "bar",
@@ -2032,7 +2041,7 @@
     //
     function updatePer30Sec() {
       updateCaseLayer();
-      countNumber("callTotle", 1234);
+      countNumber("callTotle");
       setfillPieCallType();
       setstackCallStatus();
       setgaugeCallCasePercent();
