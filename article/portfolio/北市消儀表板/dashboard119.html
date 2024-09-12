@@ -1768,10 +1768,31 @@
       //
       var callStatusData = [
         { name: "等待中", value: 5 },
-        { name: "通話中", value: 1 },
+        { name: "通話中", value: 3 },
         { name: "語音留言", value: 2 },
         { name: "放棄電話", value: 21 },
       ];
+      var colorList = ["#EE6666", "#91CC75", "#5470C6", "#FAC858"];
+
+      var xAxisData = [];
+      var seriesData = [];
+      for (let i = 0; i < callStatusData.length; i++) {
+        //
+        var xAxisTemp = {
+          value: callStatusData[i].name,
+          textStyle: {
+            color: "white",
+            fontSize: 18,
+          },
+        };
+        xAxisData.push(xAxisTemp);
+        //
+        var seriesTemp = {
+          value: callStatusData[i].value,
+          itemStyle: { color: colorList[i] },
+        };
+        seriesData.push(seriesTemp);
+      }
 
       try {
         callStatus.setOption({ series: [] }, { replaceMerge: ["series"] });
@@ -1784,43 +1805,6 @@
       if (!callStatus) {
         callStatus = echarts.init(document.querySelector(".callStatus"));
       }
-
-      // callStatus.clear();
-      // var dictList = callStatusData.map((item) => item);
-      // var series = [];
-      // for (i = 0; i < dictList.length; i++) {
-      //   var dict = {
-      //     name: dictList[i]["name"],
-      //     type: "bar",
-      //     data: [dictList[i]["value"]],
-      //     // color: color[i],
-      //     colorby: "data",
-      //     itemStyle: {
-      //       borderRadius: [5, 5, 0, 0],
-      //       borderColor: "#feeafa",
-      //       borderWidth: 2,
-      //       shadowColor: "#ffc100",
-      //       shadowBlur: 2,
-      //     },
-      //     label: {
-      //       formatter: "{@score}",
-      //       show: true,
-      //       position: "top",
-      //       color: "inherit",
-      //       textShadowColor: "black",
-      //       textShadowBlur: 3,
-      //     }, //center出現在中央
-      //     // labelLine: { show: true }, //label為outside時顯示
-      //     emphasis: {
-      //       scale: true,
-      //       scaleSize: 10,
-      //       focus: "self",
-      //       label: { show: true, fontSize: 30, fontWeight: "bold" },
-      //     },
-      //     blur: { itemStyle: { color: "#f4f9e9", opacity: 0.2 } },
-      //   };
-      //   series.push(dict);
-      // }
 
       callStatus.clear();
       var option = {
@@ -1836,36 +1820,7 @@
         },
         xAxis: {
           type: "category",
-          data: [
-            {
-              value: "等待中",
-              textStyle: {
-                color: "white",
-                fontSize: 18,
-              },
-            },
-            {
-              value: "通話中",
-              textStyle: {
-                color: "white",
-                fontSize: 18,
-              },
-            },
-            {
-              value: "語音留言",
-              textStyle: {
-                color: "white",
-                fontSize: 18,
-              },
-            },
-            {
-              value: "放棄電話",
-              textStyle: {
-                color: "white",
-                fontSize: 18,
-              },
-            },
-          ],
+          data: xAxisData,
         },
         yAxis: {
           type: "value",
@@ -1879,24 +1834,7 @@
         },
         series: [
           {
-            data: [
-              {
-                value: 5,
-                itemStyle: { color: "#EE6666" },
-              },
-              {
-                value: 3,
-                itemStyle: { color: "#91CC75" },
-              },
-              {
-                value: 2,
-                itemStyle: { color: "#5470C6" },
-              },
-              {
-                value: 21,
-                itemStyle: { color: "#FAC858" },
-              },
-            ],
+            data: seriesData,
             type: "bar",
             label: {
               formatter: "{@score}",
