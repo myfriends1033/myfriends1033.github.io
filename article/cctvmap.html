@@ -239,7 +239,7 @@
               // anchor: [0.5, 1],
               // anchorXUnits: "fraction",
               // anchorYUnits: "fraction",
-              src: "icon/cctv.png",
+              src: "https://web.hoone.com.tw/img/mapicon/cctv.png",
               scale: 0.18,
             }),
             text: new ol.style.Text({
@@ -494,18 +494,15 @@
           clearTimeout(timeoutId);
           timeoutId = undefined;
         }
-        // set now time for cctv img src change
-        var now = new Date();
         // get cctv div
         var imgElement = document.querySelectorAll(".cctvPopup");
         // if length > 0 run the timeoutId
         if (imgElement.length > 0) {
           imgElement.forEach(function (aCctv) {
             // console.log(aCctv);
-            aCctv.getElementsByTagName("img")[0].src =
-              aCctv.getElementsByTagName("img")[0].src.split("&dummy=")[0] +
-              "&dummy=" +
-              now.getTime();
+            var theUrl = aCctv.getElementsByTagName("img")[0].src;
+            aCctv.getElementsByTagName("img")[0].src = "";
+            aCctv.getElementsByTagName("img")[0].src = theUrl;
           });
           timeoutId = setTimeout(cctvRefresh, cctvRefreshTime);
           // console.log(timeoutId);
