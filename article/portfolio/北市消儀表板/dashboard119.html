@@ -1282,6 +1282,8 @@
 
             //
             var orgCall;
+            var orgInput;
+            var orgLabel;
             if (!list50.includes(pk)) {
               // add
               addNewFeature();
@@ -1291,6 +1293,8 @@
             } else {
               // update
               orgCall = callLayer.getSource().getFeatureById(pk);
+              orgInput = document.querySelector(`input[id="pk${pk}"]`);
+              orgLabel = document.querySelector(`label[for="pk${pk}"]`);
               switch (statusIcon) {
                 case "telWait":
                   break;
@@ -1308,6 +1312,12 @@
                   try {
                     clearTimeout(runTimeoutDict[pk]);
                     delete runTimeoutDict[pk];
+                    // JY add 20241105 如果按了隱藏掛斷
+                    if (document.getElementById("calledClose").checked) {                     
+                      callLayer.setStyle(callStyle); 
+                      orgLabel.style.display = "none";
+                    }
+                    // JY add 20241105 如果按了隱藏掛斷
                   } catch (error) {}
                   break;
               }
@@ -1331,27 +1341,21 @@
                 )
               );
               // child update
-              document.querySelector(`input[id="pk${pk}"]`).type =
-                lon != null ? "checkbox" : "button";
+              // JY add 20241105
+              if (orgInput.type == "button") {
+                orgInput.type = lon != null ? "checkbox" : "button";
+                orgInput.onclick = lon != null ? function onclick() {callZoomHighlight(this, this.checked)} : "";
+              } // JY add 20241105
               var callChildLabel = `<div class="callIcon"><img src="img/${statusIcon}.png" alt="通話狀態" /></div><div class="callDetail"><div>[<span>${status}</span>] ${date}</div><div>${
                 teladdr != null ? teladdr : "未顯示"
               }</div><div>${
                 lon != null ? lat + ", " + lon : "無定位"
               }</div><div>來話人：${telname} 　📞 ${tel}</div></div>`;
-              document.querySelector(`label[for="pk${pk}"]`).innerHTML =
-                callChildLabel;
-              document
-                .querySelector(`label[for="pk${pk}"]`)
-                .classList.remove("callRed");
-              document
-                .querySelector(`label[for="pk${pk}"]`)
-                .classList.remove("callGreen");
-              document
-                .querySelector(`label[for="pk${pk}"]`)
-                .classList.remove("callGray");
-              document
-                .querySelector(`label[for="pk${pk}"]`)
-                .classList.add(addbgColorClass);
+              orgLabel.innerHTML = callChildLabel;
+              orgLabel.classList.remove("callRed");
+              orgLabel.classList.remove("callGreen");
+              orgLabel.classList.remove("callGray");
+              orgLabel.classList.add(addbgColorClass);
             }
           }
           //
@@ -1379,6 +1383,8 @@
             }
           }
           //
+        }).then(() => {
+          setstackCallStatus();
         });
       });
     }
@@ -1645,7 +1651,7 @@
       };
       new countUp.CountUp(tagId, targeNum, options).start();
     }
-    countNumber("callTotle");
+    // countNumber("callTotle");
     //enf of func countnumber
 
     //
@@ -1764,16 +1770,19 @@
       callType.setOption(option);
       window.addEventListener("resize", callType.resize);
     }
-    setfillPieCallType();
+    // setfillPieCallType();
 
     //
     // 進線狀態
     var callStatus;
     function setstackCallStatus() {
       //
+      var waitCount = document.querySelectorAll(".callIcon > img[src='/static/img/gismc01/telWait.png']").length;  // JY add 20241105
+      var trafficCount = document.querySelectorAll(".callIcon > img[src='/static/img/gismc01/telWait.png']").length; // JY add 20241105
+      //
       var callStatusData = [
-        { name: "等待中", value: 5 },
-        { name: "通話中", value: 3 },
+        { name: "等待中", value: waitCount },
+        { name: "通話中", value: trafficCount },
         { name: "語音留言", value: 2 },
         { name: "放棄電話", value: 21 },
       ];
@@ -1965,17 +1974,17 @@
       callCasePercent.setOption(option);
       window.addEventListener("resize", callCasePercent.resize);
     }
-    setgaugeCallCasePercent();
+    // setgaugeCallCasePercent();
   </script>
 
   <script>
     //
     // update pre 10sec car and call
     //
-    function updatePer10Sec() {
+    function updatePer5Sec() {
       updateCarLayer();
       updateCallLayer();
-      setTimeout(updatePer10Sec, 10000);
+      setTimeout(updatePer5Sec, 5000);
     }
     updatePer10Sec();
     //
@@ -1987,7 +1996,6 @@
       updateCaseLayer();
       countNumber("callTotle");
       setfillPieCallType();
-      setstackCallStatus();
       setgaugeCallCasePercent();
       setTimeout(updatePer30Sec, 30000);
     }
