@@ -2403,11 +2403,11 @@
           //
           this._layer.getSource().clear();
           //
-          const regexYX = /\d+\.?\d{0,}.?\s\d+\.?\d{0,}/g;
+          const regexYX = /\d+\.?\d{0,}[,\s]{1,}\d+\.?\d{0,}/g;
           const resultYX = text.match(regexYX);
           if(resultYX == null) return;
           const yxText = resultYX[0];
-          const xy = [Number(yxText.split(/.?\s/)[1]), Number(yxText.split(/.?\s/)[0])];
+          const xy = [Number(yxText.split(/[,\s]{1,}/)[1]), Number(yxText.split(/[,\s]{1,}/)[0])];
           const xyGeom = new ol.geom.Point(ol.proj.fromLonLat(xy));
           //
           MapFunction.fitOrZoom(xyGeom);
