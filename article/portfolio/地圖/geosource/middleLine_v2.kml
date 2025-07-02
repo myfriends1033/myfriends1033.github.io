@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.2">
+<Document>
+<name>middleLine</name>
+<Style id="style1">
+	<LineStyle>
+		<color>ff0300ff</color>
+		<width>5</width>
+	</LineStyle>
+</Style>
+<Placemark>
+<name>蝛箇��蝱瘚瑚葉蝺�</name>
+<description><![CDATA[<p>Name: 蝛箇��蝱瘚瑚葉蝺�
+<br/>description: 
+<br/>timestamp: NULL
+<br/>begin: NULL
+<br/>end: NULL
+<br/>altitudeMode: NULL
+<br/>tessellate: 1
+<br/>extrude: 0
+<br/>visibility: -1
+<br/>drawOrder: NULL
+<br/>icon: NULL</p>]]></description>
+<ExtendedData>
+	<Data name="Name"><displayName>Name</displayName><value><![CDATA[蝛箇��蝱瘚瑚葉蝺�]]></value></Data>
+	<Data name="description"><displayName>description</displayName><value><![CDATA[]]></value></Data>
+	<Data name="timestamp"><displayName>timestamp</displayName><value><![CDATA[NULL]]></value></Data>
+	<Data name="begin"><displayName>begin</displayName><value><![CDATA[NULL]]></value></Data>
+	<Data name="end"><displayName>end</displayName><value><![CDATA[NULL]]></value></Data>
+	<Data name="altitudeMode"><displayName>altitudeMode</displayName><value><![CDATA[NULL]]></value></Data>
+	<Data name="tessellate"><displayName>tessellate</displayName><value><![CDATA[1]]></value></Data>
+	<Data name="extrude"><displayName>extrude</displayName><value><![CDATA[0]]></value></Data>
+	<Data name="visibility"><displayName>visibility</displayName><value><![CDATA[-1]]></value></Data>
+	<Data name="drawOrder"><displayName>drawOrder</displayName><value><![CDATA[NULL]]></value></Data>
+	<Data name="icon"><displayName>icon</displayName><value><![CDATA[NULL]]></value></Data>
+</ExtendedData>
+<styleUrl>#style1</styleUrl>
+	<LineString>
+		<tessellate>1</tessellate>
+		<coordinates>
+			122.0,27.0,0.000
+			118.0,23.0,0.000
+		</coordinates>
+	</LineString>
+</Placemark>
+
+</Document>
+</kml>

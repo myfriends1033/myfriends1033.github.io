@@ -1,0 +1,2485 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>臺灣地圖</title>
+    <link href="https://web.hoone.com.tw/Public/fontdemo/font/dist/icons.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/ol10.4.0.css" />
+    <link rel="shortcut icon" href="https://web.hoone.com.tw/img/logo/hoone.png" type="image/x-icon"/>
+    <style>
+      /*web base*/
+      ::-webkit-scrollbar{width: 7px;}
+      ::-webkit-scrollbar-button{display: none; border-radius: 4px;}
+      ::-webkit-scrollbar-track-piece{background: transparent; border-radius: 4px;}
+      ::-webkit-scrollbar-thumb{border-radius: 4px; background-color: var(--color-gray1); border: 1px solid var(--color-black1);}
+      ::-webkit-scrollbar-track{box-shadow: transparent;}
+      :root{--color-gray1: #808080; --color-gray2: #bcbcbc96; --color-gray3: #c2c6d3; --color-black1: #000000c4; --color-white1: #ffffffd8; --color-yellow1: #ffffd8;}
+      .hoone{display: flex; align-items: center; justify-content: center;}
+      i[class^="hoone-"]:before, i[class*=" hoone-"]:before{line-height: unset;}
+      
+      /*map div base*/
+      body, html{overflow: hidden; outline: none; user-select: none; width: 100vw; height: 100vh; margin: 0; padding: 0; font-family: "微軟正黑體", "monospace"; background-color: white;}
+      body{background: #242424;}
+      .map{width: 100%; height: 100%;}
+
+      /*input label base*/
+      .inputHide{display: none;}
+      .inputHide + label{border: calc(1px + 0.2vh) solid transparent; cursor: pointer;}
+      .inputHide + label:hover{/*background: var(--color-yellow1);*/ border: calc(1px + 0.2vh) solid black;}
+      .inputHide + label:active{scale: 0.85 !important; /*background: var(--color-yellow1);*/ border: calc(1px + 0.2vh) solid black; box-shadow: 0 0 0;}
+      .inputHide:checked + label{scale: 0.9; /*background: var(--color-yellow1);*/ border: calc(1px + 0.2vh) solid black; box-shadow: 0 0 0;}
+      .flex{display: flex;}
+
+      /*rightBox*/
+      .rightBox{position: absolute; bottom: calc(20px + 8vh); right: 1vw; display: flex; align-items: center; flex-direction: column; gap: calc(10px + 0.3vh);}
+      .rightBoxBtn{padding: calc(5px + 0.2vh); font-size: calc(1rem + 1.3vh); background: white; border-radius: 50%; box-shadow: calc(2px + 0.1vh) calc(2px + 0.1vh) calc(2px + 0.3vh) var(--color-black1);}
+      .rightZoom{
+        flex-direction: column; gap: 1px;
+        & .rightBoxBtn{border-radius: calc(1px + 0.2vh);}
+      }
+
+      /*rightTopBox*/
+      .rightTopBox{position: absolute; top: 1vh; right: 1vw; display: flex; align-items: center; flex-direction: column; gap: calc(5px + 0.3vh);}
+      .rightTopBoxBtn{padding: calc(4px + 0.2vh); font-size: calc(1rem + 1.3vh); background: white; border-radius: calc(4px + 0.5vh); box-shadow: calc(2px + 0.1vh) calc(2px + 0.1vh) calc(2px + 0.3vh) var(--color-black1);}
+
+      /*rigntBottomBox*/
+      .rigntBottomBox{position: absolute; bottom: calc(5px + 1vh); right: 1vw; display: flex;}
+
+      /*tool window base*/
+      .toolParent{position: absolute; border-radius: 0.6vh 0.6vh 0 0; box-shadow: 0.3vh 0.3vh 1vh var(--color-black1); z-index: 1;}
+      .toolTitle{display: flex; align-items: center; background: black; color: white; border-radius: 0.6vh 0.6vh 0 0; padding: 0.3vh 0.6vh; font-weight: bold; font-size: calc(1rem + 0.4vh);}
+      .toolContent{display: flex; background: var(--color-white1); padding: calc(5px + 0.2vh); gap: calc(5px + 0.2vh); font-size: calc(1rem + 0.2vh);}
+      .toolContentChild{display: flex;}
+      .toolMove{display: flex; gap: calc(2px + 0.2vw); cursor: move; flex-grow: 1;}
+      .toolClose{display: flex; cursor: pointer; & *{cursor: pointer;}}
+
+      /*layergroup*/
+      .toolLayergroup{
+        display: none; top: 4vh; right: calc(3rem + 1.5vh + 1vw);
+        & .toolContent{flex-direction: column; gap: calc(4px + 0.5vh); width: calc(210px + 3vw); overflow-y: scroll; height: calc(230px + 10vh); padding-right: calc(2px + 0.2vh);}
+      }
+      .tabGroup{flex-direction: column; gap: calc(4px + 0.5vh);}
+      .tabInput{display: none;}
+      .tabTitle{
+        display: flex; border-radius: calc(3px + 0.2vh); background: var(--color-gray2); padding: calc(1px + 0.2vh); box-shadow: 0.1vh 0.1vh 0.3vh black; font-size: calc(1rem + 0.5vh); font-weight: bold; cursor: pointer;
+        & > i{margin-right: 0.4vh;} 
+        & > :first-child{display: flex;} & > :last-child{display: none;}
+      }
+      .tabContent{display: none; gap: calc(5px + 0.2vh); padding-left: calc(5px + 0.2vw);}
+      .tabInput:checked + .tabTitle{ & >:first-child{display: none;} & >:last-child{display: flex;}}
+      .tabInput:checked + .tabTitle + .tabContent{display: flex;}
+
+      .layerTabContent{flex-direction: column;}
+      .layerInput{display: none;}
+      .layerBtn{
+        display: flex; gap: 5px; width: 95%; background: white; border-radius: calc(3px + 0.2vh); padding: calc(1px + 0.2vh); box-shadow: 0.1vh 0.1vh 0.3vh black; border: calc(1px + 0.1vh) solid black; cursor: pointer;
+        & :nth-child(1){display: flex;} & :nth-child(2){display: none;}
+      }
+      .layerInput:checked + .layerBtn{ & :nth-child(1){display: none;} & :nth-child(2){display: flex;} }
+      .basemapTabContent{flex-wrap: wrap;}
+      .basemapInput{display: none;}
+      .basemapBtn{display: flex; flex-direction: column; align-items: center; justify-content: center; width: calc(80px + 1.5vw); background: white; padding: calc(1px + 0.2vh); border: calc(1px + 0.2vh) solid transparent; border-radius: calc(3px + 0.2vh); box-shadow: 0.1vh 0.3vh 0.4vh var(--color-black1); cursor: pointer; & img{width: 90%;}}
+      .basemapInput:checked + .basemapBtn{border: calc(1px + 0.2vh) solid black;}
+
+      /* measure */
+      .toolMeasure{display: none; top: calc(280px + 15vh); right: calc(3rem + 1.5vh + 1vw);}
+      .measureToolBtn{flex-direction: column; gap: 5px; background: white; border-radius: calc(5px + 0.3vh); padding: calc(4px + 0.1vh); box-shadow: 0.2vh 0.2vh 0.4vh var(--color-black1); /*& div{line-height: 2.6vh;}*/}
+      .inputHide[type="radio"]:checked + .measureToolBtn{border: 0.3vh solid; background: var(--color-gray3); scale: 0.9; box-shadow: 0 0 0;}
+      .measureToolUnit{background: var(--color-gray3); box-shadow: 0.2vh 0.2vh 0.3vh black !important; border: 0.3vh solid; border-color: black !important;}
+      .inputHide:checked + .measureToolUnit{scale: 1;}
+
+      /*rightClickMenu*/
+      .rightClickMenu{background: var(--color-white1); box-shadow: calc(2px + 0.1vh) calc(2px + 0.1vh) calc(2px + 0.3vh) var(--color-black1); padding: calc(5px + 0.2vh); border-radius: calc(3px + 0.2vh); & hr{margin: 0;}}
+      .rightClickOption{display: flex; gap: calc(2px + 0.2vw); cursor: pointer; user-select: none; font-size: calc(1rem + 0.3vh); padding: calc(2px + 0.1vh) calc(2px + 0.3vh);}
+      .rightClickOption:hover{background: var(--color-gray1); color: white;}
+
+      /*scaleline*/
+      .ol-scale-singlebar{min-height: calc(3px + 1vh);}
+      .ol-scale-step-text{font-size: calc(8px + 0.4vh); font-weight: bold;}
+      .ol-scale-bar{bottom: 2vh; left: 1.5vh;}
+
+      /*mouseXYDiv*/
+      .mouseXYDiv{
+        min-height: calc(0.9rem + 1vh); display: flex; justify-content: center; font-family: monospace; font-weight: bold; padding: calc(2px + 0.3vh); background: white; border-radius: calc(2px + 0.2vh); font-size: calc(0.9rem + 0.5vh); font-weight: bold; box-shadow: 0.2vh 0.2vh 0.4vh black;
+        & label{display: flex; justify-content: center; flex-direction: row-reverse; gap: calc(2px + 0.2vw); border: 0; cursor: pointer;}
+        .inputHide + label:hover{border: 0;}
+        .inputHide + label:active{scale: 1 !important; border: 0;}
+        .inputHide:checked + label{scale: 1 !important; border: 0;}
+      }
+      .mouseXYOverlay{font-size: calc(0.9rem + 0.5vh); font-family: monospace; font-weight: bold; padding: calc(2px + 0.3vh); background: var(--color-white1); border-radius: calc(2px + 0.2vh); white-space: nowrap; box-shadow: 0.2vh 0.2vh 0.4vh black; user-select: none;}
+
+      /*leftTopGoYXBox*/
+      .leftTopGoYXBox{position: absolute; top: calc(5px + 1vh); left: 1vw; display: flex; justify-content: center; gap: calc(3px + 0.3vw); padding: calc(4px + 0.6vh) calc(3px + 0.4vh); background: var(--color-white1); box-shadow: 0.3vh 0.3vh 1vh var(--color-black1); border-radius: calc(2px + 0.2vh);}
+      .leftTopGoYXTip{display: flex; align-items: center; font-size: calc(1rem + 0.2vh); font-weight: bold;}
+      .leftTopGoYXText{font-size: calc(1rem + 0.2vh);width: calc(12rem + 2.4vh);}
+      .leftTopGoYXBtn{display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 1rem; background: var(--color-gray2); aspect-ratio: 1 / 1; padding: calc(1px + 0.1vw); border-color: black !important;}
+    </style>
+  </head>
+
+  <body>
+    <div id="map" class="map"></div>
+    <!-- 右側小工具 -->
+    <div class="rightBox">
+      <div class="flex"><input type="button" class="inputHide"><label id="rightCompass" class="rightBoxBtn"><i class="hoone hoone-compass"></i></label></div>
+      <div class="flex"><input type="checkbox" id="rightLayerLonlat" class="inputHide"><label for="rightLayerLonlat" class="rightBoxBtn"><i class="hoone hoone-3dmap"></i></label></div>
+      <div class="rightZoom flex">
+        <div class="flex"><input type="button" id="rightZoomIn" class="inputHide"><label for="rightZoomIn" class="rightBoxBtn"><i class="hoone hoone-plus"></i></label></div>
+        <div class="flex"><input type="button" id="rightZoomOut" class="inputHide"><label for="rightZoomOut" class="rightBoxBtn"><i class="hoone hoone-minus"></i></label></div>  
+      </div>
+      <div class="flex"><input type="button" id="rightHome" class="inputHide"><label for="rightHome" class="rightBoxBtn"><i class="hoone hoone-home"></i></label></div>
+    </div>
+    <!-- 右上側小工具 -->
+    <div class="rightTopBox">
+      <div class="flex"><input type="checkbox" id="rightTopLayergroup" class="inputHide" onchange="openToolLayergroup(this.checked);"><label for="rightTopLayergroup" class="rightTopBoxBtn"><i class="hoone hoone-map"></i></label></div>
+      <div class="flex"><input type="checkbox" id="rightTopMeasure" class="inputHide"><label for="rightTopMeasure" class="rightTopBoxBtn"><i class="hoone hoone-ruler"></i></label></div>
+    </div>
+    <!-- 右下側小工具 -->
+    <div class="rigntBottomBox">
+      <div id="mouseXYDiv" class="mouseXYDiv">
+        <label for="mouseXYForOverlay" class="mapToolParent"><i class="hoone hoone-mouse"></i><div id="mouseXY" class="mouseXY">Latitude°N,Longitude°E</div></label>
+      </div>
+    </div>
+    <!-- leftTopGoYXBox -->
+    <div class="leftTopGoYXBox">
+      <div class="leftTopGoYXTip">Y,X</div>
+      <input type="text" id="leftTopGoYXText" class="leftTopGoYXText" placeholder="請輸入緯度(Y),經度(X)">
+      <div class="flex">
+        <input type="button" id="leftTopGoYX" class="inputHide" onclick="LeftTopGoYX.goNzoom();"><label for="leftTopGoYX" class="leftTopGoYXBtn">GO</label>
+      </div>
+    </div>
+    <!-- 圖層列表 -->
+    <div id="toolLayergroup" class="toolLayergroup toolParent">
+      <div class="toolTitle" onmousedown="dragMoveDiv(event, document.getElementById('toolLayergroup'), document.getElementById('map'));">
+        <div class="toolMove"><i class="hoone hoone-map"></i><div>套疊圖層</div></div>
+        <!-- <div class="toolClose"><i class="hoone hoone-close"></i></div> -->
+      </div>
+      <div class="toolContent">
+        <!-- <div class="tabGroup flex">
+          <input type="checkbox" id="tabLayer" class="tabInput">
+          <label for="tabLayer" class="tabTitle"><i class="hoone hoone-up"></i><i class="hoone hoone-down"></i>圖層列表</label>
+          <div class="layerTabContent tabContent">
+            <div class="flex"><input type="checkbox" id="layer1" class="layerInput" onchange="LayerMiddleLine.add(this.checked);"><label for="layer1" class="layerBtn"><i class="hoone hoone-circle-o"></i><i class="hoone hoone-circle"></i>海峽中線</label></div>
+            <div class="flex"><input type="checkbox" id="layer2" class="layerInput" onchange="LayerFir.add(this.checked);"><label for="layer2" class="layerBtn"><i class="hoone hoone-circle-o"></i><i class="hoone hoone-circle"></i>飛航管制區</label></div>
+            <div class="flex"><input type="checkbox" id="layer3" class="layerInput" onchange="LayerRainforecast.add(this.checked);"><label for="layer3" class="layerBtn"><i class="hoone hoone-circle-o"></i><i class="hoone hoone-circle"></i>降雨預報圖</label></div>
+            <div class="flex"><input type="checkbox" id="layer4" class="layerInput" onchange="LayerRainfall.add(this.checked);"><label for="layer4" class="layerBtn"><i class="hoone hoone-circle-o"></i><i class="hoone hoone-circle"></i>即時雨量</label></div>
+            <div class="flex"><input type="checkbox" id="layer5" class="layerInput" onchange="LayerTemper.add(this.checked);"><label for="layer5" class="layerBtn"><i class="hoone hoone-circle-o"></i><i class="hoone hoone-circle"></i>即時溫度</label></div>
+            <div class="flex"><input type="checkbox" id="layer6" class="layerInput" onchange="LayerSeatide.add(this.checked);"><label for="layer6" class="layerBtn"><i class="hoone hoone-circle-o"></i><i class="hoone hoone-circle"></i>潮汐資訊</label></div>
+            <div class="flex"><input type="checkbox" id="layer7" class="layerInput" onchange="LayerTyphoon.add(this.checked);"><label for="layer7" class="layerBtn"><i class="hoone hoone-circle-o"></i><i class="hoone hoone-circle"></i>颱風特報</label></div>
+            <div class="flex"><input type="checkbox" id="layer8" class="layerInput" onchange="LayerTsunami.add(this.checked);"><label for="layer8" class="layerBtn"><i class="hoone hoone-circle-o"></i><i class="hoone hoone-circle"></i>海嘯警報</label></div>
+          </div>
+        </div> -->
+        <div class="tabGroup flex">
+          <input type="checkbox" id="tabBasemap" class="tabInput" checked>
+          <label for="tabBasemap" class="tabTitle"><i class="hoone hoone-up"></i><i class="hoone hoone-down"></i>底圖切換</label>
+          <div class="basemapTabContent tabContent">
+            <div class="flex"><input type="radio" name="basemap" id="basemap1" class="basemapInput" onchange="Basemap.change('standard');" checked><label for="basemap1" class="basemapBtn">通用地圖<img src="/image/map_standard.png" alt="通用地圖"></label></div>
+            <div class="flex"><input type="radio" name="basemap" id="basemap6" class="basemapInput" onchange="Basemap.change('osm');"><label for="basemap6" class="basemapBtn">開放街圖<img src="/image/map_osm.png" alt="開放街圖"></label></div>
+            <div class="flex"><input type="radio" name="basemap" id="basemap7" class="basemapInput" onchange="Basemap.change('google');"><label for="basemap7" class="basemapBtn">Google<img src="/image/map_google.png" alt="Google"></label></div>
+            <div class="flex"><input type="radio" name="basemap" id="basemap2" class="basemapInput" onchange="Basemap.change('grey');"><label for="basemap2" class="basemapBtn">灰色地圖<img src="/image/map_grey.png" alt="灰色地圖"></label></div>
+            <div class="flex"><input type="radio" name="basemap" id="basemap3" class="basemapInput" onchange="Basemap.change('transparent');"><label for="basemap3" class="basemapBtn">深色地圖<img src="/image/map_transparent.png" alt="深色地圖"></label></div>
+            <div class="flex"><input type="radio" name="basemap" id="basemap4" class="basemapInput" onchange="Basemap.change('satellite');"><label for="basemap4" class="basemapBtn">衛星航照<img src="/image/map_satellite.png" alt="衛星航照"></label></div>
+            <div class="flex"><input type="radio" name="basemap" id="basemap5" class="basemapInput" onchange="Basemap.change('terrain');"><label for="basemap5" class="basemapBtn">地形圖<img src="/image/map_terrain.png" alt="地形圖"></label></div>
+            <div class="flex"><input type="radio" name="basemap" id="basemap8" class="basemapInput" onchange="Basemap.change('thunderforest');"><label for="basemap8" class="basemapBtn">雷森地圖<img src="/image/map_thunderforest.png" alt="雷森地圖"></label></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 測量 -->
+    <div id="toolMeasure" class="toolMeasure toolParent">
+      <div class="toolTitle">
+        <div class="toolMove" onmousedown="dragMoveDiv(event, document.getElementById('toolMeasure'), document.getElementById('map'));"><i class="hoone hoone-ruler"></i><div>測量工具</div></div>
+        <div class="toolClose"><input type="button" id="measureClose" class="inputHide"><label for="measureClose"><i class="hoone hoone-close"></i></label></div>
+      </div>
+      <div class="toolContent">
+        <div class="flex"><input type="checkbox" id="measureUnit" class="inputHide"><label for="measureUnit" class="measureToolBtn measureToolUnit"><i class="hoone hoone-playback"></i><div id="unitTip">公里</div></label></div>
+        <div class="flex"><input type="radio" id="measureLine" class="inputHide" name="measureType"><label for="measureLine" class="measureToolBtn"><i class="hoone hoone-polyline"></i><div>長度</div></label></div>
+        <div class="flex"><input type="radio" id="measurePolygon" class="inputHide" name="measureType"><label for="measurePolygon" class="measureToolBtn"><i class="hoone hoone-polygon"></i><div>面積</div></label></div>
+        <div class="flex"><input type="radio" id="measureCircle" class="inputHide" name="measureType"><label for="measureCircle" class="measureToolBtn"><i class="hoone hoone-circle-o"></i><div>EBL</div></label></div>
+        <div class="flex"><input type="button" id="measureClear" class="inputHide"><label for="measureClear" class="measureToolBtn"><i class="hoone hoone-trashcan"></i><div>清除</div></label></div>
+      </div>
+    </div>
+    <!-- 右鍵點擊事件 -->
+    <div id="rightClickMenu" class="rightClickMenu"></div>
+
+    <script type="text/javascript" src="/js/html2canvas.min.js"></script>
+    <script type="text/javascript" src="/js/ol10.4.0.js"></script>
+    <script type="text/javascript" src="/js/proj4.js"></script>
+
+    <script>
+      // #region 地圖參數及常用功能
+
+      // initProjection
+      function initProjection(){
+        proj4.defs("EPSG:3824", "+proj=longlat +ellps=GRS80 +no_defs +type=crs");
+        proj4.defs("EPSG:3825", "+proj=tmerc +lat_0=0 +lon_0=119 +k=0.9999 +x_0=250000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
+        proj4.defs("EPSG:3826", "+proj=tmerc +lat_0=0 +lon_0=121 +k=0.9999 +x_0=250000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
+        proj4.defs("EPSG:3827", "+proj=tmerc +lat_0=0 +lon_0=119 +k=0.9999 +x_0=250000 +y_0=0 +ellps=aust_SA +units=m +no_defs");
+        proj4.defs("EPSG:3828", "+proj=tmerc +lat_0=0 +lon_0=121 +k=0.9999 +x_0=250000 +y_0=0 +ellps=aust_SA +units=m +no_defs");
+        proj4.defs("EPSG:4326", "+proj=longlat +datum=WGS84 +no_defs");
+        proj4.defs("EPSG:3857", "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs");
+        ol.proj.proj4.register(proj4);
+      }
+
+      // 參數設置
+      let map; // init map
+      let mapCenterDefault;
+      let mapZoomLevelDefault;
+      // let mapCenterDynamic;
+      // let mapZoomLevelDynamic;
+      let userscale;
+      let autoMousePosition; // 全域變數存取滑鼠位置事件
+
+      // drag and move div
+      function dragMoveDiv(e, moveDiv, parentDiv) {
+        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        let translateX = 0, translateY = 0;
+
+        // 根據當前的 transform 值初始化位置
+        const transformValues = moveDiv.style.transform.match(/translate\(([^px]+)px, ([^px]+)px\)/);
+        if (transformValues) {
+          translateX = parseFloat(transformValues[1]);
+          translateY = parseFloat(transformValues[2]);
+        }
+
+        // 計算初始 top 和 left 值
+        const initialTop = moveDiv.offsetTop;
+        const initialLeft = moveDiv.offsetLeft;
+
+        dragMouseDown(e);
+
+        function dragMouseDown(e) {
+          e = e || window.event;
+          e.preventDefault();
+          pos3 = e.clientX;
+          pos4 = e.clientY;
+          document.onmouseup = closeDragElement;
+          document.onmousemove = elementDrag;
+        }
+
+        function elementDrag(e) {
+          e = e || window.event;
+          e.preventDefault();
+          pos1 = pos3 - e.clientX;
+          pos2 = pos4 - e.clientY;
+          pos3 = e.clientX;
+          pos4 = e.clientY;
+
+          // 計算新位置
+          translateX -= pos1;
+          translateY -= pos2;
+
+          if (translateY < -initialTop) translateY = -initialTop;
+          if (translateX < -initialLeft) translateX = -initialLeft;
+
+          let parentRect, moveDivRect;
+          if(parentDiv){
+            // 獲取指定父 div 的邊界
+            parentRect = parentDiv.getBoundingClientRect();
+            moveDivRect = moveDiv.getBoundingClientRect();
+            // 確保新位置在指定父 div 內
+            if (translateY + moveDivRect.height > parentRect.height - initialTop) translateY = parentRect.height - moveDivRect.height - initialTop;
+            if (translateX + moveDivRect.width > parentRect.width - initialLeft) translateX = parentRect.width - moveDivRect.width - initialLeft;
+          }
+
+          moveDiv.style.transform = `translate(${translateX}px, ${translateY}px)`;
+          moveDiv.style.margin = "0";
+          moveDiv.style.bottom = "inherit";
+          moveDiv.style.right = "inherit";
+          moveDiv.style.top = `${initialTop}px`;
+          moveDiv.style.left = `${initialLeft}px`;
+        }
+
+        function closeDragElement() {
+          document.onmouseup = null;
+          document.onmousemove = null;
+        }
+      }
+
+      // 底圖
+      class Basemap {
+        static #layer = null;
+        static #dict = {
+          standard: {type: "wmts", url: "https://wmts.nlsc.gov.tw/wmts/EMAP5/default/EPSG:3857/{z}/{y}/{x}"},
+          grey: {type: "wmts", url: "https://wmts.nlsc.gov.tw/wmts/EMAP01/default/EPSG:3857/{z}/{y}/{x}"},
+          transparent: {type: "wmts", url: "https://wmts.nlsc.gov.tw/wmts/EMAP2/default/EPSG:3857/{z}/{y}/{x}.png"},
+          satellite: {type: "wmts", url: "https://wmts.nlsc.gov.tw/wmts/PHOTO2/default/EPSG:3857/{z}/{y}/{x}.png"},
+          terrain: {type: "wmts", url: "https://wmts.nlsc.gov.tw/wmts/PHOTO_MIX/default/EPSG:3857/{z}/{y}/{x}.png"},
+          thunderforest: {type: "wmts", url: "https://a.tile.thunderforest.com/cycle/{z}/{x}/{y}@2x.png?apikey=6170aad10dfd42a38d4d8c709a536f38"},
+          osm: {type: "wmts", url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png"},
+          mpb: {type: "wms", url: "https://enccenter.ntou.edu.tw/dgds/wms_ip/MPB-aton/wms", params: { LAYERS: "cells" }},
+          google: {type: "wmts", url: "https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}"},
+        };
+
+        static async default(){
+          const defaultMap = "standard"; // 設定初始化地圖
+          this.#layer = new ol.layer.Tile({ source: this.sourceCreate(defaultMap) });
+          return this.#layer;
+        }
+        static sourceCreate(name){
+          switch (this.#dict[name].type) {
+            case "wmts":
+              return new ol.source.XYZ({ url: this.#dict[name].url, crossOrigin: "anonymous", maxZoom: 20 });
+              break;
+            case "wms":
+              return new ol.source.TileWMS({ url: this.#dict[name].url, params: this.#dict[name].params, /*serverType: "geoserver", transition: 0*/ });
+              break;
+            default: break;
+          }
+        }
+        static change(name){
+          if(!this.#layer){ throw new Error("basemap have not init yet"); }
+          this.#layer.setSource( this.sourceCreate(name) );
+        }
+        static opacity(value) {
+          value = Number(value);
+          if (value < 0 || value > 1) { throw new Error("opacity should be (0 <= value =< 1)"); }
+          this.#layer.setOpacity(value);
+        }
+      }
+
+      class MapFormula {
+        // 兩點找方位角
+        static calculateBearing(pointA, pointB) {
+            const phi1 = pointA[1] * Math.PI / 180;
+            const phi2 = pointB[1] * Math.PI / 180;
+            const lambda1 = pointA[0] * Math.PI / 180;
+            const lambda2 = pointB[0] * Math.PI / 180;
+            const y = Math.sin(lambda2 - lambda1) * Math.cos(phi2);
+            const x = Math.cos(phi1) * Math.sin(phi2) - Math.sin(phi1) * Math.cos(phi2) * Math.cos(lambda2 - lambda1);
+            let bearing = Math.atan2(y, x);
+            bearing = bearing * 180 / Math.PI;
+            bearing = (bearing + 360) % 360; // Normalize to 0-360 degrees
+            return bearing;
+        }
+
+        // 弧度轉角度
+        static radiansToDegrees(radians) {
+          const degrees = radians * (180 / Math.PI);
+          return degrees;
+        }
+
+        // 角度控制在0~360
+        static degreesTo360(degrees) {
+          degrees = degrees % 360;
+          if (degrees < 0) { degrees += 360; } 
+          // else if (degrees > 360) { degrees -= 360; }
+          if (degrees >= 360) { degrees -= 360; } 
+          return degrees;
+        }
+
+        // 角度轉弧度
+        static degreesToRadians(degrees) {
+          let radians = (degrees * Math.PI / 180) % (2 * Math.PI);
+          if (radians > Math.PI) { radians -= 2 * Math.PI; }
+          else if (radians < -Math.PI) { radians += 2 * Math.PI; }
+          // console.log(radians);
+          return radians;
+        }
+
+        // 將橢球長度轉半徑投影長度 // center 必須要帶入3857座標
+        static geodesicRadiusToProjectedRadius(center, geodesicRadius) {
+          // ** 估算校正係數 (scaleFactor)，隨緯度變化 **
+          const latitude = ol.proj.transform(center, 'EPSG:3857', 'EPSG:4326')[1]; // 取得緯度
+          const scaleFactor = 1 / Math.cos((latitude * Math.PI) / 180); // Web Mercator 縮放修正
+          // 直接用比例換算投影半徑
+          return geodesicRadius * scaleFactor;
+        }
+
+        // 將投影長度改成橢球長度 // center 必須要帶入3857座標
+        static projectedRadiusToGeodesicRadius(center, radius) {
+          // 方法一:在投影系統 (3857) 中向東或西偏移 radius
+          const line = new ol.geom.LineString([center, [center[0]>0 ? center[0]-radius : center[0]+radius , center[1]]]);
+          // // 方法二:中心點與點擊位置的連線
+          // const line = new ol.geom.LineString([center, autoMousePosition["coordinate"]]);
+
+          // 計算橢球體上的實際長度
+          return ol.sphere.getLength(line);
+        }
+
+        // 方法三:利用resolution及getPointResolution計算
+        // static projectedRadiusToGeodesicRadius(radius){
+        //   const resolution = map.getView().getResolution();
+        //   const center = map.getView().getCenter();
+        //   const projection = map.getView().getProjection();
+        //   return ol.proj.getPointResolution(projection, resolution, center);
+        // }
+
+        // 轉度分秒
+        static wgs84toDMS(xyArray, getArray){
+          const x = xyArray[0];
+          const y = xyArray[1];
+          if(getArray){ return [this.d2dms(y), this.d2dms(x)]; }
+
+          return `${this.d2dms(y)}, ${this.d2dms(x)}`;
+        }
+        static d2dms(oldD){
+          let np = ""
+          if(oldD < 0){ np = "-"; }
+          const d = Math.floor(Math.abs(oldD));
+          const m = Math.floor((Math.abs(oldD) - d) * 60);
+          let s = (((Math.abs(oldD) - d) * 60) - m) * 60;
+          s = s.toFixed(2);
+          return `${np}${d}°${String(m).padStart(2, "0")}'${String(s).padStart(5, "0")}"`;
+        }
+
+        // 各類型繪圖測量數據
+        static formatMeasure(geom, type, unit, featureForBearing){
+          let length, area, center, radiusProject, radius, radiusPoint, bearing;
+          let outputLength, outputArea, outputRadius;
+          switch (type) {
+            case "LineString":
+              length = ol.sphere.getLength(geom);
+              if(unit === "nautical"){ outputLength = Math.round(((length / 1000) * 100) / 1.852) / 100 + " 海浬";}
+              else{
+                if(length > 1000){ outputLength = Math.round((length / 1000) * 1000) / 1000 + " 公里"; }
+                else{ outputLength = Math.round(length * 1000) / 1000 + " 公尺"; }
+              }
+              return outputLength;
+            case "Polygon":
+              area = ol.sphere.getArea(geom);
+              if(unit === "nautical"){ outputArea = Math.round((area / 1000000) * 100 * 103.102) / 100 + " 甲"; }
+              else{
+                if(area > 1000000){ outputArea = Math.round((area / 1000000) * 10000) / 10000 + " km\xB2"; }
+                else{ outputArea = Math.round(area * 10000) / 10000 + " m\xB2"; }
+              }
+              return outputArea;
+            case "Circle":
+              center = geom.getCenter();
+              radiusProject = geom.getRadius();
+              radius = this.projectedRadiusToGeodesicRadius(center, radiusProject);
+              area = Math.PI * Math.pow(radius, 2);
+              if(unit === "nautical"){ outputRadius = Math.round(((radius / 1000) * 100) / 1.852) / 100 + " 海浬"; }
+              else{
+                if(radius > 1000){ outputRadius = Math.round((radius / 1000) * 1000) / 1000 + " 公里"; }
+                else{ outputRadius = Math.round(radius * 1000) / 1000 + " 公尺"; }
+              }
+              if(unit === "nautical"){ outputArea = Math.round((area / 1000000) * 100 * 103.102) / 100 + " 甲"; }
+              else{
+                if(area > 1000000){ outputArea = Math.round((area / 1000000) * 1000) / 1000 + " km\xB2"; }
+                else{ outputArea = Math.round(area * 10000) / 10000 + " m\xB2"; }
+              }
+              // return "半徑:" + outputRadius + "\n" + "面積" + outputArea;
+              if(featureForBearing){ radiusPoint = featureForBearing.get("radiusPoint"); }
+              else{ radiusPoint = autoMousePosition["coordinate"]; }
+              bearing = this.calculateBearing(ol.proj.toLonLat(center), ol.proj.toLonLat(radiusPoint)).toFixed(1);
+              return `半徑:${outputRadius}\n方位角:${bearing}°`;
+            default: break;
+          }
+        }
+      }
+      // #endregion 地圖參數及常用功能
+    </script>
+
+    <script>
+      // #region 地圖按鈕及工具
+
+      class MapFunction {
+        // zoom to center
+        static async zoomAnimate({ center, zoom, proj }) {
+          // 如果沒有給定中心點及縮放層級，就給予預設值(全域變數)
+          if(!zoom){ zoom = mapZoomLevelDefault; }
+          if(!center){ center = ol.proj.transform(mapCenterDefault, "EPSG:4326", "EPSG:3857"); }
+          if(proj){ center = ol.proj.transform(center, proj, "EPSG:3857"); }
+          await map.getView().animate({center: center, zoom: zoom, duration: 700});
+        }
+
+        // fit or zoom
+        static fitOrZoom(geom){
+          const geomExtent = geom.getExtent();
+          const center = [(geomExtent[0] + geomExtent[2]) / 2, (geomExtent[1] + geomExtent[3]) / 2];
+          
+          // 創建虛擬地圖來計算
+          let tempMap = new ol.Map({ target: "map", view: new ol.View({
+            projection: "EPSG:3857",
+            center: center,
+            zoom: 12
+          })});
+          const level10Extent = tempMap.getView().calculateExtent(tempMap.getSize());
+          const level10XDiff = Math.abs(level10Extent[2] - level10Extent[0]);
+          const level10YDiff = Math.abs(level10Extent[3] - level10Extent[1]);
+
+          // 判斷帶入的geom，其extent比 level 10 大還小
+          const geomXDiff = Math.abs(geomExtent[2] - geomExtent[0]);
+          const geomYDiff = Math.abs(geomExtent[3] - geomExtent[1]);
+
+          // 刪除tempMap
+          tempMap.setTarget(null);
+          tempMap = null;
+          // document.getElementById("map").querySelectorAll(".ol-viewport")[1].remove();
+
+          // console.log(geomXDiff, level10XDiff);
+          // 如果都比較小就用 level 10 帶中心點去 zoom
+          if(geomXDiff < level10XDiff && geomYDiff < level10YDiff ){ MapFunction.zoomAnimate({ center: center, zoom: 12 }); return; }
+          // 如果其中一個比較大就要把 extent 各加上 幾% 去 fit
+          const bigPercent = 1.3;
+          const newExtent = [ center[0] - (geomXDiff/2)*bigPercent, center[1] - (geomYDiff/2)*bigPercent, center[0] + (geomXDiff/2)*bigPercent, center[1] + (geomYDiff/2)*bigPercent ];
+          map.getView().fit(newExtent, { duration: 200 });
+        }
+
+        // 地圖暫停移動及縮放
+        static mapMoveActive(active){
+          map.getInteractions().getArray().forEach(interaction => {
+            if (interaction instanceof ol.interaction.DragPan ||
+              interaction instanceof ol.interaction.DoubleClickZoom ||
+              interaction instanceof ol.interaction.PinchZoom ||
+              interaction instanceof ol.interaction.MouseWheelZoom ||
+              interaction instanceof ol.interaction.DragZoom)
+            {
+              interaction.setActive(active);
+            }
+          });
+        }
+
+        // 回到原點
+        static ZoomHome = class{
+          static #btn = null;
+
+          static init({ ele }){
+            this.#btn = ele;
+            this.#btn.addEventListener("click", ()=>{ MapFunction.zoomAnimate({}); });
+          }
+        }
+
+        // zoom +/-
+        static ZoomMode = class{
+          static #btnIn = null;
+          static #btnOut = null;
+
+          static init({ eleIn, eleOut }){
+            this.#btnIn = eleIn;
+            this.#btnOut = eleOut;
+            this.#btnIn.addEventListener("click", ()=>{ this.zoom({ mode: "in" }); });
+            this.#btnOut.addEventListener("click", ()=>{ this.zoom({ mode: "out" }); });
+          }
+
+          static zoom({ mode, center }){
+            if(!center){ center = map.getView().getCenter(); }
+            let zoom = map.getView().getZoom();
+            if (mode == "in"){ zoom += 1; } 
+            else { zoom -= 1; }
+            map.getView().animate( {center: center, zoom: zoom, duration: 200} );
+          }
+        }
+
+        // 比例尺
+        static CalculateScaleNm = class{
+          static #div = null;
+
+          static init(ele){
+            this.#div = ele;
+          }
+          static scale({ ele }){
+            if(!this.#div){ this.init(ele); }
+            const resolution = map.getView().getResolution();
+
+            const center = map.getView().getCenter();
+            const projection = map.getView().getProjection();
+            const scalePer100px2Nm = ol.proj.getPointResolution(projection, resolution, center) * 100 / 1852;
+
+            if(scalePer100px2Nm < 0.1){
+              this.#div.innerHTML = scalePer100px2Nm.toFixed(2) + " NM";
+              this.#div.style.width = "100px";
+            }else if(scalePer100px2Nm < 1){
+              this.#div.innerHTML = Math.floor(scalePer100px2Nm * 10) / 10 + " NM";
+              this.#div.style.width = (100 / scalePer100px2Nm) * Math.floor(scalePer100px2Nm * 10) / 10 + "px";
+            }else{
+              this.#div.innerHTML = Math.floor(scalePer100px2Nm) + " NM";
+              this.#div.style.width = (100 / scalePer100px2Nm) * Math.floor(scalePer100px2Nm) + "px";
+            }
+          }
+        }
+
+        // 內建比例尺
+        static ScaleDefault = class{
+          constructor(){ this.scale = null; }
+
+          // static add({ ele }){
+          //   this.scale = new ol.control.ScaleLine({ target: ele, units: "nautical", maxWidth: 100 });
+          //   map.addControl(this.scale);
+          // }
+          static add(){
+            this.scale = new ol.control.ScaleLine({ units: "metric", bar: true, steps: 2 });
+            map.addControl(this.scale);
+          }
+          // unit >>> metric(default) degrees imperial nautical us
+          static unitChange(unit){ this.scale.setUnits(unit); }
+        }
+
+        // 滑鼠座標顯示 // 無浮動座標
+        // static MouseMove = class{
+        //   static #div = null;
+
+        //   static init(ele){
+        //     this.#div = ele;
+        //   }
+        //   static move(evt, { ele }){
+        //     if(!this.#div){ this.init(ele); }
+        //     const coordinate = ol.proj.toLonLat(evt.coordinate);
+        //     let lon = coordinate[0];
+        //     let lat = coordinate[1];
+        //     const EW = lon > 0 ? "E": "W";
+        //     const NS = lat > 0 ? "N": "S";
+        //     lon = Math.abs(lon).toFixed(5);
+        //     lat = Math.abs(lat).toFixed(5);
+        //     this.#div.innerHTML = `${lat}°${NS},${lon}°${EW}`;
+        //   }
+        // }
+        // 滑鼠座標顯示 // 有浮動座標
+        static MouseMove = class{
+          static #div = null;
+          static #input = null;
+          static #overlaydiv = null;
+          static #overlay = null;
+
+          static init(ele){
+            ele.innerHTML = `<input type="checkbox" id="mouseXYForOverlay" class="inputHide"><label for="mouseXYForOverlay" class="mapToolParent"><i class="hoone hoone-mouse"></i><div id="mouseXY" class="mouseXY">Latitude°N,Longitude°E</div></label><div id="mouseXYOverlay" class="mouseXYOverlay">Longitude°E,Latitude°N</div>`;
+            this.#div = document.getElementById("mouseXY");
+            this.#input = document.getElementById("mouseXYForOverlay");
+            this.#overlaydiv = document.getElementById("mouseXYOverlay");
+            this.#overlay = new ol.Overlay({ element: this.#overlaydiv, offset: [8,-30] });
+            // map.addOverlay(this.#overlay);
+            this.#input.addEventListener("change", (evt)=>{ this.overlay(evt.target.checked); });
+          }
+          static move(evt, { ele }){
+            if(!this.#div){ this.init(ele); }
+            const coordinate = ol.proj.toLonLat(evt.coordinate);
+            let lon = coordinate[0];
+            let lat = coordinate[1];
+            const EW = lon > 0 ? "E": "W";
+            const NS = lat > 0 ? "N": "S";
+            lon = Math.abs(lon).toFixed(5);
+            lat = Math.abs(lat).toFixed(5);
+            this.#div.innerHTML = `${lat}°${NS},${lon}°${EW}`;
+            //
+            this.#overlaydiv.innerHTML = `${lat}°${NS},${lon}°${EW}`;
+            this.#overlay.setPosition(evt.coordinate);
+          }
+          static overlay(checked){
+            if(checked){ map.addOverlay(this.#overlay); this.#div.style.display = "none"; }
+            else{ map.removeOverlay(this.#overlay); this.#div.style.display = "block"; }
+          }
+        }
+
+        // 開啟經緯度網格線
+        static LayerLonlat = class{
+          static #btn = null;
+          static #layer = null;
+
+          static init({ ele }){
+            this.#btn = ele;
+            this.#layer = new ol.layer.Graticule({
+              strokeStyle: new ol.style.Stroke({ color: "rgba(0,0,0,0.3)", width: 2, lineDash: [20, 10] }),
+              showLabels: true,
+              lonLabelPosition: 0.85,
+              latLabelPosition: 0.25,
+              extent: ol.proj.transformExtent([115, 18, 126, 29],"EPSG:4326", "EPSG:3857"),
+              latLabelStyle: new ol.style.Text({ font: "12px Calibri,sans-serif", textAlign: "end", fill: new ol.style.Fill({ color: "rgba(93,239,96,0.8)" }), stroke: new ol.style.Stroke({ color: "rgba(0,0,0,0.7)", width: 3 }) }),
+              lonLabelStyle: new ol.style.Text({ font: "12px Calibri,sans-serif", textBaseline: "bottom", fill: new ol.style.Fill({ color: "rgba(93,239,96,0.8)" }), stroke: new ol.style.Stroke({ color: "rgba(0,0,0,0.7)", width: 3 }) }),
+              zIndex: 50
+            });
+            this.#btn.addEventListener("change", ()=>{ this.add(this.#btn.checked) });
+          }
+          static add(checked) {
+            if (checked) { map.addLayer(this.#layer); }
+            else { map.removeLayer(this.#layer); }
+          }
+        }
+
+        // 指北針
+        static Compass = class{
+          static #btn = null;
+          static #icon = null;
+          static #tip = null;
+          //
+          static init(eleDiv, eleTip){
+            this.#btn = eleDiv;
+            this.#btn.innerHTML = `<i class="hoone hoone-compass"></i>`;
+            this.#btn.style.borderRadius = "100%";
+            this.#icon = this.#btn.querySelector(":first-child");
+            this.#btn.addEventListener("click", ()=>{ this.reset(); });
+            if(eleTip){
+              this.#tip = eleTip;
+              eleTip.addEventListener("change", (evt)=>{ this.change(evt.target.value); });
+            }
+          }
+
+          static rotate({ eleDiv, eleTip }){
+            if(!this.#btn){ this.init(eleDiv, eleTip); }
+            const rotation = map.getView().getRotation();
+            const normalizedRotation = MapFormula.degreesTo360(MapFormula.radiansToDegrees(rotation));
+            // console.log(normalizedRotation);
+            // 轉動指北style
+            this.#icon.style.transform = `rotate(${normalizedRotation}deg)`;
+            // 顯示角度
+            if(this.#tip){ this.#tip.value = normalizedRotation.toFixed(1); }
+          }
+          static reset(){
+            // 地圖重置
+            map.getView().setRotation(0);
+            // 顯示重置
+            this.#icon.style.transform = `rotate(0deg)`;
+            // this.#tip.value = 0;
+          }
+          static change(value){
+            value = Number(value);
+            if(value <= 5 || value >= 355){ this.reset(); this.#tip.value = 0; /*throw new Error("angle should be (5 < value < 355)");*/ }
+            if (value > 360){ value = 360; }
+            else if (value < 0){ value = 0; }
+            map.getView().setRotation(MapFormula.degreesToRadians(value));
+          }
+        }
+
+        // 右鍵功能
+        static RightClick = class{
+          static #div = null;
+          static #overlay = null;
+          static #coord = null;
+
+          static init({ele}){
+            this.#div = ele;
+            this.#overlay = new ol.Overlay({ element: this.#div });
+
+            map.getViewport().addEventListener("contextmenu", (evt) => {
+              evt.preventDefault();
+              this.#coord = map.getEventCoordinate(evt);
+              this.show(this.#coord);
+            });
+            map.on("singleclick", () => {
+              this.show(); // 關閉
+            });
+            this.#div.addEventListener("click", (evt)=>{
+              const option = evt.target.closest(".rightClickOption");
+              if(!option){ return; } // 如果按到的不是選項的話就不執行並跳出
+
+              switch (option.id) {
+                case "rightClickCopy":
+                  navigator.clipboard.writeText(evt.target.textContent); break;
+                case "rightClickZoomIn":
+                  MapFunction.ZoomMode.zoom({ mode: "in", center: this.#coord }); break;
+                case "rightClickZoomOut":
+                  MapFunction.ZoomMode.zoom({ mode: "out", center: this.#coord }); break;
+                case "rightClickGoogle":
+                  window.open('https://www.google.com/maps/search/?api=1&query='+ol.proj.toLonLat(this.#coord,'EPSG:3857').reverse().join(),'_blank');
+                  break;
+                default: break;
+              }
+              this.show(); // 最後關閉 
+            });
+          }
+          static show(coord){
+            this.#div.innerHTML = "";
+            if(!coord){ map.removeOverlay(this.#overlay); this.#coord = null; return; } // 如果沒有座標就關閉刪除overlayer
+            
+            const wgs84 = ol.proj.toLonLat(coord, "EPSG:3857");
+            this.#div.innerHTML = `<div id="rightClickCopy" class="rightClickOption"><i class="hoone hoone-copy"></i>${wgs84[1].toFixed(5)}, ${wgs84[0].toFixed(5)}</div><hr><div id="rightClickZoomIn" class="rightClickOption"><i class="hoone hoone-plus"></i>放大</div><hr><div id="rightClickZoomOut" class="rightClickOption"><i class="hoone hoone-minus"></i>縮小</div><hr><div id="rightClickGoogle" class="rightClickOption"><i class="hoone hoone-pin"></i>Google</div>`;
+            this.#overlay.setPosition(coord);
+            map.addOverlay(this.#overlay);
+          }
+        }
+
+        // 測量
+        static Measure = class{
+          static _measure = null;
+          static _tipText = "點擊開始測量";
+          static _tipPoint = null;
+          static #box = null;
+          static #btn = null;
+          //
+          static init({ eleBox, eleStart }){
+            if(!eleBox){ throw new Error("measure box should be set."); }
+            this.#box = eleBox;
+            //
+            if(eleStart){ 
+              this.#btn = eleStart;
+              this.#btn.addEventListener("change", ()=>{
+                // 先判斷是不是正在使用其他繪圖功能，如果是的話就跳出提示
+                if(MapFunction.Draw._draw){ window.alert("請先結束繪圖再使用測量功能！"); this.#btn.checked = false; return; }
+                if(MapFunction.Draw._screenshot){ window.alert("請先結束截圖功能再使用測量功能！"); this.#btn.checked = false; return; }
+                // 沒有繪圖才可以使用測量
+                if(this.#btn.checked){
+                  this.#box.style.display = "block"; // 先打開測量視窗
+                  // 預設開啟哪一個測量
+                  const defaultType = this.#box.querySelector("#measureLine");
+                  if(!defaultType.checked){ defaultType.checked = true; }
+                  this.start("LineString");
+                }
+                else{ this.stop(); this.#box.style.display = "none"; } // 關閉測量
+              });
+            }
+            //
+            this.#box.addEventListener("click", (evt)=>{
+              const ele = evt.target;
+              if(!ele.classList.contains("inputHide")){ return; } // 如果按到的不是按鈕就跳出
+              switch (ele.id) {
+                case "measureClose": this.#btn.checked = false; this.#btn.dispatchEvent(new Event('change')); break;
+                case "measureLine": if(ele.checked){ this.switch("LineString"); } break;
+                case "measurePolygon": if(ele.checked){ this.switch("Polygon"); } break;
+                case "measureCircle": if(ele.checked){ this.switch("Circle"); } break;
+                case "measureClear": this.clear(); break;
+                case "measureUnit": 
+                  const unitTip = document.getElementById("unitTip");
+                  if(ele.checked){ this.unitChange("nautical"); unitTip.innerHTML = "海浬"; }
+                  else{ this.unitChange("metric"); unitTip.innerHTML = "公里"; }
+                  break;
+                default: break;
+              }
+            });
+          }
+          //
+          static #unit = "metric"; // 預設單位
+          static unitChange(value){
+            this.#unit = value; // 設定單位
+            this.#layer.setStyle( (feature) => this.styleMeasure(feature) ); // 測量數據style動態切換
+            this.#layerEBL.setStyle( (feature) => this.styleMeasure(feature) ); // 測量數據style動態切換
+          }
+          // 可以modify的source
+          static _source = new ol.source.Vector();
+          static #layer = null;
+          // EBL測量不可modify
+          static _sourceEBL = new ol.source.Vector();
+          static #layerEBL = null;
+          static styleMeasure(feature, measureType){ // 有measureType是繪測量時用的
+            const styleList = [];
+            const geometry = feature.getGeometry();
+            const type = geometry.getType();
+            //
+            let point, label, line, radius;
+            if (!measureType || measureType === type || type === "Point") {
+              switch (type) {
+                case "LineString":
+                  point = new ol.geom.Point(geometry.getLastCoordinate());
+                  label = MapFormula.formatMeasure(geometry, type, this.#unit);
+                  line = geometry;
+                  break;
+                case "Polygon":
+                  point = geometry.getInteriorPoint();
+                  label = MapFormula.formatMeasure(geometry, type, this.#unit);
+                  line = new ol.geom.LineString(geometry.getCoordinates()[0]);
+                  break;
+                case "Circle":
+                  point = new ol.geom.Point(geometry.getCenter());
+                  if(measureType){ label = MapFormula.formatMeasure(geometry, type, this.#unit); } // 測量時
+                  else{ label = MapFormula.formatMeasure(geometry, type, this.#unit, feature); } // 產生時
+                  radius = new ol.geom.LineString([geometry.getCenter(), autoMousePosition["coordinate"],]);
+                  break;
+                default: break;
+              }
+            }
+            // measure label
+            const labelStyle = new ol.style.Style({
+              text: new ol.style.Text({
+                font: "2vh Calibri,sans-serif",
+                fill: new ol.style.Fill({ color: "rgba(255, 255, 255, 1)" }),
+                backgroundFill: new ol.style.Fill({ color: "rgba(0, 0, 0, 0.4)" }),
+                backgroundStroke: new ol.style.Stroke({ color: `#aed3fa`, width: 1 }),
+                padding: [3, 3, 3, 3],
+                textBaseline: "bottom",
+                offsetY: -15,
+              }),
+              image: new ol.style.RegularShape({
+                radius: 8,
+                points: 3,
+                angle: Math.PI,
+                displacement: [0, 10],
+                fill: new ol.style.Fill({color: "rgba(0, 0, 0, 0.5)",}),
+              }),
+            });
+            if (label) {
+              labelStyle.setGeometry(point);
+              labelStyle.getText().setText(label);
+              styleList.push(labelStyle);
+            }
+            // segmen label
+            const segmentStyle = new ol.style.Style({
+              text: new ol.style.Text({
+                font: "1.6vh Calibri,sans-serif",
+                fill: new ol.style.Fill({ color: "rgba(255, 255, 255, 1)" }),
+                backgroundFill: new ol.style.Fill({ color: "rgba(0, 0, 0, 0.4)" }),
+                backgroundStroke: new ol.style.Stroke({color: `#aed3fa`, width: 1,}),
+                padding: [2, 2, 2, 2],
+                textBaseline: "bottom",
+                offsetY: -12,
+              }),
+              image: new ol.style.RegularShape({
+                radius: 6,
+                points: 3,
+                angle: Math.PI,
+                displacement: [0, 8],
+                fill: new ol.style.Fill({color: "rgba(0, 0, 0, 0.4)",}),
+              }),
+            });
+            const segmentStyles = [segmentStyle];
+            if (line) {
+              let count = 0;
+              line.forEachSegment((a, b) => {
+                const segment = new ol.geom.LineString([a, b]);
+                const label = MapFormula.formatMeasure(segment, "LineString", this.#unit);
+                if(segmentStyles.length - 1 < count){ segmentStyles.push(segmentStyle.clone()); }
+                const segmentPoint = new ol.geom.Point(segment.getCoordinateAt(0.5));
+                segmentStyles[count].setGeometry(segmentPoint);
+                segmentStyles[count].getText().setText(label);
+                styleList.push(segmentStyles[count]);
+                count++;
+              });
+            }
+            // label
+            const tipStyle = new ol.style.Style({
+              text: new ol.style.Text({
+                text: "",
+                font: "2.5vh Calibri,sans-serif",
+                fill: new ol.style.Fill({color: "#06FF00",}),
+                backgroundFill: new ol.style.Fill({color: "rgba(0, 0, 0, 0.5)",}),
+                padding: [8, 4, 4, 4],
+                textAlign: "left",
+                offsetX: 16,
+              }),
+            });
+            if (typeof measureType != "undefined" && type === "Point" && !this._modify.getOverlay().getSource().getFeatures().length) {
+              this._tipPoint = geometry;
+              tipStyle.getText().setText(this._tipText);
+              styleList.push(tipStyle);
+            }
+            // point style
+            const pointStyle = new ol.style.Style({
+              image: new ol.style.Circle({ radius: 7, fill: new ol.style.Fill({color: "#22B14C"}) }),
+            });
+            if (type === "Point") { styleList.push(pointStyle); }
+            // line and polygon style
+            const linePolygonStyle = new ol.style.Style({
+              stroke: new ol.style.Stroke({color: "#22B14C", width: 4}),
+              fill: new ol.style.Fill({ color: "#22B14C1A" }),
+            });
+            styleList.push(linePolygonStyle);
+            // circle radius
+            const lineForCircle = new ol.style.Style({
+              stroke: new ol.style.Stroke({color: "#22B14C", width: 4, lineDash: [7, 7],})
+            });
+            if (type === "Circle" && typeof measureType != "undefined") { // 測量時
+              lineForCircle.setGeometry(radius);
+              styleList.push(lineForCircle);
+            }
+            else if(type === "Circle" && typeof measureType == "undefined") { //測量完
+              const radiusPoint = feature.get("radiusPoint");
+              radius = new ol.geom.LineString([geometry.getCenter(), radiusPoint]);
+              lineForCircle.setGeometry(radius);
+              styleList.push(lineForCircle);
+            }
+            //
+            return styleList;
+          }
+          //
+          static #styleModify = new ol.style.Style({
+            image: new ol.style.Circle({
+              radius: 8,
+              stroke: new ol.style.Stroke({ color: "rgb(0, 0, 0)", width: 2 }),
+              fill: new ol.style.Fill({ color: "rgba(6, 255, 0, 0.8)" }),
+            }),
+            text: new ol.style.Text({
+              text: "拖曳調整",
+              font: "2.5vh Calibri,sans-serif",
+              fill: new ol.style.Fill({color: "#06FF00",}),
+              backgroundFill: new ol.style.Fill({color: "rgba(0, 0, 0, 0.5)",}),
+              padding: [8, 4, 4, 4],
+              textAlign: "left",
+              offsetX: 16,
+            }),
+          });
+          static _modify = new ol.interaction.Modify({
+            source: this._source,
+            style: this.#styleModify
+          });
+          //
+          // 開始測量
+          static start(type){
+            if(!this.#layer){
+              this.#layer = new ol.layer.Vector({
+                name: "measure",
+                popupable: false,
+                zIndex: 51,
+                source: this._source,
+                style: (feature) => this.styleMeasure(feature)
+              });
+              map.addLayer(this.#layer);
+              // EBL
+              this.#layerEBL = new ol.layer.Vector({
+                name: "measure",
+                popupable: false,
+                zIndex: 51,
+                source: this._sourceEBL,
+                style: (feature) => this.styleMeasure(feature)
+              });
+              map.addLayer(this.#layerEBL);
+            }
+            //
+            this._measure = new ol.interaction.Draw({
+              type: type, /*source: this._source,*/ /*maxPoints: undefined,*/
+              style: (feature) => this.styleMeasure(feature, type)
+            });
+            map.addInteraction(this._measure);
+            map.addInteraction(this._modify);
+            stopPopup = true; // 先停止 popup 觸發
+            //
+            try { this._measure.listeners_.drawstart.length = 0; } catch (error) { }
+            this._measure.on("drawstart", () => {
+              // this.clear();
+              this._modify.setActive(false);
+              this._tipText = "點擊繼續測量";
+            });
+            try { this._measure.listeners_.drawend.length = 0; } catch (error) { }
+            this._measure.on("drawend", (evt) => {
+              // 將測量圖資處理後才加入 this._source // EBL加入到不可modify的source
+              const type = evt.feature.getGeometry().getType();
+              if(type == "Circle"){
+                const newFeature = evt.feature.clone();
+                // 將剛剛半徑的線段點寫入屬性讓style可以一直出現半徑線段
+                newFeature.setProperties({ radiusPoint: newFeature.getGeometry().getClosestPoint(autoMousePosition["coordinate"]) });
+                this._sourceEBL.addFeature(newFeature);
+              }
+              else{ this._source.addFeature(evt.feature.clone()); }
+              //
+              this._modify.setActive(true);
+              this.#styleModify.setGeometry(this._tipPoint);
+              map.once("pointermove", () => { this.#styleModify.setGeometry(); });
+              this._tipText = "點擊開始測量";
+            });
+            // try { this._modify.listeners_.modifyend.length = 0; } catch (error) { }
+            // this._modify.on("modifyend", (evt) => {
+            //   const modifyFeature = evt.features.getArray()[0];
+            // });
+            // try { this._modify.listeners_.modifystart.length = 0; } catch (error) { }
+            // this._modify.on("modifystart", (evt) => {
+            //   const modifyFeature = evt.features.getArray()[0];
+            // });
+          }
+          // 停止測量
+          static stop(clear){
+            map.removeInteraction(this._measure); this._measure = null
+            map.removeInteraction(this._modify);
+            stopPopup = false; // 停止後繼續呈現 popup
+            // 下面區塊可能用不到
+            if(clear){
+              this.clear(); // 同時清除測量
+              map.removeLayer(this.#layer); this.#layer = null; // 同時關閉測量layer
+              map.removeLayer(this.#layerEBL); this.#layerEBL = null; // 同時關閉測量layer
+              this.#box.style.display = "none"; this.#btn.checked = false; // 同時關閉視窗及按鈕呈現沒按的狀態
+            }
+          }
+          // 切換測量
+          static switch(type){
+            if(!this._measure){ throw new Error("measure should be started first."); }
+            this.stop();
+            this.start(type);
+          }
+          // 清除測量
+          static clear(){
+            this._source.clear();
+            this._sourceEBL.clear();
+          }
+        }
+
+        // 繪圖
+        static Draw = class{
+          static _draw = null;
+        }
+      
+        // 矩形截圖
+        static ScreenShot = class{
+          static _screenshot = null;
+          static _tipText = "點擊開始測量";
+          static _tipPoint = null;
+          static #btnFull = null;
+          static #btnDraw = null;
+          static #dpr = null;
+
+          static init({ eleFull, eleDraw }){
+            if(!this.#dpr){ this.#dpr = window.devicePixelRatio; } // 一開始就紀錄裝置的 dpr
+            if(eleFull){
+              this.#btnFull = eleFull;
+              this.#btnFull.addEventListener("change", ()=>{
+                // 先判斷是不是正在使用其他繪圖功能，如果是的話就跳出提示
+                if(MapFunction.Measure._measure){ window.alert("請先結束測量功能再使用截圖功能！"); this.#btnFull.checked = false; return; }
+                if(MapFunction.Draw._draw){ window.alert("請先結束繪圖再使用截圖功能！"); this.#btnFull.checked = false; return; }
+                // 如果都沒有才執行繪製矩形並截圖
+                this.shot();
+              });
+            }
+            if(eleDraw){
+              this.#btnDraw = eleDraw;
+              this.#btnDraw.addEventListener("change", ()=>{
+                // 先判斷是不是正在使用其他繪圖功能，如果是的話就跳出提示
+                if(MapFunction.Measure._measure){ window.alert("請先結束測量功能再使用截圖功能！"); this.#btnDraw.checked = false; return; }
+                if(MapFunction.Draw._draw){ window.alert("請先結束繪圖再使用截圖功能！"); this.#btnDraw.checked = false; return; }
+                // 如果都沒有才執行繪製矩形並截圖
+                this.shot(true);
+              });
+            }
+          }
+          //
+          static shot(byDraw){
+            if(!byDraw){ // 如果不是用繪製的就直接截圖整個 #map
+              const canvas = document.querySelector("#map .ol-layer > canvas");
+              canvas.crossOrigin = "anonymous";
+              const image = canvas.toDataURL('image/png');
+              // 創建一個下載鏈接
+              this.download(image);
+              // 按鈕停止
+              this.#btnFull.checked = false;
+              return;
+            }
+            
+            // 以下就是繪製一個矩形進行截圖
+            this.closeDiv(true); // 畫面更乾淨
+            // 停止地圖移動縮放
+            MapFunction.mapMoveActive(false);
+            //
+            this._screenshot = new ol.interaction.Draw({
+              type: "Circle",
+              geometryFunction: ol.interaction.Draw.createBox(), // 創造矩形
+              style: this.style,
+            });
+            map.addInteraction(this._screenshot);
+            stopPopup = true; // 先停止 popup 觸發
+            //
+            try { this._screenshot.listeners_.drawend.length = 0; } catch (error) { }
+            this._screenshot.on("drawend", (evt) => {
+              // 停止繪圖
+              setTimeout(async () => {
+                await map.removeInteraction(this._screenshot);
+                const featureExtent = evt.feature.getGeometry().getExtent();
+                const pointA = map.getPixelFromCoordinate([featureExtent[0], featureExtent[1]]);
+                const pointB = map.getPixelFromCoordinate([featureExtent[2], featureExtent[3]]);
+                // console.log(pointA,pointB);
+                const canvas = document.querySelector('#map canvas');
+                try {
+                  const ctx = canvas.getContext('2d');
+                  // const dpr = window.devicePixelRatio || 1; // 根據不同大小及瀏覽器進行縮放
+                  // 以上這個參數必須是一開始吃到的裝置的 dpr，不能根據移動到不同解析度螢幕而改變
+                  // 所以在 init 的時候就要記錄起來
+                  
+                  // 定義要截圖的範圍
+
+                  // 起始點
+                  const x = pointA[0] * this.#dpr; // 根據不同大小及瀏覽器進行縮放
+                  const y = pointB[1] * this.#dpr; // 根據不同大小及瀏覽器進行縮放
+                  const width = Math.abs(pointB[0] - pointA[0]) * 1 * this.#dpr; // 根據不同大小及瀏覽器進行縮放
+                  const height = Math.abs(pointB[1] - pointA[1]) * 1 * this.#dpr; // 根據不同大小及瀏覽器進行縮放
+                  // 獲取範圍的像素數據
+                  const imageData = ctx.getImageData(x, y, width, height);
+                  // 創建一個新的 Canvas 來繪製範圍
+                  const rangeCanvas = document.createElement("canvas");
+                  rangeCanvas.width = width;
+                  rangeCanvas.height = height;
+                  const rangeCtx = rangeCanvas.getContext("2d");
+                  rangeCtx.putImageData(imageData, 0, 0);
+                  // 將新的 Canvas 的內容轉換為圖片
+                  const image = rangeCanvas.toDataURL("image/png");
+                  // 創建一個下載鏈接
+                  this.download(image);
+                } catch (error) { console.log(error); }
+
+                // 按鈕停止
+                if(this.#btnDraw){ this.#btnDraw.checked = false; }
+                // 清空 _screenshot 並開啟 stopPopup
+                this._screenshot = null;
+                stopPopup = false;
+                // 地圖可以移動縮放
+                MapFunction.mapMoveActive(true);
+                // 取消畫面更乾淨
+                this.closeDiv(false);
+              }, 1);
+            });
+          }
+          // static htmlToCanvas(map){
+          //   return new Promise(resolve => {
+          //     // 使用 requestAnimationFrame 等待下一個渲染幀
+          //     requestAnimationFrame(() => {
+          //       // 使用 html2canvas 捕捉容器
+          //       html2canvas(map, { allowTaint: true, useCORS: true, scale: window.devicePixelRatio || 1, backgroundColor: null })
+          //       .then(canvas => {
+          //         // 捕捉截圖後啟用深度測試
+          //         const image = canvas.toDataURL('image/png');
+          //         // 創建一個下載鏈接
+          //         const link = document.createElement('a');
+          //         const now = new Date().toISOString().match(/\d{4}-\d{2}-\d{2}T/g)[0] + new Date().toTimeString().match(/\d{2}:\d{2}(?=:\d{2})/g)[0];
+          //         link.href = image;
+          //         link.download = `screenshot${now}.png`;
+          //         link.click();
+          //         // 解析 Promise (Promise 中的一個方法)
+          //         resolve();
+          //       });
+          //     });
+          //   });
+          // }
+          //
+          static download(image){
+            const link = document.createElement("a");
+            const now = new Date().toISOString().match(/\d{4}-\d{2}-\d{2}T/g)[0] + new Date().toTimeString().match(/\d{2}:\d{2}(?=:\d{2})/g)[0];
+            link.href = image;
+            link.download = `screenshot_${now}.png`;
+            link.click();
+          }
+          static style(feature){
+            const styleList = [];
+            const geometry = feature.getGeometry();
+            const type = geometry.getType();
+
+            const baseStyle = new ol.style.Style({
+              fill: new ol.style.Fill({color:'rgba(0, 81, 255, 0.3)'}),
+              stroke: new ol.style.Stroke({color:'#000',width:2}),
+              image: new ol.style.Circle({radius: 5, stroke: new ol.style.Stroke({color: 'rgb(0, 81, 255)', width: 1}), fill: new ol.style.Fill({color: 'rgba(0, 81, 255, 0.3)'})}),
+            });
+            styleList.push(baseStyle);
+
+            const tipStyle = new ol.style.Style({
+              text: new ol.style.Text({
+                text: "畫出範圍以截圖",
+                font: "2vh Calibri,sans-serif",
+                fill: new ol.style.Fill({color: "#06FF00",}),
+                backgroundFill: new ol.style.Fill({color: "rgba(0, 0, 0, 0.5)",}),
+                padding: [8, 4, 4, 4],
+                textAlign: "left",
+                offsetX: 16,
+              })
+            });
+            if(type === "Point"){ styleList.push(tipStyle); }
+            //
+            return styleList;
+          }
+          // 可以設定要先關閉哪些視窗讓畫面更乾淨
+          static closeDiv(bool){
+            // hideForScreenShot > display none important
+            if(bool){}
+            else{}
+          }
+        }
+
+        // 圖例
+        static LegendList = class{
+          static #btn = null;
+          static #div = null;
+          static #table = null;
+          static #close = null;
+
+          static init({ eleBtn, eleDiv, eleTable }){
+            this.#btn = eleBtn;
+            this.#div = eleDiv;
+            this.#table = eleTable;
+            this.#btn.addEventListener("change", ()=>{
+              if(this.#btn.checked){ this.#div.style.display = "block"; }
+              else{ this.#div.style.display = "none"; }
+            });
+            //
+            window["logtest"] = this.#div;
+            if(!this.#div.querySelector(".toolClose")){ return; }
+            this.#close = this.#div.querySelector("#legendListClose");
+            this.#close.addEventListener("click", ()=>{
+              this.#btn.checked = false;
+              this.#btn.dispatchEvent(new Event('change'));
+            });
+          }
+          static add(dom){
+            if(!this.#table){ return; }
+            this.#table.appendChild(dom);
+          }
+          static remove(id){
+            if(!this.#table){ return; }
+            this.#table.querySelector(`#${id}`).remove();
+          }
+        }
+
+        // 屬性
+        static AttributeTable = class{
+          static #div = null;
+        }
+      }
+      // #endregion 地圖按鈕及工具
+    </script>
+
+    <script>
+      // #region 所有圖層
+
+      // layer init class
+      class LayerInit {
+        static _layer = null; // 使用受保護屬性來存儲圖層
+        // constructor() { this._layer = null; }
+        // static getlayer(){ return this._layer; }
+
+        static async add(checked) {
+          if (checked) {
+            if (!this._layer) { this._layer = await this.create(); } // 如果還不存在就先創建
+            // console.log(this._layer);
+            map.addLayer(this._layer);
+          } else {
+            if (!this._layer) { throw new Error("layer should be created first."); }
+            map.removeLayer(this._layer);
+          }
+
+          if(this.addmore){ this.addmore(checked); } // 開關額外步驟，如果存在才執行
+          if(this.legend){ this.legend(checked); } // 開關額外步驟，如果存在才執行
+          if(this.attribute){ this.attribute(checked); } // 開關額外步驟，如果存在才執行
+        }
+
+        static refresh() {
+          if (!this._layer) { throw new Error("layer should be created first."); }
+          this._layer.getSource().refresh();
+        }
+
+        static opacity(value) {
+          value = Number(value);
+          if (!this._layer) { throw new Error("layer should be created first."); }
+          if (value < 0 || value > 1) { throw new Error("opacity should be (0 <= value =< 1)"); }
+          this._layer.setOpacity(value);
+        }
+
+        static create() { throw new Error("create method should be implemented by subclasses."); }
+        static style(feature) { throw new Error("style method should be implemented by subclasses."); }
+        static popup(feature) { throw new Error("popup method should be implemented by subclasses."); }
+      }
+
+      // 海峽中線
+      class LayerMiddleLine extends LayerInit {
+        static create(){
+          const layer = new ol.layer.Vector({
+            // name: "middleLine",
+            // popupable: false,
+            zIndex: 11,
+            source: new ol.source.Vector({
+              format: new ol.format.KML({ extractStyles: false }),
+              crossOrigin: "anonymous",
+              url: "/geosource/middleLine_v2.kml",
+            }),
+            style: this.style
+          });
+          return layer; // 加入圖資
+        }
+        static style(feature){
+          return new ol.style.Style({
+            stroke: new ol.style.Stroke({ color: "red", width: 3 })
+          });
+        }
+        // static popup(feature){ }
+        static legend(checked){
+          const id = "legendmiddleLine";
+          const title = "海峽中線";
+          if(!checked){ MapFunction.LegendList.remove(id); return; }
+          //
+          const dom = document.createElement("div");
+          dom.className = "legendChild";
+          dom.id = id;
+          dom.innerHTML = `<div class="legendChildTitle">${title}</div><div class="legendChildContent">
+            <div class="legendChildContentSub"><i class="hoone hoone-polyline" style="color: red;"></i><div>海峽中線</div></div>
+          </div>`;
+          MapFunction.LegendList.add(dom);
+        }
+      }
+
+      // 飛航管制區
+      class LayerFir extends LayerInit {
+        static create(){
+          const layer = new ol.layer.Vector({
+            // name: "fir",
+            // popupable: false,
+            zIndex: 11,
+            source: new ol.source.Vector({
+              format: new ol.format.KML({ extractStyles: false }),
+              crossOrigin: "anonymous",
+              url: "/geosource/FIR_v2.kml",
+            }),
+            style: this.style
+          });
+          return layer; // 加入圖資
+        }
+        static style(feature){
+          return new ol.style.Style({
+            stroke: new ol.style.Stroke({ color: "blue", width: 3 })
+          });
+        }
+        // static popup(feature){ }
+        static legend(checked){
+          const id = "legendADIZ";
+          const title = "飛航管制區";
+          if(!checked){ MapFunction.LegendList.remove(id); return; }
+          //
+          const dom = document.createElement("div");
+          dom.className = "legendChild";
+          dom.id = id;
+          dom.innerHTML = `<div class="legendChildTitle">${title}</div><div class="legendChildContent">
+            <div class="legendChildContentSub"><i class="hoone hoone-polyline" style="color: blue;"></i><div>飛航管制區</div></div>
+          </div>`;
+          MapFunction.LegendList.add(dom);
+        }
+      }
+
+      // ais
+      class LayerAis extends LayerInit {
+        // 客製化開啟圖層
+        static async add(checked) {
+          if (checked) {
+            if (!this._layer) { this._layer = await this.create(); this.searchinit(); } // 如果還不存在就先創建
+            map.addLayer(this._layer);
+          } else {
+            if (!this._layer) { throw new Error("layer should be created first."); }
+            map.removeLayer(this._layer);
+          }
+
+          if(this.addmore){ this.addmore(checked); } // 開關額外步驟，如果存在才執行
+          if(this.legend){ this.legend(checked); } // 開關額外步驟，如果存在才執行
+          if(this.attribute){ this.attribute(checked); } // 開關額外步驟，如果存在才執行
+        }
+        // 開關額外步驟
+        static addmore(checked){
+          const searchBox = document.getElementById("aisShearchBox");
+          if(checked){ searchBox.style.display = "flex"; } // 開啟搜尋框
+          else{ searchBox.style.display = "none"; } // 關閉搜尋框
+        }
+        //
+        static create(){
+          const layer = new ol.layer.Vector({
+            name: "ais",
+            popupable: true,
+            zIndex: 5,
+            source: new ol.source.Vector({ url: "/geosource/ais.json", format: new ol.format.GeoJSON(), crossOrigin: "anonymous" }),
+            style: this.style
+          });
+          // 加入popup字典
+          try { PopupClick._popupdict["ais"] = LayerAis; } catch (error) { } // 點擊popup
+          try { PopupMouse._popupdict["ais"] = LayerAis; } catch (error) { } // 滑鼠移動popup
+
+          return layer; // 加入圖資
+        }
+        static style(feature){
+          let show = true;
+          if(typeof feature.get("show") != "undefined"){ show = feature.get("show"); }
+          let pointed = false;
+          if(typeof feature.get("pointed") != "undefined"){ pointed = feature.get("pointed"); }
+          const shiptype = feature.get("Ship_and_Cargo_Type");
+          const stop = feature.get("SOG") == 0 ? true : false;
+          const cog = feature.get("COG");
+
+          if(!show){ return new ol.style.Style({}); }
+
+          const styleList = [];
+          const iconDict = { "0": "ship_gray", "1": "ship_gray", "9": "ship_gray", "2": "ship_gray", "3": "ship_blue", "4": "ship_green", "5": "ship_red", "6": "ship_yellow", "7": "ship_lightblue", "8": "ship_purple" };
+          const combineUrl = `/image/${iconDict[String(shiptype)[0]]}${stop==true?"_s":""}.png`;
+          const iconStyle = new ol.style.Style({image: new ol.style.Icon({crossOrigin: "anonymous", anchor: [12, 12], anchorXUnits: "pixels", anchorYUnits: "pixels", src: combineUrl, scale: 0.12 * userscale, opacity: 0.9, rotation: MapFormula.degreesToRadians(cog)}), zIndex: 2});
+          // const iconStyle = new ol.style.Style({image: new ol.style.Circle({radius: 4, fill: new ol.style.Fill({ color: "red" }), stroke: new ol.style.Stroke({ color: "black", width: 2 })})});
+          styleList.push(iconStyle);
+
+          if(!pointed){ return styleList; }
+
+          const pointedStyle = new ol.style.Style({image: new ol.style.RegularShape({radius: 2.5 * userscale, points: 4, stroke: new ol.style.Stroke({color: "#1000ff", width: 2})}), zIndex: 3});
+          styleList.push(pointedStyle);
+          return styleList;
+        }
+        static popup(feature){
+          const mmsi = feature.get("MMSI");
+          const shipname = feature.get("ShipName");
+          const call = feature.get("Call_Sign");
+          const imo = feature.get("IMO_Number");
+          const cog = feature.get("COG");
+          const sog = feature.get("SOG");
+          const lon = feature.get("Longitude");
+          const lat = feature.get("Latitude");
+          const record = feature.get("Record_Time");
+          const shiptypeCode = feature.get("Ship_and_Cargo_Type");
+          const shipTypeDict1 = {"30": "漁船", "31": "拖帶", "32": "牽引", "33": "疏浚或水下作業", "34": "潛水作業", "35": "軍事行動", "36": "帆船", "37": "遊艇", "38": "未具體說明", "39": "未具體說明", "50": "引水船", "51": "搜救船", "52": "拖船", "53": "Port Tender", "54": "防污染設備", "55": "執法船", "56": "本地船隻", "57": "本地船隻", "58": "醫療運輸船", "59": "非戰鬥艦艇"};
+          const shipTypeDict2 = {"0": "未具體說明", "1": "未具體說明", "9": "未具體說明", "2": "地面翼", "4": "高速船", "6": "客船", "7": "貨船", "8": "油輪"};
+          const shiptype = typeof shipTypeDict1[shiptypeCode] == "undefined" ? shipTypeDict2[String(shiptypeCode)[0]] : shipTypeDict1[shiptypeCode];
+          return `
+            <div class="popupTr popupTitle">
+              <div class="popupTd" style="flex-grow: 1;">${mmsi}</div><div class="popupTd">國家</div>
+            </div>
+            <div class="popupTr">
+              <div class="popupTd popupTdtitle" style="width: 5.6vh;">船名</div><div class="popupTd popupTdGrow" style="width: calc(100% - 5.9vh);">${shipname}</div>
+            </div>
+            <div class="popupTr">
+              <div class="popupTd popupTdtitle" style="width: 5.6vh;">呼號</div><div class="popupTd popupTdGrow" style="width: calc(100% - 5.9vh);">${call}</div>
+            </div>
+            <div class="popupTr">
+              <div class="popupTd popupTdtitle" style="width: 5.6vh;">IMO_</div><div class="popupTd popupTdGrow" style="width: calc(100% - 5.9vh);">${imo}</div>
+            </div>
+            <div class="popupTr">
+              <div class="popupTd popupTdtitle" style="width: 5.6vh;">船舶種類</div><div class="popupTd popupTdGrow" style="width: calc(100% - 5.9vh);">${shiptype}</div>
+            </div>
+            <div class="popupTr">
+              <div class="popupTr" style="width: calc(50% - 0.15vh);">
+                <div class="popupTd popupTdtitle" style="width: 5.6vh;">航向</div><div class="popupTd popupTdGrow" style="width: calc(100% - 5.9vh);">${cog}°</div>
+              </div>
+              <div class="popupTr" style="width: calc(50% - 0.15vh);">
+                <div class="popupTd popupTdtitle" style="width: 5.6vh;">航速</div><div class="popupTd popupTdGrow" style="width: calc(100% - 5.9vh);">${sog}kt</div>
+              </div>
+            </div>
+            <div class="popupTr">
+              <div class="popupTd popupTdtitle" style="width: 5.6vh;">位置</div><div class="popupTd popupTdGrow" style="width: calc(100% - 5.9vh);">${lat} , ${lon}</div>
+            </div>
+            <div class="popupTr">
+              <div class="popupTd popupTdtitle" style="width: 5.6vh;">紀錄時間</div><div class="popupTd popupTdGrow" style="width: calc(100% - 5.9vh);">${record}</div>
+            </div>
+          `;
+        }
+        static legend(checked){
+          const id = "legendAis";
+          const title = "AIS(船舶類型)";
+          if(!checked){ MapFunction.LegendList.remove(id); return; }
+          //
+          const dom = document.createElement("div");
+          dom.className = "legendChild";
+          dom.id = id;
+          dom.innerHTML = `<div class="legendChildTitle">${title}</div><div class="legendChildContent">
+            <div class="legendChildContentSub"><img src="/image/ship_gray.png"><div>未具體說明的船舶</div></div>
+            <div class="legendChildContentSub"><img src="/image/ship_blue.png"><div>漁船、拖船、淺水作業船、帆船、遊艇</div></div>
+            <div class="legendChildContentSub"><img src="/image/ship_green.png"><div>高速船</div></div>
+            <div class="legendChildContentSub"><img src="/image/ship_red.png"><div>引水船、搜索船、拖駁船、港口補給船舶、執法船、醫療用船舶、載有汙染設備的船舶</div></div>
+            <div class="legendChildContentSub"><img src="/image/ship_yellow.png"><div>客船</div></div>
+            <div class="legendChildContentSub"><img src="/image/ship_lightblue.png"><div>貨船</div></div>
+            <div class="legendChildContentSub"><img src="/image/ship_purple.png"><div>油輪</div></div>
+          </div>`;
+          MapFunction.LegendList.add(dom);
+        }
+        // static attribute(checked){}
+        //
+        static #searched = null;
+        static searchinit(){
+          const aisSearch = document.getElementById("aisSearch");
+          const aisResult = document.getElementById("aisResult");
+
+          aisSearch.addEventListener("input", () => {
+            // 如果還不存在就先跳出
+            if(!this._layer){ return; }
+            // 如果沒有開啟就不搜尋並且關閉結果框
+            const aisLayerTarget = map.getAllLayers().filter(layer => layer.get("name") === "ais");
+            if(aisLayerTarget.length != 1){ aisResult.style.display = "none"; return; }
+            // 如果沒有值就不搜尋並且關閉結果框
+            if(aisSearch.value == ""){ aisResult.style.display = "none"; return; }
+
+            aisResult.innerHTML = ""; // 先清除結果
+
+            const features = this._layer.getSource().getFeatures();
+            const searchPattern = new RegExp(aisSearch.value, 'i');
+            const aisField = document.getElementById("aisFieldSelect").value;
+            const results = features.filter(feature => searchPattern.test(feature.get(aisField))).slice(0, 10); // 取前十個
+            // 如果沒有搜尋到就不繼續執行並且關閉結果框
+            if(results.length == 0){ aisResult.style.display = "none"; return; }
+            results.forEach(result => { aisResult.innerHTML+=`<div class="aisResultChild" onclick="LayerAis.goto('${result.getId()}');">${result.get(aisField)}</div>`; });
+            
+            // 取得SIZE和位置後打開
+            const aisSearchSize = aisSearch.getBoundingClientRect();
+            aisResult.style.width = `${aisSearchSize.width}px`;
+            aisResult.style.top = `calc( 1.3vh + ${aisSearchSize.height}px )`; // topBox padding + aisSearchSize height
+            aisResult.style.display = "block";
+          });
+
+          document.body.addEventListener("click", (evt) => {
+            // 如果不是在上方的搜尋功能中點擊，搜尋結果框也要關閉
+            if(evt.target.closest(".aisSearchParent") == null){ aisResult.style.display = "none"; return; }
+            // 如果點到搜尋框，並且裡面有值，就又要再打開
+            if(aisSearch.value != "" && evt.target.closest(".aisSearchParent")){ aisSearch.dispatchEvent(new Event('input')) }
+          });
+
+          map.on("singleclick", () => {
+            if(!this.#searched){ return; } // 如果 #searched 不存在就不繼續執行
+
+            // 如果沒有點擊的popup功能就直接執行pointedoff
+            if(!PopupClick._featureList){ this.pointedoff(); return; }
+            // 如果點擊popup沒有取的feature就直接執行pointedoff
+            if(PopupClick._featureList == 0){ this.pointedoff(); return; }
+
+            // 如果點擊並且產生popup，就要查看popup的第一筆資料是不是同一個
+            if(PopupClick._featureList[0].ol_uid != this.#searched.ol_uid){ return; }
+            // 如果是同一個就不用消除 pointed style，但還是要清除 #searched
+            this.#searched = null;
+          });
+        }
+        static pointedoff(byGoto){
+          // 先把 popup (pointed style) 關閉
+          if(byGoto){ try { PopupClick.popupInit(); } catch (error) { } }
+          // 再把先前的搜尋 pointed 取消
+          if(this.#searched){ this.#searched.setProperties({ pointed: false }); }
+          this.#searched = null;
+        }
+        static goto(id){
+          this.pointedoff(true); // 先關閉上一次
+          this.#searched = this._layer.getSource().getFeatureById(id);
+          this.#searched.setProperties({ pointed: true });
+          const center = this.#searched.getGeometry().getCoordinates();
+          MapFunction.zoomAnimate({center: center, zoom: 12});
+        }
+      }
+
+      // #region 氣象圖層
+
+      // 降雨預報圖
+      class LayerRainforecast extends LayerInit {
+        static create(){
+          const layer = new ol.layer.Image({
+            // name: "rainforecast",
+            // popupable: false,
+            zIndex: 10,
+            source: new ol.source.ImageStatic({ url: "https://winfo.tycg.gov.tw/GetQpeSumRain/image/Tmp.gif", imageExtent: ol.extent.applyTransform([118, 20, 123.5, 27], ol.proj.getTransform("EPSG:4326", "EPSG:3857")) }),
+            // style: this.style
+          });
+          return layer; // 加入圖資
+        }
+        // static style(feature){ }
+        // static popup(feature){ }
+        static legend(checked){
+          const id = "legendRainforecast";
+          const title = "降雨預報圖";
+          if(!checked){ MapFunction.LegendList.remove(id); return; }
+          //
+          const dom = document.createElement("div");
+          dom.className = "legendChild";
+          dom.id = id;
+          dom.innerHTML = `<div class="legendChildTitle">${title}</div><div class="legendChildContent">
+            <div class="legendChildContentSub"><i class="hoone hoone-picture"></i><div>降雨預報圖</div></div>
+          </div>`;
+          MapFunction.LegendList.add(dom);
+        }
+      }
+
+      // 即時雨量
+      class LayerRainfall extends LayerInit {
+        static async create(){
+          const rainfallSource = new ol.source.Vector({});
+          fetch("https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0002-001?Authorization=CWB-326DAE79-B70E-4DD3-BC36-07B077E82CAB&elementName=RAIN&parameterName=CITY,TOWN").then(response => response.json()).then(res => {
+              const count = Object.keys(res.records.Station).length;
+              for (let i = 0; i < count; i++) {
+                // const id = res.records.Station[i].StationId;
+                const name = res.records.Station[i].StationName;
+                // const height = res.records.Station[i].GeoInfo.StationAltitude;
+                const time = res.records.Station[i].ObsTime.DateTime.split("+")[0];
+                const now = res.records.Station[i].RainfallElement.Now.Precipitation;
+                const past10m = res.records.Station[i].RainfallElement.Past10Min.Precipitation;
+                const past1hr = res.records.Station[i].RainfallElement.Past1hr.Precipitation;
+                const past24hr = res.records.Station[i].RainfallElement.Past24hr.Precipitation;
+                const county = res.records.Station[i].GeoInfo.CountyName;
+                const town = res.records.Station[i].GeoInfo.TownName;
+                const lon = res.records.Station[i].GeoInfo.Coordinates[1].StationLongitude;
+                const lat = res.records.Station[i].GeoInfo.Coordinates[1].StationLatitude;
+                const coordinates = ol.proj.fromLonLat([lon, lat]);
+                const feature = new ol.Feature({ geometry: new ol.geom.Point(coordinates), name: name, now: now, past10m: past10m, past1hr: past1hr, past24hr: past24hr, time: time, county: county, town: town, lat: lat, lon: lon });
+                rainfallSource.addFeature(feature);
+              }
+            })
+            .catch(error => console.error('Error:', error));
+          //
+          const layer = new ol.layer.Vector({
+            name: "rainfall",
+            popupable: true,
+            zIndex: 6,
+            source: rainfallSource,
+            declutter: true,
+            style: this.style
+          });
+          // 加入popup字典
+          try { PopupClick._popupdict["rainfall"] = LayerRainfall; } catch (error) { } // 點擊popup
+          try { PopupMouse._popupdict["rainfall"] = LayerRainfall; } catch (error) { } // 滑鼠移動popup
+
+          return layer; // 加入圖資
+        }
+        static style(feature){
+          let pointed = false;
+          if(typeof feature.get("pointed") != "undefined"){ pointed = feature.get("pointed"); }
+          let scaleNum = 0.03;
+          if(pointed){ scaleNum = 0.04; }
+          return new ol.style.Style({
+            image: new ol.style.Icon({
+              anchor: [0.5, 1],
+              // anchorXUnits: "fraction",
+              // anchorYUnits: "fraction",
+              src: "https://web.hoone.com.tw/img/mapicon/rain.png",
+              crossOrigin: "anonymous",
+              scale: scaleNum * userscale,
+            }),
+          });
+        }
+        static popup(feature){
+          const name = feature.get("name");
+          const now = feature.get("now");
+          const time = feature.get("time");
+          // const past10m = feature.get("past10m");
+          const past1hr = feature.get("past1hr");
+          const past24hr = feature.get("past24hr");
+          const county = feature.get("county");
+          const town = feature.get("town");
+          const lon = feature.get("lon");
+          const lat = feature.get("lat");
+          //
+          return `<table><thead><tr><th colspan="2">${name}即時雨量</th></tr></thead><tbody><tr><td>現在雨量</td><td>${now}mm</td></tr><tr class="evenTr"><td>過去1小時</td><td>${past1hr}mm</td></tr><tr><td>過去24小時</td><td>${past24hr}mm</td></tr><tr class="evenTr"><td>時間</td><td>${time}</td></tr><tr><td>位置</td><td>${county}${town}</td></tr><tr class="evenTr"><td>座標</td><td>${lat}, ${lon}</td></tr></tbody></table>`;
+        }
+        static legend(checked){
+          const id = "legendRainfall";
+          const title = "即時雨量";
+          if(!checked){ MapFunction.LegendList.remove(id); return; }
+          //
+          const dom = document.createElement("div");
+          dom.className = "legendChild";
+          dom.id = id;
+          dom.innerHTML = `<div class="legendChildTitle">${title}</div><div class="legendChildContent">
+            <div class="legendChildContentSub"><img src="https://web.hoone.com.tw/img/mapicon/rain.png"><div>即時雨量</div></div>
+          </div>`;
+          MapFunction.LegendList.add(dom);
+        }
+        // 自定義刷新
+        static refresh(){
+          if(this._layer){
+            fetch("https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0002-001?Authorization=CWB-326DAE79-B70E-4DD3-BC36-07B077E82CAB&elementName=RAIN&parameterName=CITY,TOWN").then(response => response.json()).then(res => {
+              const resource = new ol.source.Vector({});
+              const count = Object.keys(res.records.Station).length;
+              for (let i = 0; i < count; i++) {
+                // const id = res.records.Station[i].StationId;
+                const name = res.records.Station[i].StationName;
+                // const height = res.records.Station[i].GeoInfo.StationAltitude;
+                const time = res.records.Station[i].ObsTime.DateTime.split("+")[0];
+                const now = res.records.Station[i].RainfallElement.Now.Precipitation;
+                const past10m = res.records.Station[i].RainfallElement.Past10Min.Precipitation;
+                const past1hr = res.records.Station[i].RainfallElement.Past1hr.Precipitation;
+                const past24hr = res.records.Station[i].RainfallElement.Past24hr.Precipitation;
+                const county = res.records.Station[i].GeoInfo.CountyName;
+                const town = res.records.Station[i].GeoInfo.TownName;
+                const lon = res.records.Station[i].GeoInfo.Coordinates[1].StationLongitude;
+                const lat = res.records.Station[i].GeoInfo.Coordinates[1].StationLatitude;
+                const coordinates = ol.proj.fromLonLat([lon, lat]);
+                const feature = new ol.Feature({ geometry: new ol.geom.Point(coordinates), name: name, now: now, past10m: past10m, past1hr: past1hr, past24hr: past24hr, time: time, district: county + town });
+                resource.addFeature(feature);
+              }
+              this._layer.setSource(resource);
+            })
+            .catch(error => console.error('Error:', error));
+          }
+        }
+      }
+
+      // 即時溫度
+      class LayerTemper extends LayerInit {
+        static async create(){
+          const temperSource = new ol.source.Vector({});
+          fetch("https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=CWB-326DAE79-B70E-4DD3-BC36-07B077E82CAB&elementName=WDIR,WDSD,TEMP,HUMD,H_24R,PRES,D_TXT,D_TX,D_TNT,D_TN&parameterName%EF%BC%8C=CITY,TOWN").then(response => response.json()).then(res => {
+              const count = Object.keys(res.records.Station).length;
+              for (let i = 0; i < count; i++) {
+                // const id = res.records.Station[i].StationId;
+                const name = res.records.Station[i].StationName;
+                const temper = res.records.Station[i].WeatherElement.AirTemperature;
+                const time = res.records.Station[i].ObsTime.DateTime.split("+")[0];
+                const county = res.records.Station[i].GeoInfo.CountyName;
+                const town = res.records.Station[i].GeoInfo.TownName;
+                const lon = res.records.Station[i].GeoInfo.Coordinates[1].StationLongitude;
+                const lat = res.records.Station[i].GeoInfo.Coordinates[1].StationLatitude;
+                const coordinates = ol.proj.fromLonLat([lon, lat]);
+                const feature = new ol.Feature({ geometry: new ol.geom.Point(coordinates), name: name, temper: temper, unit: "°C", time: time, county: county, town: town, lat: lat, lon: lon });
+                temperSource.addFeature(feature);
+              }
+            })
+            .catch(error => console.error('Error:', error));
+          //
+          const layer = new ol.layer.Vector({
+            name: "temper",
+            popupable: true,
+            zIndex: 6,
+            source: temperSource,
+            declutter: true,
+            style: this.style
+          });
+          // 加入popup字典
+          try { PopupClick._popupdict["temper"] = LayerTemper; } catch (error) { } // 點擊popup
+          try { PopupMouse._popupdict["temper"] = LayerTemper; } catch (error) { } // 滑鼠移動popup
+
+          return layer; // 加入圖資
+        }
+        static style(feature){
+          let pointed = false;
+          if(typeof feature.get("pointed") != "undefined"){ pointed = feature.get("pointed"); }
+          let scaleNum = 0.03;
+          if(pointed){ scaleNum = 0.04; }
+          return new ol.style.Style({
+            image: new ol.style.Icon({
+              anchor: [0.5, 1],
+              // anchorXUnits: "fraction",
+              // anchorYUnits: "fraction",
+              src: "https://web.hoone.com.tw/img/mapicon/temp.png",
+              crossOrigin: "anonymous",
+              scale: scaleNum * userscale,
+            }),
+          });
+        }
+        static popup(feature){
+          const name = feature.get("name");
+          const temper = feature.get("temper");
+          const time = feature.get("time");
+          const county = feature.get("county");
+          const town = feature.get("town");
+          const lat = feature.get("lat");
+          const lon = feature.get("lon");
+          //
+          return `<table><thead><tr><th colspan="2">${name}即時溫度</th></tr></thead><tbody><tr><td>溫度</td><td>${temper}°C</td></tr><tr class="evenTr"><td>時間</td><td>${time}</td></tr><tr><td>位置</td><td>${county}${town}</td></tr><tr class="evenTr"><td>座標</td><td>${lat}, ${lon}</td></tr></tbody></table>`;
+        }
+        static legend(checked){
+          const id = "legendTemper";
+          const title = "即時溫度";
+          if(!checked){ MapFunction.LegendList.remove(id); return; }
+          //
+          const dom = document.createElement("div");
+          dom.className = "legendChild";
+          dom.id = id;
+          dom.innerHTML = `<div class="legendChildTitle">${title}</div><div class="legendChildContent">
+            <div class="legendChildContentSub"><img src="https://web.hoone.com.tw/img/mapicon/temp.png"><div>即時溫度</div></div>
+          </div>`;
+          MapFunction.LegendList.add(dom);
+        }
+        // 自定義刷新
+        static refresh(){
+          if(this._layer){
+            fetch("https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=CWB-326DAE79-B70E-4DD3-BC36-07B077E82CAB&elementName=WDIR,WDSD,TEMP,HUMD,H_24R,PRES,D_TXT,D_TX,D_TNT,D_TN&parameterName%EF%BC%8C=CITY,TOWN").then(response => response.json()).then(res => {
+              const resource = new ol.source.Vector({});
+              const count = Object.keys(res.records.Station).length;
+              for (let i = 0; i < count; i++) {
+                // const id = res.records.Station[i].StationId;
+                const name = res.records.Station[i].StationName;
+                const temper = res.records.Station[i].WeatherElement.AirTemperature;
+                const time = res.records.Station[i].ObsTime.DateTime.split("+")[0];
+                const county = res.records.Station[i].GeoInfo.CountyName;
+                const town = res.records.Station[i].GeoInfo.TownName;
+                const lon = res.records.Station[i].GeoInfo.Coordinates[1].StationLongitude;
+                const lat = res.records.Station[i].GeoInfo.Coordinates[1].StationLatitude;
+                const coordinates = ol.proj.fromLonLat([lon, lat]);
+                const feature = new ol.Feature({ geometry: new ol.geom.Point(coordinates), name: name, temper: temper, unit: "°C", time: time, county: county, town: town, lat: lat, lon: lon });
+                resource.addFeature(feature);
+              }
+              this._layer.setSource(resource);
+            })
+            .catch(error => console.error('Error:', error));
+          }
+        }
+      }
+
+      // 潮汐資訊
+      class LayerSeatide extends LayerInit {
+        static async create(){
+          const seatideSource = new ol.source.Vector({});
+          const today = new Date().getFullYear() + "-" + String(new Date().getMonth() + 1).padStart(2, "0") + "-" + String(new Date().getDate() + 1).padStart(2, "0");
+          fetch("https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-A0021-001?Authorization=CWB-326DAE79-B70E-4DD3-BC36-07B077E82CAB" + "&format=JSON&sort=Date&Date=" + today).then(response => response.json()).then(res => {
+              const count = res.records.TideForecasts.length;
+              for (let i = 0; i < count; i++) {
+                const name = res.records.TideForecasts[i].Location.LocationName;
+                const lon = res.records.TideForecasts[i].Location.Longitude;
+                const lat = res.records.TideForecasts[i].Location.Latitude;
+                const coordinates = ol.proj.fromLonLat([lon, lat]);
+                const daily = res.records.TideForecasts[i].Location.TimePeriods.Daily;
+                let date, lunardate, tiderange, time, seatide;
+                if (daily.length == 1) {
+                  date = daily[0].Date;
+                  lunardate = daily[0].LunarDate;
+                  tiderange = daily[0].TideRange;
+                  time = daily[0].Time;
+                  seatide = "";
+                  for (let i = 0; i < time.length; i++) {
+                    const classname = (i + 1) % 2 == 1 ? "evenTr" : "";
+                    const tide = time[i].Tide;
+                    const tidetime = String(new Date(time[i].DateTime).getHours()).padStart(2, "0") + ":" + String(new Date(time[i].DateTime).getMinutes()).padStart(2, "0");
+                    seatide += `<tr class="${classname}"><td>${tide}時間</td><td>${tidetime}</td></tr>`;
+                  }
+                }
+                const feature = new ol.Feature({ geometry: new ol.geom.Point(coordinates), name: name, date: date, lunardate: lunardate, tiderange: tiderange, seatide: seatide });
+                seatideSource.addFeature(feature);
+              }
+            })
+            .catch(error => console.error('Error:', error));
+          //
+          const layer = new ol.layer.Vector({
+            name: "seatide",
+            popupable: true,
+            zIndex: 6,
+            source: seatideSource,
+            declutter: true,
+            style: this.style
+          });
+          // 加入popup字典
+          try { PopupClick._popupdict["seatide"] = LayerSeatide; } catch (error) { } // 點擊popup
+          try { PopupMouse._popupdict["seatide"] = LayerSeatide; } catch (error) { } // 滑鼠移動popup
+
+          return layer; // 加入圖資
+        }
+        static style(feature){
+          let pointed = false;
+          if(typeof feature.get("pointed") != "undefined"){ pointed = feature.get("pointed"); }
+          let scaleNum = 0.03;
+          if(pointed){ scaleNum = 0.04; }
+          return new ol.style.Style({
+            image: new ol.style.Icon({
+              anchor: [0.5, 1],
+              // anchorXUnits: "fraction",
+              // anchorYUnits: "fraction",
+              src: "https://web.hoone.com.tw/img/mapicon/tide.png",
+              crossOrigin: "anonymous",
+              scale: scaleNum * userscale,
+            }),
+          });
+        }
+        static popup(feature){
+          const name = feature.get("name");
+          const daily = feature.get("daily");
+          const date = feature.get("date");
+          const lunardate = feature.get("lunardate");
+          const tiderange = feature.get("tiderange");
+          const seatide = feature.get("seatide");
+          return `<table><thead><th colspan="2">潮汐預報<br>${name}</th></thead></tbody><tr><td>日期</td><td>${date}</td></tr><tr class="evenTr"><td>農曆日期</td><td>${lunardate}</td><tr><td>潮差</td><td>${tiderange}</td></tr></tr>${seatide}</tbody></table>`;
+        }
+        static legend(checked){
+          const id = "legendSeatide";
+          const title = "潮汐資訊";
+          if(!checked){ MapFunction.LegendList.remove(id); return; }
+          //
+          const dom = document.createElement("div");
+          dom.className = "legendChild";
+          dom.id = id;
+          dom.innerHTML = `<div class="legendChildTitle">${title}</div><div class="legendChildContent">
+            <div class="legendChildContentSub"><img src="https://web.hoone.com.tw/img/mapicon/tide.png"><div>潮汐資訊</div></div>
+          </div>`;
+          MapFunction.LegendList.add(dom);
+        }
+        // 自定義刷新
+        static refresh() {
+          if(this._layer){
+            const today = new Date().getFullYear() + "-" + String(new Date().getMonth() + 1).padStart(2, "0") + "-" + String(new Date().getDate() + 1).padStart(2, "0");
+            fetch("https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-A0021-001?Authorization=CWB-326DAE79-B70E-4DD3-BC36-07B077E82CAB" + "&format=JSON&sort=Date&Date=" + today).then(response => response.json()).then(res => {
+              const resource = new ol.source.Vector({});
+              const count = res.records.TideForecasts.length;
+              for (let i = 0; i < count; i++) {
+                const name = res.records.TideForecasts[i].Location.LocationName;
+                const lon = res.records.TideForecasts[i].Location.Longitude;
+                const lat = res.records.TideForecasts[i].Location.Latitude;
+                const coordinates = ol.proj.fromLonLat([lon, lat]);
+                const daily = res.records.TideForecasts[i].Location.TimePeriods.Daily;
+                let date, lunardate, tiderange, time, seatide;
+                if (daily.length == 1) {
+                  date = daily[0].Date;
+                  lunardate = daily[0].LunarDate;
+                  tiderange = daily[0].TideRange;
+                  time = daily[0].Time;
+                  seatide = "";
+                  for (let i = 0; i < time.length; i++) {
+                    const classname = (i + 1) % 2 == 1 ? "evenTr" : "";
+                    const tide = time[i].Tide;
+                    const tidetime = String(new Date(time[i].DateTime).getHours()).padStart(2, "0") + ":" + String(new Date(time[i].DateTime).getMinutes()).padStart(2, "0");
+                    seatide += `<tr class="${classname}"><td>${tide}時間</td><td>${tidetime}</td></tr>`;
+                  }
+                }
+                const feature = new ol.Feature({ geometry: new ol.geom.Point(coordinates), name: name, date: date, lunardate: lunardate, tiderange: tiderange, seatide: seatide });
+                resource.addFeature(feature);
+              }
+              this._layer.setSource(resource);
+            })
+            .catch(error => console.error('Error:', error));
+          }
+        }
+      }
+
+      // 海嘯警報
+      class LayerTsunami extends LayerInit {
+        static async create(){
+          const tsunamiSource = new ol.source.Vector({});
+          fetch("https://opendata.cwa.gov.tw/api/v1/rest/datastore/E-A0014-001?Authorization=CWA-1AEBC7CB-C240-4961-AE57-7AE2A2E3122F").then(response => response.json()).then(res => {
+              const count = res.records.Tsunami.length;
+              for (let i = 0; i < count; i++) {
+                const no = res.records.Tsunami[i].TsunamiNo;
+                const locate = res.records.Tsunami[i].EarthquakeInfo.Epicenter.Location;
+                const time = res.records.Tsunami[i].EarthquakeInfo.OriginTime;
+                const lon = res.records.Tsunami[i].EarthquakeInfo.Epicenter.EpicenterLongitude;
+                const lat = res.records.Tsunami[i].EarthquakeInfo.Epicenter.EpicenterLatitude;
+                const coordinates = ol.proj.fromLonLat([lon, lat]);
+                const feature = new ol.Feature({ geometry: new ol.geom.Point(coordinates), no: no, locate: locate, time: time, lon: lon, lat: lat });
+                tsunamiSource.addFeature(feature);
+              }
+            })
+            .catch(error => console.error('Error:', error));
+          //
+          const layer = new ol.layer.Vector({
+            name: "tsunami",
+            popupable: true,
+            zIndex: 6,
+            source: tsunamiSource,
+            style: this.style
+          });
+          // 加入popup字典
+          try { PopupClick._popupdict["tsunami"] = LayerTsunami; } catch (error) { } // 點擊popup
+          try { PopupMouse._popupdict["tsunami"] = LayerTsunami; } catch (error) { } // 滑鼠移動popup
+
+          return layer; // 加入圖資
+        }
+        static style(feature){
+          let pointed = false;
+          if(typeof feature.get("pointed") != "undefined"){ pointed = feature.get("pointed"); }
+          let scaleNum = 0.03;
+          if(pointed){ scaleNum = 0.04; }
+          return new ol.style.Style({
+            image: new ol.style.Icon({
+              anchor: [0.5, 1],
+              // anchorXUnits: "fraction",
+              // anchorYUnits: "fraction",
+              src: "https://web.hoone.com.tw/img/mapicon/tsunami.png",
+              crossOrigin: "anonymous",
+              scale: scaleNum * userscale,
+            }),
+          });
+        }
+        static popup(feature){
+          const no = feature.get("no");
+          const locate = feature.get("locate");
+          const time = feature.get("time");
+          const lon = feature.get("lon");
+          const lat = feature.get("lat");
+          return `<table><thead><tr><th colspan="2">海嘯警報<br>${locate}</th></tr></thead><tbody><tr><td>編號</td><td>${no}</td></tr><tr class="evenTr"><td>時間</td><td>${time}</td></tr><tr><td>座標</td><td>${lat.toFixed(3)}, ${lon.toFixed(3)}</td></tr></tbody></table>`;
+        }
+        static legend(checked){
+          const id = "legendTsunami";
+          const title = "海嘯警報";
+          if(!checked){ MapFunction.LegendList.remove(id); return; }
+          //
+          const dom = document.createElement("div");
+          dom.className = "legendChild";
+          dom.id = id;
+          dom.innerHTML = `<div class="legendChildTitle">${title}</div><div class="legendChildContent">
+            <div class="legendChildContentSub"><img src="https://web.hoone.com.tw/img/mapicon/tsunami.png"><div>海嘯警報</div></div>
+          </div>`;
+          MapFunction.LegendList.add(dom);
+        }
+        // 自定義刷新
+        static refresh(){
+          if(this._layer){
+            fetch("https://opendata.cwa.gov.tw/api/v1/rest/datastore/E-A0014-001?Authorization=CWA-1AEBC7CB-C240-4961-AE57-7AE2A2E3122F").then(response => response.json()).then(res => {
+              const resource = new ol.source.Vector({});
+              const count = res.records.Tsunami.length;
+              for (let i = 0; i < count; i++) {
+                const no = res.records.Tsunami[i].TsunamiNo;
+                const locate = res.records.Tsunami[i].EarthquakeInfo.Epicenter.Location;
+                const time = res.records.Tsunami[i].EarthquakeInfo.OriginTime;
+                const lon = res.records.Tsunami[i].EarthquakeInfo.Epicenter.EpicenterLongitude;
+                const lat = res.records.Tsunami[i].EarthquakeInfo.Epicenter.EpicenterLatitude;
+                const coordinates = ol.proj.fromLonLat([lon, lat]);
+                const feature = new ol.Feature({ geometry: new ol.geom.Point(coordinates), no: no, locate: locate, time: time, lon: lon, lat: lat });
+                resource.addFeature(feature);
+              }
+              this._layer.setSource(resource);
+            })
+            .catch(error => console.error('Error:', error));
+          }
+        }
+      }
+
+      // 颱風特報
+      class LayerTyphoon extends LayerInit{
+        static async create(){
+          const typhoonSource = new ol.source.Vector({});
+          await fetch("https://opendata.cwa.gov.tw/fileapi/v1/opendataapi/W-C0034-002?Authorization=CWA-9C8100F3-34AC-4CD6-8C9C-47892DA98BC1&downloadType=WEB&format=KMZ")
+            .then(response=>response.arrayBuffer()).then(data=>JSZip.loadAsync(data)).then(zip=>{return zip.file(/\.kml$/i)[0].async("string");}).then(kmlString=>{
+              typhoonSource.addFeatures( new ol.format.KML({ extractStyles: false }).readFeatures(kmlString,{featureProjection:'EPSG:3857'}) );
+          }).catch(error=>{console.error("KMZ 解壓失敗: ", error);});
+          await fetch("https://opendata.cwa.gov.tw/fileapi/v1/opendataapi/W-C0034-003?Authorization=CWA-9C8100F3-34AC-4CD6-8C9C-47892DA98BC1&downloadType=WEB&format=KMZ")
+            .then(response=>response.arrayBuffer()).then(data=>JSZip.loadAsync(data)).then(zip=>{return zip.file(/\.kml$/i)[0].async("string");}).then(kmlString=>{
+              typhoonSource.addFeatures( new ol.format.KML({ extractStyles: false }).readFeatures(kmlString,{featureProjection:'EPSG:3857'}) );
+          }).catch(error=>{console.error("KMZ 解壓失敗: ", error);});
+          //
+          const layer = new ol.layer.Vector({
+            name: "typhoon",
+            popupable: true,
+            zIndex: 10,
+            source: typhoonSource,
+            style: this.style
+          });
+          // 加入popup字典
+          try { PopupClick._popupdict["typhoon"] = LayerTyphoon; } catch (error) { } // 點擊popup
+          try { PopupMouse._popupdict["typhoon"] = LayerTyphoon; } catch (error) { } // 滑鼠移動popup
+
+          return layer; // 加入圖資
+        }
+        static style(feature){
+          const styleList = [];
+          const geometry = feature.get("geometry");
+          switch(geometry.getType()){
+            case "Point":
+            const pointStyle = new ol.style.Style({ image: new ol.style.Icon({ src: "https://web.hoone.com.tw/img/mapicon/typhoon.png", crossOrigin: "anonymous", anchor: [0.5, 1], scale: 0.03 * userscale }) });
+              styleList.push(pointStyle);
+              break;
+            case "LineString":
+              let pastLineStyle, predictLineStyle;
+              switch (feature.get("name")) {
+                case "過去路徑":
+                  pastLineStyle = new ol.style.Style({ stroke: new ol.style.Stroke({ color: "gray", width: 3 }) });
+                  pastLineStyle.setGeometry(feature.getGeometry());
+                  styleList.push(pastLineStyle);
+                  break;
+                case "颱風路徑預測":
+                  predictLineStyle = new ol.style.Style({ stroke: new ol.style.Stroke({ color: "red", width: 3, lineDash: [10, 10] }) });
+                  predictLineStyle.setGeometry(feature.getGeometry());
+                  styleList.push(predictLineStyle);
+                  break;
+                default: break;
+              }
+              break;
+            case "Polygon":
+              let rountPredictStyle, typhoonPredictStyle, predict20Style;
+              switch (feature.get("name")) {
+                case "路徑潛勢預測":
+                  rountPredictStyle = new ol.style.Style({
+                    stroke: new ol.style.Stroke({ color: "red", width: 3, lineDash: [10, 10] }),
+                    fill: new ol.style.Fill({ color: "rgba(255, 255, 255, 0.4)" })
+                  });
+                  rountPredictStyle.setGeometry(feature.getGeometry());
+                  styleList.push(rountPredictStyle);
+                  break;
+                case "颱風路徑預測":
+                  typhoonPredictStyle = new ol.style.Style({
+                    stroke: new ol.style.Stroke({ color: "gray", width: 3, lineDash: [10, 10] }),
+                    fill: new ol.style.Fill({ color: "rgba(255, 0, 0, 0.4)" }),
+                  });
+                  typhoonPredictStyle.setGeometry(feature.getGeometry());
+                  styleList.push(typhoonPredictStyle);
+                  break;
+                case "20%":
+                  predict20Style = new ol.style.Style({
+                    stroke: new ol.style.Stroke({ color: "white", width: 1 }),
+                    fill: new ol.style.Fill({ color: "rgba(127, 219, 107, 0.7)" }),
+                  });
+                  predict20Style.setGeometry(feature.getGeometry());
+                  styleList.push(predict20Style);
+                  break;
+                case "40%":
+                  predict20Style = new ol.style.Style({
+                    stroke: new ol.style.Stroke({ color: "white", width: 1 }),
+                    fill: new ol.style.Fill({ color: "rgba(187, 237, 136, 0.7)" }),
+                  });
+                  predict20Style.setGeometry(feature.getGeometry());
+                  styleList.push(predict20Style);
+                  break;
+                case "60%":
+                  predict20Style = new ol.style.Style({
+                    stroke: new ol.style.Stroke({ color: "white", width: 1 }),
+                    fill: new ol.style.Fill({ color: "rgba(254, 238, 108, 0.7)" }),
+                  });
+                  predict20Style.setGeometry(feature.getGeometry());
+                  styleList.push(predict20Style);
+                  break;
+                case "80%":
+                  predict20Style = new ol.style.Style({
+                    stroke: new ol.style.Stroke({ color: "white", width: 1 }),
+                    fill: new ol.style.Fill({ color: "rgba(254, 212, 97, 0.7)" }),
+                  });
+                  predict20Style.setGeometry(feature.getGeometry());
+                  styleList.push(predict20Style);
+                  break;
+                case "100%":
+                  predict20Style = new ol.style.Style({
+                    stroke: new ol.style.Stroke({ color: "white", width: 1 }),
+                    fill: new ol.style.Fill({ color: "rgba(254, 145, 97, 0.7)" }),
+                  });
+                  predict20Style.setGeometry(feature.getGeometry());
+                  styleList.push(predict20Style);
+                  break;
+                default: break;
+              }
+              break;
+          }
+          return styleList;
+        }
+        static popup(feature){
+          const name = feature.get("name");
+          let descript = "";
+          if (typeof feature.get("description") != "undefined") {
+            descript = `<tbody><tr><td class="evenTr" style="white-space: nowrap;">描述</td><td style="white-space: break-spaces">${feature.get("description")}</td></tr></tbody>`;
+          }
+          return `<table style="width: 20vw"><thead><tr><th colspan="2">颱風特報<br>${name}</th></tr></thead>${descript}</table>`;
+        }
+        static legend(checked){
+          const id = "legendTyphoon";
+          const title = "颱風特報";
+          if(!checked){ MapFunction.LegendList.remove(id); return; }
+          //
+          const dom = document.createElement("div");
+          dom.className = "legendChild";
+          dom.id = id;
+          dom.innerHTML = `<div class="legendChildTitle">${title}</div><div class="legendChildContent">
+            <div class="legendChildContentSub"><img src="https://web.hoone.com.tw/img/mapicon/typhoon.png"><div>颱風位置</div></div>
+            <div class="legendChildContentSub"><i class="hoone hoone-polyline" style="color: gray;"></i><div>颱風過去路徑</div></div>
+            <div class="legendChildContentSub"><i class="hoone hoone-polyline" style="color: red;"></i><div>颱風潛勢預測</div></div>
+          </div>`;
+          MapFunction.LegendList.add(dom);
+        }
+        // 自定義刷新
+        static async refresh(){
+          if(this._layer){
+            const resource = new ol.source.Vector({});
+            await fetch("https://opendata.cwa.gov.tw/fileapi/v1/opendataapi/W-C0034-002?Authorization=CWA-9C8100F3-34AC-4CD6-8C9C-47892DA98BC1&downloadType=WEB&format=KMZ")
+              .then(response=>response.arrayBuffer()).then(data=>JSZip.loadAsync(data)).then(zip=>{return zip.file(/\.kml$/i)[0].async("string");}).then(kmlString=>{
+                resource.addFeatures( new ol.format.KML({ extractStyles: false }).readFeatures(kmlString,{featureProjection:'EPSG:3857'}) );
+            }).catch(error=>{console.error("KMZ 解壓失敗: ", error);});
+            await fetch("https://opendata.cwa.gov.tw/fileapi/v1/opendataapi/W-C0034-003?Authorization=CWA-9C8100F3-34AC-4CD6-8C9C-47892DA98BC1&downloadType=WEB&format=KMZ")
+              .then(response=>response.arrayBuffer()).then(data=>JSZip.loadAsync(data)).then(zip=>{return zip.file(/\.kml$/i)[0].async("string");}).then(kmlString=>{
+                resource.addFeatures( new ol.format.KML({ extractStyles: false }).readFeatures(kmlString,{featureProjection:'EPSG:3857'}) );
+            }).catch(error=>{console.error("KMZ 解壓失敗: ", error);});
+            await this._layer.setSource(resource);
+          }
+        }
+      }
+
+      // #endregion 氣象圖層
+
+      // #endregion 所有圖層
+    </script>
+
+    <script>
+      // #region popup設定
+
+      let stopPopup = false;
+
+      // 點擊popup
+      class PopupClick {
+        static _layerList = [];
+        static _featureList = []; // 使用受保護屬性來存儲圖層
+        static _div = document.getElementById("clickPopup");
+        static _overlay = new ol.Overlay({ element: this._div });
+        static _popupdict = {};
+        static add(){ map.addOverlay(this._overlay); } // 加入 overlay
+
+        // popup 初始化
+        static popupInit(evt){
+          // 取得點擊位置並設定popup在該位置出現
+          let coordinates;
+          if(evt){ coordinates = evt.coordinate; this._overlay.setPosition(coordinates); }
+          // 先清空並關閉
+          this._div.innerHTML = `<div class="popupParent">
+            <div class="popupSwitch">
+              <div id="popupLeftRight" class="popupLeftRight"><i class="hoone hoone-left" onclick="PopupClick.showSwitch();"></i><i class="hoone hoone-right" onclick="PopupClick.showSwitch(true);"></i></div>
+              <div class="popupCount">(<div id="popupNumNow" class="popupNumNow">1</div> / <div id="popupNumTotal" class="popupNumTotal"></div>)</div>
+            </div>
+            <div id="clickPopupContent" class="popupContent"></div>
+          </div>`;
+          this._div.style.display = "none";
+          // 先把有 pointed 的 feature 先設定回去 false
+          this._featureList.forEach(feature=>{ if(feature.getProperties().pointed == true){ feature.setProperties({ pointed: false }); } });
+          // 清空 array
+          this._layerList.length = 0; this._featureList.length = 0;
+        }
+        // 執行popup
+        static popup(evt){
+          // 初始化
+          this.popupInit(evt);
+          // 當有任何讓停止popup的行為就不繼續執行了
+          if(stopPopup){ return; }
+          // 取得圖資
+          map.forEachFeatureAtPixel(evt.pixel, (feature, layer) => {
+            // 利用設定 layer name 來控制是否要 popup，沒有設定 name 就不 popup
+            if(typeof layer.get("name") == "undefined"){ return; }
+            // 如果 popupable 設定成 false，就不繼續執行 popup
+            if(!layer.get("popupable")){ return; }
+            this._featureList.push(feature); this._layerList.push(layer);
+          });
+          // 沒有 feature 就不執行 show
+          if(this._featureList.length == 0){ return; }
+          // 取得popup數量及數字
+          const total = document.getElementById("popupNumTotal");
+          total.innerHTML = this._featureList.length;
+          this.show(1);
+        }
+        // popup顯示
+        static show(num){
+          // 先把有 pointed 的 feature 先設定回去 false
+          this._featureList.forEach(feature=>{ if(feature.getProperties().pointed == true){ feature.setProperties({ pointed: false }); } });
+          // 往前往後按鈕出現與否
+          const left = document.querySelector("#popupLeftRight > .hoone-left");
+          const right = document.querySelector("#popupLeftRight > .hoone-right");
+          num == 1 ? left.classList.add("popupLeftRightDisable") : left.classList.remove("popupLeftRightDisable");
+          num == this._featureList.length ? right.classList.add("popupLeftRightDisable") : right.classList.remove("popupLeftRightDisable");
+          //
+          const contentDiv = document.getElementById("clickPopupContent");
+          // 帶入n筆資料 n = num - 1
+          const n = num - 1;
+          contentDiv.innerHTML = this._popupdict[this._layerList[n].get("name")].popup( this._featureList[n] );
+          // 再賦予 pointed 的 style
+          this._featureList[n].setProperties({ pointed: true });
+          // 最後開啟
+          this._div.style.display = "block";
+        }
+        static showSwitch(next){
+          const popupNumNow = document.getElementById("popupNumNow");
+          const nowN = Number(popupNumNow.textContent);
+          const total = Number(document.getElementById("popupNumTotal").textContent);
+          let nextN;
+          nextN = next ? nowN + 1 : nowN - 1; // 先加減1
+          nextN = nextN <= 0 ? 1 : nextN; // 判斷是否為0
+          nextN = nextN > total ? total : nextN; // 判斷是否大於總數
+          popupNumNow.innerHTML = nextN; // 更新第幾個
+          this.show(nextN); // popup
+        }
+      }
+
+      // 滑鼠移動popup
+      class PopupMouse {
+        static _layerList = [];
+        static _featureList = []; // 使用受保護屬性來存儲圖層
+        static _div = document.getElementById("mousePopup");
+        static _overlay = new ol.Overlay({ element: this._div, offset: [10, 10] });
+        static _popupdict = {};
+        static add(){ map.addOverlay(this._overlay); } // 加入 overlay
+
+        // popup 初始化
+        static popupInit(evt){
+          // 取得點擊位置並設定popup在該位置出現
+          const coordinates = evt.coordinate; this._overlay.setPosition(coordinates);
+          // 先清空並關閉
+          this._div.innerHTML = `<div class="popupParent">
+            <div id="mousePopupContent" class="popupContent"></div>
+          </div>`;
+          this._div.style.display = "none";
+          // 清空 array
+          this._layerList.length = 0; this._featureList.length = 0;
+        }
+        //
+        static popup(evt){
+          // 初始化
+          this.popupInit(evt);
+          // 當有任何讓停止popup的行為就不繼續執行了
+          if(stopPopup){ return; }
+          map.forEachFeatureAtPixel(evt.pixel, (feature, layer) => {
+            // 利用設定 layer name 來控制是否要 popup，沒有設定 name 就不 popup
+            if(typeof layer.get("name") == "undefined"){ return; }
+            // 如果 popupable 設定成 false，就不繼續執行 popup
+            if(!layer.get("popupable")){ return; }
+            this._layerList.push(layer); this._featureList.push(feature);
+          });
+          // 沒有 feature 就不執行 show
+          if(this._featureList.length == 0){ return; }
+          this.show(); // 只會執行第一筆 popup
+        }
+        static show(){
+          const contentDiv = document.getElementById("mousePopupContent");
+          // 只會執行第一筆 popup，所以一定會是 0
+          contentDiv.innerHTML = this._popupdict[this._layerList[0].get("name")].popup( this._featureList[0] );
+          this._div.style.display = "block";
+        }
+      }
+      // #endregion popup設定
+    </script>
+
+    <script>
+      // #region 網站本身
+
+      // 開啟圖層
+      function openToolLayergroup(checked){
+        const toolLayergroup = document.getElementById("toolLayergroup");
+        if(checked){toolLayergroup.style.display = "block";}
+        else{toolLayergroup.style.display = "";}
+      }
+
+      // leftTopGoYX
+      class LeftTopGoYX extends LayerInit {
+        static create(){
+          const layer = new ol.layer.Vector({
+            // name: "leftTopGoYX",
+            // popupable: false,
+            zIndex: 11,
+            source: new ol.source.Vector({}),
+            style: this.style
+          });
+          return layer; // 加入圖資
+        }
+        static style(feature){
+          let scaleNum = 0.03;
+          return new ol.style.Style({
+            image: new ol.style.Icon({
+              anchor: [0.5, 1],
+              // anchorXUnits: "fraction",
+              // anchorYUnits: "fraction",
+              src: "https://web.hoone.com.tw/img/mapicon/pin_red.png",
+              crossOrigin: "anonymous",
+              scale: scaleNum * userscale,
+            }),
+          });
+        }
+        static goNzoom(){
+          const text = document.getElementById("leftTopGoYXText").value;
+          // console.log(text);
+          if(text == "") return;
+          //
+          this._layer.getSource().clear();
+          //
+          const regexYX = /\d+\.?\d{0,}.?\s\d+\.?\d{0,}/g;
+          const resultYX = text.match(regexYX);
+          if(resultYX == null) return;
+          const yxText = resultYX[0];
+          const xy = [Number(yxText.split(/.?\s/)[1]), Number(yxText.split(/.?\s/)[0])];
+          const xyGeom = new ol.geom.Point(ol.proj.fromLonLat(xy));
+          //
+          MapFunction.fitOrZoom(xyGeom);
+          this._layer.getSource().addFeature(new ol.Feature({ geometry: xyGeom }));
+        }
+      }
+      // #endregion 網站本身
+    </script>
+
+    <script>
+      // #region 所有初始化
+      async function mapInit(){
+        initProjection();
+        // 設定參數
+        mapCenterDefault = [120.95102759887676, 23.72019163905587];
+        mapZoomLevelDefault = 7.6;
+        // mapCenterDynamic = [121.00102759887676, 23.72019163905587];
+        // mapZoomLevelDynamic = 7.6;
+        userscale = 8;
+        autoMousePosition; // 全域變數存取滑鼠位置事件
+
+        // 長出地圖
+        map = await new ol.Map({
+          controls: ol.control.defaults.defaults({zoom: false, attribution: false, rotate: false,}),
+          interactions: ol.interaction.defaults.defaults({pinchRotate: false,}),
+          layers: [ await Basemap.default() ],
+          target: "map",
+          enableRotation: false,
+          view: new ol.View({projection: "EPSG:3857", center: ol.proj.fromLonLat(mapCenterDefault), zoom: mapZoomLevelDefault, maxZoom: 20, minZoom: 5,}),
+          crossOrigin: null,
+        });
+
+        // 加入 popup
+        // PopupClick.add(); // 點擊popup
+        // PopupMouse.add(); // 滑鼠移動popup
+        
+        // 加入靜態工具
+        MapFunction.ZoomHome.init({ ele: document.querySelector("#rightHome") }); // 回到原點
+        MapFunction.ZoomMode.init({ eleIn: document.querySelector("#rightZoomIn"), eleOut: document.querySelector("#rightZoomOut") }); // zoom +/-
+        MapFunction.LayerLonlat.init({ ele: document.querySelector("#rightLayerLonlat") }); // 開啟經緯度網格線
+        MapFunction.ScaleDefault.add(); // 內建比例尺
+        MapFunction.Measure.init({ eleBox: document.querySelector("#toolMeasure"), eleStart: document.querySelector("#rightTopMeasure") }); // 測量
+        MapFunction.RightClick.init({ ele: document.getElementById("rightClickMenu") }); // 右鍵點擊事件
+
+        // 地圖用監聽
+        map.on("postrender", (evt) => {
+          // MapFunction.CalculateScaleNm.scale({ ele: document.querySelector("#scale") }); // 比例尺
+          MapFunction.Compass.rotate({ eleDiv: document.querySelector("#rightCompass") }); // 指北針
+        });
+        map.on("pointermove", (evt) => {
+          autoMousePosition = evt;
+          MapFunction.MouseMove.move( evt, { ele: document.querySelector("#mouseXYDiv") } ); // 滑鼠座標顯示
+          // PopupMouse.popup(evt); // 滑鼠移動popup
+        });
+        map.on("singleclick", (evt) => {
+          // PopupClick.popup(evt); // 點擊popup
+        });
+        // map.once("loadend", ()=>{ console.log(123); });
+
+        // 預設開啟圖資
+        LeftTopGoYX.add(true);
+        // LayerMiddleLine.add(true); document.getElementById("layer8").checked = true;
+        // LayerFir.add(true); document.getElementById("layer9").checked = true;
+      }
+
+      // 預設開啟的功能
+      document.getElementById("rightTopLayergroup").click();
+
+      // #endregion 所有初始化
+
+      document.addEventListener("DOMContentLoaded", () => { mapInit(); });
+    </script>
+
+  </body>
+</html>

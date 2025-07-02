@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.2">
+<Document>
+<name>FIR</name>
+<Style id="style1">
+	<LineStyle>
+		<color>ffdd0105</color>
+		<width>5</width>
+	</LineStyle>
+</Style>
+<Placemark>
+<name>1</name>
+<description><![CDATA[<p>id: 1</p>]]></description>
+<ExtendedData>
+	<Data name="id"><displayName>id</displayName><value><![CDATA[1]]></value></Data>
+</ExtendedData>
+<styleUrl>#style1</styleUrl>
+	<LineString>
+		<tessellate>1</tessellate>
+		<coordinates>
+			117.5,29.0,0.000
+			124.0,29.0,0.000
+			124.0,23.5,0.000
+			121.5,21.0,0.000
+			117.5,21.0,0.000
+			117.5,29.0,0.000
+		</coordinates>
+	</LineString>
+</Placemark>
+
+</Document>
+</kml>
