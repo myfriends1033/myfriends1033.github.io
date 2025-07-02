@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>臺灣地圖</title>
     <link href="https://web.hoone.com.tw/Public/fontdemo/font/dist/icons.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="/css/ol10.4.0.css" />
-    <link rel="shortcut icon" href="https://web.hoone.com.tw/img/logo/hoone.png" type="image/x-icon"/>
+    <link rel="stylesheet" href="/article/portfolio/地圖/css/ol10.4.0.css" />
+    <link rel="shortcut icon" href="/article/portfolio/地圖/genki.png" type="image/x-icon"/>
     <style>
       /*web base*/
       ::-webkit-scrollbar{width: 7px;}
@@ -173,14 +173,14 @@
           <input type="checkbox" id="tabBasemap" class="tabInput" checked>
           <label for="tabBasemap" class="tabTitle"><i class="hoone hoone-up"></i><i class="hoone hoone-down"></i>底圖切換</label>
           <div class="basemapTabContent tabContent">
-            <div class="flex"><input type="radio" name="basemap" id="basemap1" class="basemapInput" onchange="Basemap.change('standard');" checked><label for="basemap1" class="basemapBtn">通用地圖<img src="/image/map_standard.png" alt="通用地圖"></label></div>
-            <div class="flex"><input type="radio" name="basemap" id="basemap6" class="basemapInput" onchange="Basemap.change('osm');"><label for="basemap6" class="basemapBtn">開放街圖<img src="/image/map_osm.png" alt="開放街圖"></label></div>
-            <div class="flex"><input type="radio" name="basemap" id="basemap7" class="basemapInput" onchange="Basemap.change('google');"><label for="basemap7" class="basemapBtn">Google<img src="/image/map_google.png" alt="Google"></label></div>
-            <div class="flex"><input type="radio" name="basemap" id="basemap2" class="basemapInput" onchange="Basemap.change('grey');"><label for="basemap2" class="basemapBtn">灰色地圖<img src="/image/map_grey.png" alt="灰色地圖"></label></div>
-            <div class="flex"><input type="radio" name="basemap" id="basemap3" class="basemapInput" onchange="Basemap.change('transparent');"><label for="basemap3" class="basemapBtn">深色地圖<img src="/image/map_transparent.png" alt="深色地圖"></label></div>
-            <div class="flex"><input type="radio" name="basemap" id="basemap4" class="basemapInput" onchange="Basemap.change('satellite');"><label for="basemap4" class="basemapBtn">衛星航照<img src="/image/map_satellite.png" alt="衛星航照"></label></div>
-            <div class="flex"><input type="radio" name="basemap" id="basemap5" class="basemapInput" onchange="Basemap.change('terrain');"><label for="basemap5" class="basemapBtn">地形圖<img src="/image/map_terrain.png" alt="地形圖"></label></div>
-            <div class="flex"><input type="radio" name="basemap" id="basemap8" class="basemapInput" onchange="Basemap.change('thunderforest');"><label for="basemap8" class="basemapBtn">雷森地圖<img src="/image/map_thunderforest.png" alt="雷森地圖"></label></div>
+            <div class="flex"><input type="radio" name="basemap" id="basemap1" class="basemapInput" onchange="Basemap.change('standard');" checked><label for="basemap1" class="basemapBtn">通用地圖<img src="/article/portfolio/地圖/image/map_standard.png" alt="通用地圖"></label></div>
+            <div class="flex"><input type="radio" name="basemap" id="basemap6" class="basemapInput" onchange="Basemap.change('osm');"><label for="basemap6" class="basemapBtn">開放街圖<img src="/article/portfolio/地圖/image/map_osm.png" alt="開放街圖"></label></div>
+            <div class="flex"><input type="radio" name="basemap" id="basemap7" class="basemapInput" onchange="Basemap.change('google');"><label for="basemap7" class="basemapBtn">Google<img src="/article/portfolio/地圖/image/map_google.png" alt="Google"></label></div>
+            <div class="flex"><input type="radio" name="basemap" id="basemap2" class="basemapInput" onchange="Basemap.change('grey');"><label for="basemap2" class="basemapBtn">灰色地圖<img src="/article/portfolio/地圖/image/map_grey.png" alt="灰色地圖"></label></div>
+            <div class="flex"><input type="radio" name="basemap" id="basemap3" class="basemapInput" onchange="Basemap.change('transparent');"><label for="basemap3" class="basemapBtn">深色地圖<img src="/article/portfolio/地圖/image/map_transparent.png" alt="深色地圖"></label></div>
+            <div class="flex"><input type="radio" name="basemap" id="basemap4" class="basemapInput" onchange="Basemap.change('satellite');"><label for="basemap4" class="basemapBtn">衛星航照<img src="/article/portfolio/地圖/image/map_satellite.png" alt="衛星航照"></label></div>
+            <div class="flex"><input type="radio" name="basemap" id="basemap5" class="basemapInput" onchange="Basemap.change('terrain');"><label for="basemap5" class="basemapBtn">地形圖<img src="/article/portfolio/地圖/image/map_terrain.png" alt="地形圖"></label></div>
+            <div class="flex"><input type="radio" name="basemap" id="basemap8" class="basemapInput" onchange="Basemap.change('thunderforest');"><label for="basemap8" class="basemapBtn">雷森地圖<img src="/article/portfolio/地圖/image/map_thunderforest.png" alt="雷森地圖"></label></div>
           </div>
         </div>
       </div>
@@ -202,9 +202,9 @@
     <!-- 右鍵點擊事件 -->
     <div id="rightClickMenu" class="rightClickMenu"></div>
 
-    <script type="text/javascript" src="/js/html2canvas.min.js"></script>
-    <script type="text/javascript" src="/js/ol10.4.0.js"></script>
-    <script type="text/javascript" src="/js/proj4.js"></script>
+    <script type="text/javascript" src="/article/portfolio/地圖/js/html2canvas.min.js"></script>
+    <script type="text/javascript" src="/article/portfolio/地圖/js/ol10.4.0.js"></script>
+    <script type="text/javascript" src="/article/portfolio/地圖/js/proj4.js"></script>
 
     <script>
       // #region 地圖參數及常用功能
@@ -1347,7 +1347,7 @@
             source: new ol.source.Vector({
               format: new ol.format.KML({ extractStyles: false }),
               crossOrigin: "anonymous",
-              url: "/geosource/middleLine_v2.kml",
+              url: "/article/portfolio/地圖/geosource/middleLine_v2.kml",
             }),
             style: this.style
           });
@@ -1384,7 +1384,7 @@
             source: new ol.source.Vector({
               format: new ol.format.KML({ extractStyles: false }),
               crossOrigin: "anonymous",
-              url: "/geosource/FIR_v2.kml",
+              url: "/article/portfolio/地圖/geosource/FIR_v2.kml",
             }),
             style: this.style
           });
@@ -1439,7 +1439,7 @@
             name: "ais",
             popupable: true,
             zIndex: 5,
-            source: new ol.source.Vector({ url: "/geosource/ais.json", format: new ol.format.GeoJSON(), crossOrigin: "anonymous" }),
+            source: new ol.source.Vector({ url: "/article/portfolio/地圖/geosource/ais.json", format: new ol.format.GeoJSON(), crossOrigin: "anonymous" }),
             style: this.style
           });
           // 加入popup字典
@@ -1461,7 +1461,7 @@
 
           const styleList = [];
           const iconDict = { "0": "ship_gray", "1": "ship_gray", "9": "ship_gray", "2": "ship_gray", "3": "ship_blue", "4": "ship_green", "5": "ship_red", "6": "ship_yellow", "7": "ship_lightblue", "8": "ship_purple" };
-          const combineUrl = `/image/${iconDict[String(shiptype)[0]]}${stop==true?"_s":""}.png`;
+          const combineUrl = `/article/portfolio/地圖/image/${iconDict[String(shiptype)[0]]}${stop==true?"_s":""}.png`;
           const iconStyle = new ol.style.Style({image: new ol.style.Icon({crossOrigin: "anonymous", anchor: [12, 12], anchorXUnits: "pixels", anchorYUnits: "pixels", src: combineUrl, scale: 0.12 * userscale, opacity: 0.9, rotation: MapFormula.degreesToRadians(cog)}), zIndex: 2});
           // const iconStyle = new ol.style.Style({image: new ol.style.Circle({radius: 4, fill: new ol.style.Fill({ color: "red" }), stroke: new ol.style.Stroke({ color: "black", width: 2 })})});
           styleList.push(iconStyle);
@@ -1527,13 +1527,13 @@
           dom.className = "legendChild";
           dom.id = id;
           dom.innerHTML = `<div class="legendChildTitle">${title}</div><div class="legendChildContent">
-            <div class="legendChildContentSub"><img src="/image/ship_gray.png"><div>未具體說明的船舶</div></div>
-            <div class="legendChildContentSub"><img src="/image/ship_blue.png"><div>漁船、拖船、淺水作業船、帆船、遊艇</div></div>
-            <div class="legendChildContentSub"><img src="/image/ship_green.png"><div>高速船</div></div>
-            <div class="legendChildContentSub"><img src="/image/ship_red.png"><div>引水船、搜索船、拖駁船、港口補給船舶、執法船、醫療用船舶、載有汙染設備的船舶</div></div>
-            <div class="legendChildContentSub"><img src="/image/ship_yellow.png"><div>客船</div></div>
-            <div class="legendChildContentSub"><img src="/image/ship_lightblue.png"><div>貨船</div></div>
-            <div class="legendChildContentSub"><img src="/image/ship_purple.png"><div>油輪</div></div>
+            <div class="legendChildContentSub"><img src="/article/portfolio/地圖/image/ship_gray.png"><div>未具體說明的船舶</div></div>
+            <div class="legendChildContentSub"><img src="/article/portfolio/地圖/image/ship_blue.png"><div>漁船、拖船、淺水作業船、帆船、遊艇</div></div>
+            <div class="legendChildContentSub"><img src="/article/portfolio/地圖/image/ship_green.png"><div>高速船</div></div>
+            <div class="legendChildContentSub"><img src="/article/portfolio/地圖/image/ship_red.png"><div>引水船、搜索船、拖駁船、港口補給船舶、執法船、醫療用船舶、載有汙染設備的船舶</div></div>
+            <div class="legendChildContentSub"><img src="/article/portfolio/地圖/image/ship_yellow.png"><div>客船</div></div>
+            <div class="legendChildContentSub"><img src="/article/portfolio/地圖/image/ship_lightblue.png"><div>貨船</div></div>
+            <div class="legendChildContentSub"><img src="/article/portfolio/地圖/image/ship_purple.png"><div>油輪</div></div>
           </div>`;
           MapFunction.LegendList.add(dom);
         }
